@@ -1,0 +1,28 @@
+{
+  "name": "Flutter Dev Environment",
+  "build": { //Cho VS Code biết cần đọc file Dockerfile ngay bên cạnh để dựng môi trường.
+    "dockerfile": "Dockerfile"
+  },
+  
+  // Các thiết lập dành riêng cho VS Code
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // Chỉ định cho VS Code biết Flutter SDK nằm ở đâu trong Container
+        "dart.flutterSdkPath": "/sdks/flutter"
+      },
+      // Tự động cài đặt các Extension này VÀO TRONG CONTAINER khi mở dự án
+      "extensions": [ //không phải cài lại extension Flutter hay Dart thủ công bên trong môi trường container. VS Code sẽ tự kích hoạt chúng ngay khi container khởi động xong.
+        "Dart-Code.dart-code",
+        "Dart-Code.flutter",
+        "eamodio.gitlens"
+      ]
+    }
+  },
+
+  // Cấu hình chuyển tiếp cổng để xem ứng dụng web trên máy host (trình duyệt thật)
+  // Mở cổng 8080 để khi bạn chạy ứng dụng Flutter Web trong container
+  "forwardPorts": [8080],
+
+  "remoteUser": "root"
+}
