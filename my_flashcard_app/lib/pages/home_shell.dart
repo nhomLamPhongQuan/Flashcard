@@ -21,6 +21,7 @@ class _HomeShellState extends State<HomeShell> {
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 720),
+          //IndexedStack giữ trạng thái cả 3 tab không bị mất khi chuyển qua lại
           child: IndexedStack(
             index: _index,
             children: const [LearnTab(), LibraryTab(), StatsTab()],

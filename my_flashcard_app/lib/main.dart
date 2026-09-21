@@ -9,7 +9,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final state = AppState(VocabRepository());
-  await state.init();
+  await state.init(); // <- đọc xong data mới chạy UI
 
   runApp(AppScope(state: state, child: const FlashcardApp()));
 }
@@ -21,6 +21,8 @@ class FlashcardApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // AppScope.of đăng ký widget này là dependent của AppState, nên mỗi lần
     // notifyListeners() được gọi, FlashcardApp sẽ tự rebuild với theme mới.
+    // AppScope là một InheritedWidget đặc biệt — nó "treo" state lên đỉnh cây widget
+    // Để mọi widget con ở bất kỳ độ sâu nào cũng lấy được state bằng AppScope.of(context) mà không cần truyền tay qua từng constructor.
     final state = AppScope.of(context);
     return MaterialApp(
       title: 'Từ vựng Anh - Nhật',

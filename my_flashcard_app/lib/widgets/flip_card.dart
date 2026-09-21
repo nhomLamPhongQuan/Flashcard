@@ -55,6 +55,7 @@ class _FlipCardState extends State<FlipCard>
   }
 
   @override
+  //setEntry(3, 2, 0.0011) tạo hiệu ứng phối cảnh (perspective) để thẻ trông "xoay trong không gian 3D" chứ không bị bóp méo phẳng. Khi góc xoay qua 90° (nửa chặng), nó đổi từ hiển thị mặt trước sang mặt sau (chữ bị lật ngược nên phải xoay pi thêm lần nữa để chữ mặt sau đọc xuôi bình thường).
   Widget build(BuildContext context) {
     final p = Palette.ofContext(context);
     return SizedBox.expand(
