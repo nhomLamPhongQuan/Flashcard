@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/deck.dart';
 import '../services/database_helper.dart';
+import '../data/mock_data.dart';
 import 'study_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,9 +13,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Deck> _decks = [];
-  Map<String, Map<String, int>> _deckStats =
-      {}; // {deckId: {'total': X, 'learned': Y}}
+  Map<String, Map<String, int>> _deckStats = {};
   bool _isLoading = true;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -22,13 +23,26 @@ class _HomePageState extends State<HomePage> {
     _loadData();
   }
 
-  // Tải danh sách bộ thẻ và tính toán tiến độ từ SQLite
+  // Tải dữ liệu và ép Seeding nếu CSDL rỗng
   Future<void> _loadData() async {
-    setState(() => _isLoading = true);
-    try {
-      final decks = await DatabaseHelper.instance.getAllDecks();
-      final Map<String, Map<String, int>> stats = {};
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
 
+    try {
+      var decks = await DatabaseHelper.instance.getAllDecks();
+
+      // Nếu CSDL rỗng, tự động nạp MockData ngay lập tức
+      if (decks.isEmpty) {
+        for (var deck in MockData.defaultDecks) {
+          await DatabaseHelper.instance.insertDeck(deck);
+        }
+        await DatabaseHelper.instance.insertBatchCards(MockData.defaultCards);
+        decks = await DatabaseHelper.instance.getAllDecks();
+      }
+
+      final Map<String, Map<String, int>> stats = {};
       for (var deck in decks) {
         final stat = await DatabaseHelper.instance.getDeckStats(deck.id);
         stats[deck.id] = stat;
@@ -39,99 +53,21 @@ class _HomePageState extends State<HomePage> {
         _deckStats = stats;
       });
     } catch (e) {
-      debugPrint('Lỗi tải dữ liệu HomePage: $e');
+      setState(() => _errorMessage = e.toString());
+      debugPrint('Lỗi HomePage: $e');
     } finally {
       setState(() => _isLoading = false);
     }
   }
 
-  // Hộp thoại Thêm / Sửa bộ thẻ
-  void _showDeckDialog({Deck? deckToEdit}) {
-    final titleController =
-        TextEditingController(text: deckToEdit?.title ?? '');
-    final descController =
-        TextEditingController(text: deckToEdit?.description ?? '');
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(deckToEdit == null ? 'Tạo bộ thẻ mới' : 'Chỉnh sửa bộ thẻ'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: titleController,
-              autofocus: true,
-              decoration: const InputDecoration(
-                labelText: 'Tên bộ thẻ *',
-                hintText: 'VD: Từ vựng IELTS N3',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: descController,
-              decoration: const InputDecoration(
-                labelText: 'Mô tả ngắn',
-                hintText: 'VD: Các từ hay xuất hiện trong đề thi',
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Hủy'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              if (titleController.text.trim().isEmpty) return;
-
-              final deck = Deck(
-                id: deckToEdit?.id ??
-                    DateTime.now().millisecondsSinceEpoch.toString(),
-                title: titleController.text.trim(),
-                description: descController.text.trim(),
-                createdAt: deckToEdit?.createdAt,
-              );
-
-              await DatabaseHelper.instance.insertDeck(deck);
-              if (mounted) Navigator.pop(context);
-              _loadData();
-            },
-            child: Text(deckToEdit == null ? 'Tạo mới' : 'Lưu'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Xác nhận Xóa bộ thẻ
-  void _confirmDelete(Deck deck) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Xác nhận xóa'),
-        content: Text(
-            'Bạn có chắc muốn xóa bộ thẻ "${deck.title}"?\nTất cả thẻ ghi nhớ bên trong cũng sẽ bị xóa vĩnh viễn.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Hủy'),
-          ),
-          TextButton(
-            onPressed: () async {
-              await DatabaseHelper.instance.deleteDeck(deck.id);
-              if (mounted) Navigator.pop(context);
-              _loadData();
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Xóa'),
-          ),
-        ],
-      ),
-    );
+  // Ép nạp lại dữ liệu mẫu bằng tay
+  Future<void> _forceSeedData() async {
+    setState(() => _isLoading = true);
+    for (var deck in MockData.defaultDecks) {
+      await DatabaseHelper.instance.insertDeck(deck);
+    }
+    await DatabaseHelper.instance.insertBatchCards(MockData.defaultCards);
+    await _loadData();
   }
 
   @override
@@ -143,22 +79,26 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         actions: [
           IconButton(
+            icon: const Icon(Icons.download),
+            tooltip: 'Nạp dữ liệu mẫu',
+            onPressed: _forceSeedData,
+          ),
+          IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: _loadData,
             tooltip: 'Làm mới',
+            onPressed: _loadData,
           ),
         ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : _decks.isEmpty
-              ? _buildEmptyState()
-              : _buildDeckList(),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showDeckDialog(),
-        icon: const Icon(Icons.add),
-        label: const Text('Bộ thẻ mới'),
-      ),
+          : _errorMessage != null
+              ? Center(
+                  child: Text('Lỗi: $_errorMessage',
+                      style: const TextStyle(color: Colors.red)))
+              : _decks.isEmpty
+                  ? _buildEmptyState()
+                  : _buildDeckList(),
     );
   }
 
@@ -169,15 +109,16 @@ class _HomePageState extends State<HomePage> {
         children: [
           Icon(Icons.folder_open_outlined, size: 80, color: Colors.grey[400]),
           const SizedBox(height: 16),
-          Text(
-            'Chưa có bộ thẻ nào',
-            style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey[600],
-                fontWeight: FontWeight.bold),
+          const Text(
+            'Chưa có bộ thẻ nào trong CSDL',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 8),
-          const Text('Bấm nút "Bộ thẻ mới" bên dưới để bắt đầu.'),
+          const SizedBox(height: 12),
+          ElevatedButton.icon(
+            onPressed: _forceSeedData,
+            icon: const Icon(Icons.file_download),
+            label: const Text('Nạp ngay dữ liệu mẫu (IELTS, TOEIC, N3)'),
+          ),
         ],
       ),
     );
@@ -185,7 +126,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildDeckList() {
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.all(16),
       itemCount: _decks.length,
       itemBuilder: (context, index) {
         final deck = _decks[index];
@@ -196,20 +137,16 @@ class _HomePageState extends State<HomePage> {
 
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
-          elevation: 2,
+          elevation: 3,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
             onTap: () async {
-              // Điều hướng sang Màn hình Ôn tập (StudyPage)
               await Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => StudyPage(deck: deck),
-                ),
+                MaterialPageRoute(builder: (context) => StudyPage(deck: deck)),
               );
-              // Tải lại tiến độ khi học xong quay về
               _loadData();
             },
             child: Padding(
@@ -217,46 +154,17 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          deck.title,
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      PopupMenuButton<String>(
-                        onSelected: (value) {
-                          if (value == 'edit')
-                            _showDeckDialog(deckToEdit: deck);
-                          if (value == 'delete') _confirmDelete(deck);
-                        },
-                        itemBuilder: (context) => [
-                          const PopupMenuItem(
-                              value: 'edit', child: Text('Chỉnh sửa')),
-                          const PopupMenuItem(
-                            value: 'delete',
-                            child: Text('Xóa bộ thẻ',
-                                style: TextStyle(color: Colors.red)),
-                          ),
-                        ],
-                      ),
-                    ],
+                  Text(
+                    deck.title,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  if (deck.description != null &&
-                      deck.description!.isNotEmpty) ...[
+                  if (deck.description != null) ...[
                     const SizedBox(height: 4),
-                    Text(
-                      deck.description!,
-                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    Text(deck.description!,
+                        style: TextStyle(color: Colors.grey[600])),
                   ],
                   const SizedBox(height: 16),
-                  // Progress Bar hiển thị % thuộc bài
                   Row(
                     children: [
                       Expanded(
@@ -271,11 +179,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      Text(
-                        '$learned/$total thẻ',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 13),
-                      ),
+                      Text('$learned/$total thẻ',
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ],
