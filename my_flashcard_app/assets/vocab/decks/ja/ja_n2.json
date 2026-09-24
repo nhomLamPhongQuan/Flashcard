@@ -1,0 +1,139 @@
+{
+  "words": [
+    {
+      "t": "影響",
+      "r": "えいきょう",
+      "ro": "eikyō",
+      "p": "n",
+      "m": "ảnh hưởng",
+      "e": "この決定は多くの人に影響を与える。",
+      "v": "Quyết định này ảnh hưởng đến nhiều người."
+    },
+    {
+      "t": "解決",
+      "r": "かいけつ",
+      "ro": "kaiketsu",
+      "p": "n, v(する)",
+      "m": "giải quyết",
+      "e": "問題を早く解決したい。",
+      "v": "Tôi muốn giải quyết vấn đề sớm."
+    },
+    {
+      "t": "経済",
+      "r": "けいざい",
+      "ro": "keizai",
+      "p": "n",
+      "m": "kinh tế",
+      "e": "経済が急速に成長している。",
+      "v": "Kinh tế đang tăng trưởng nhanh chóng."
+    },
+    {
+      "t": "環境",
+      "r": "かんきょう",
+      "ro": "kankyō",
+      "p": "n",
+      "m": "môi trường",
+      "e": "環境を守ることが大切だ。",
+      "v": "Bảo vệ môi trường là điều quan trọng."
+    },
+    {
+      "t": "増加",
+      "r": "ぞうか",
+      "ro": "zōka",
+      "p": "n, v(する)",
+      "m": "gia tăng",
+      "e": "人口が増加している。",
+      "v": "Dân số đang gia tăng."
+    },
+    {
+      "t": "減少",
+      "r": "げんしょう",
+      "ro": "genshō",
+      "p": "n, v(する)",
+      "m": "giảm sút",
+      "e": "売り上げが減少した。",
+      "v": "Doanh số đã giảm sút."
+    },
+    {
+      "t": "状況",
+      "r": "じょうきょう",
+      "ro": "jōkyō",
+      "p": "n",
+      "m": "tình hình",
+      "e": "現在の状況を説明してください。",
+      "v": "Xin hãy giải thích tình hình hiện tại."
+    },
+    {
+      "t": "対応",
+      "r": "たいおう",
+      "ro": "taiō",
+      "p": "n, v(する)",
+      "m": "ứng phó, đối ứng",
+      "e": "クレームに丁寧に対応する。",
+      "v": "Đối ứng khiếu nại một cách chu đáo."
+    },
+    {
+      "t": "判断",
+      "r": "はんだん",
+      "ro": "handan",
+      "p": "n, v(する)",
+      "m": "phán đoán, quyết định",
+      "e": "冷静に判断することが必要だ。",
+      "v": "Cần phán đoán một cách bình tĩnh."
+    },
+    {
+      "t": "検討",
+      "r": "けんとう",
+      "ro": "kentō",
+      "p": "n, v(する)",
+      "m": "xem xét, cân nhắc",
+      "e": "この案を検討してください。",
+      "v": "Xin hãy xem xét đề án này."
+    },
+    {
+      "t": "確認",
+      "r": "かくにん",
+      "ro": "kakunin",
+      "p": "n, v(する)",
+      "m": "xác nhận",
+      "e": "内容を確認してから送ってください。",
+      "v": "Hãy xác nhận nội dung trước khi gửi."
+    },
+    {
+      "t": "維持",
+      "r": "いじ",
+      "ro": "iji",
+      "p": "n, v(する)",
+      "m": "duy trì",
+      "e": "健康を維持するために運動する。",
+      "v": "Tập thể dục để duy trì sức khỏe."
+    },
+    {
+      "t": "傾向",
+      "r": "けいこう",
+      "ro": "keikō",
+      "p": "n",
+      "m": "xu hướng",
+      "e": "若者の間で新しい傾向が見られる。",
+      "v": "Có thể thấy xu hướng mới trong giới trẻ."
+    },
+    {
+      "t": "効果",
+      "r": "こうか",
+      "ro": "kōka",
+      "p": "n",
+      "m": "hiệu quả",
+      "e": "この薬はすぐに効果が出る。",
+      "v": "Loại thuốc này có hiệu quả ngay."
+    },
+    {
+      "t": "改善",
+      "r": "かいぜん",
+      "ro": "kaizen",
+      "p": "n, v(する)",
+      "m": "cải thiện",
+      "e": "サービスの質を改善する必要がある。",
+      "v": "Cần cải thiện chất lượng dịch vụ."
+    }
+  ]
+}

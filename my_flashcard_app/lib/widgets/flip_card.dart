@@ -55,7 +55,6 @@ class _FlipCardState extends State<FlipCard>
   }
 
   @override
-  //setEntry(3, 2, 0.0011) tạo hiệu ứng phối cảnh (perspective) để thẻ trông "xoay trong không gian 3D" chứ không bị bóp méo phẳng. Khi góc xoay qua 90° (nửa chặng), nó đổi từ hiển thị mặt trước sang mặt sau (chữ bị lật ngược nên phải xoay pi thêm lần nữa để chữ mặt sau đọc xuôi bình thường).
   Widget build(BuildContext context) {
     final p = Palette.ofContext(context);
     return SizedBox.expand(
@@ -148,7 +147,7 @@ class _Face extends StatelessWidget {
   }
 
   Widget _front(Palette p) {
-    final isJa = word.lang == Lang.ja;
+    final isCjk = word.lang.hidesReadingOnFront;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -156,16 +155,16 @@ class _Face extends StatelessWidget {
           word.term,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: isJa ? 60 : 42,
-            fontWeight: isJa ? FontWeight.w600 : FontWeight.w700,
+            fontSize: isCjk ? 60 : 42,
+            fontWeight: isCjk ? FontWeight.w600 : FontWeight.w700,
             height: 1.15,
-            letterSpacing: isJa ? 0 : -0.5,
+            letterSpacing: isCjk ? 0 : -0.5,
             color: p.ink,
           ),
         ),
-        // Tiếng Anh hiện phiên âm ngay ở mặt trước. Tiếng Nhật ẩn cách đọc
-        // để người học tự nhớ trước khi lật.
-        if (!isJa && word.reading != null) ...[
+        // Tiếng Anh hiện phiên âm ngay ở mặt trước. Tiếng Nhật/Hàn ẩn cách
+        // đọc để người học tự nhớ trước khi lật.
+        if (!isCjk && word.reading != null) ...[
           const SizedBox(height: 12),
           Text(
             word.reading!,
@@ -178,20 +177,21 @@ class _Face extends StatelessWidget {
   }
 
   Widget _back(Palette p, Color accent) {
-    final isJa = word.lang == Lang.ja;
+    final isCjk = word.lang.hidesReadingOnFront;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (isJa) ...[
-          Text(
-            word.reading ?? word.term,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 32, fontWeight: FontWeight.w600, color: accent),
-          ),
-          if (word.romaji != null)
+        if (isCjk) ...[
+          if (word.reading != null)
             Text(
-              word.romaji!,
+              word.reading!,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 32, fontWeight: FontWeight.w600, color: accent),
+            ),
+          if (word.romanization != null)
+            Text(
+              word.romanization!,
               style: TextStyle(fontSize: 16, color: p.muted),
             ),
         ] else ...[

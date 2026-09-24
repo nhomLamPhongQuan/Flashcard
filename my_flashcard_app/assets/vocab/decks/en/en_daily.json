@@ -1,0 +1,116 @@
+{
+  "words": [
+    {
+      "t": "commute",
+      "r": "/kəˈmjuːt/",
+      "p": "v, n",
+      "m": "đi lại (giữa nhà và nơi làm việc)",
+      "e": "My commute takes about forty minutes.",
+      "v": "Quãng đường đi làm của tôi mất khoảng bốn mươi phút."
+    },
+    {
+      "t": "borrow",
+      "r": "/ˈbɒrəʊ/",
+      "p": "v",
+      "m": "mượn",
+      "e": "Can I borrow your pen?",
+      "v": "Tôi mượn bút của bạn được không?"
+    },
+    {
+      "t": "deadline",
+      "r": "/ˈdedlaɪn/",
+      "p": "n",
+      "m": "hạn chót",
+      "e": "The deadline is this Friday.",
+      "v": "Hạn chót là thứ Sáu này."
+    },
+    {
+      "t": "reluctant",
+      "r": "/rɪˈlʌktənt/",
+      "p": "adj",
+      "m": "miễn cưỡng, do dự",
+      "e": "He was reluctant to speak in public.",
+      "v": "Anh ấy ngại nói trước đám đông."
+    },
+    {
+      "t": "convenient",
+      "r": "/kənˈviːniənt/",
+      "p": "adj",
+      "m": "thuận tiện",
+      "e": "The shop is convenient because it's near my house.",
+      "v": "Cửa hàng này tiện vì gần nhà tôi."
+    },
+    {
+      "t": "appointment",
+      "r": "/əˈpɔɪntmənt/",
+      "p": "n",
+      "m": "cuộc hẹn",
+      "e": "I have a dentist appointment at 3 p.m.",
+      "v": "Tôi có hẹn với nha sĩ lúc 3 giờ chiều."
+    },
+    {
+      "t": "recommend",
+      "r": "/ˌrekəˈmend/",
+      "p": "v",
+      "m": "giới thiệu, đề xuất",
+      "e": "Can you recommend a good restaurant?",
+      "v": "Bạn có thể giới thiệu một nhà hàng ngon không?"
+    },
+    {
+      "t": "improve",
+      "r": "/ɪmˈpruːv/",
+      "p": "v",
+      "m": "cải thiện",
+      "e": "I want to improve my English.",
+      "v": "Tôi muốn cải thiện tiếng Anh của mình."
+    },
+    {
+      "t": "afford",
+      "r": "/əˈfɔːd/",
+      "p": "v",
+      "m": "đủ khả năng chi trả",
+      "e": "I can't afford a new phone right now.",
+      "v": "Bây giờ tôi không đủ tiền mua điện thoại mới."
+    },
+    {
+      "t": "schedule",
+      "r": "/ˈʃedjuːl/",
+      "p": "n",
+      "m": "lịch trình",
+      "e": "My schedule is full this week.",
+      "v": "Lịch của tôi tuần này kín rồi."
+    },
+    {
+      "t": "familiar",
+      "r": "/fəˈmɪliə/",
+      "p": "adj",
+      "m": "quen thuộc",
+      "e": "This song sounds familiar.",
+      "v": "Bài hát này nghe quen quen."
+    },
+    {
+      "t": "figure out",
+      "r": "/ˈfɪɡər aʊt/",
+      "p": "phr v",
+      "m": "tìm ra, hiểu ra",
+      "e": "I can't figure out how this app works.",
+      "v": "Tôi không hiểu ứng dụng này hoạt động thế nào."
+    },
+    {
+      "t": "run out of",
+      "r": "/rʌn aʊt əv/",
+      "p": "phr v",
+      "m": "hết, cạn kiệt",
+      "e": "We've run out of milk.",
+      "v": "Chúng ta hết sữa rồi."
+    },
+    {
+      "t": "look forward to",
+      "r": "/lʊk ˈfɔːwəd tuː/",
+      "p": "phr v",
+      "m": "mong chờ",
+      "e": "I'm looking forward to the weekend.",
+      "v": "Tôi đang mong đến cuối tuần."
+    }
+  ]
+}

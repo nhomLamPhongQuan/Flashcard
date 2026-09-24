@@ -1,0 +1,124 @@
+{
+  "words": [
+    {
+      "t": "symptom",
+      "r": "/ˈsɪmptəm/",
+      "p": "n",
+      "m": "triệu chứng",
+      "e": "Fever is a common symptom of flu.",
+      "v": "Sốt là triệu chứng phổ biến của cúm."
+    },
+    {
+      "t": "prescription",
+      "r": "/prɪˈskrɪpʃn/",
+      "p": "n",
+      "m": "đơn thuốc",
+      "e": "The doctor gave me a prescription.",
+      "v": "Bác sĩ kê cho tôi một đơn thuốc."
+    },
+    {
+      "t": "recover",
+      "r": "/rɪˈkʌvə/",
+      "p": "v",
+      "m": "hồi phục",
+      "e": "It took a week to recover.",
+      "v": "Mất một tuần để hồi phục."
+    },
+    {
+      "t": "exhausted",
+      "r": "/ɪɡˈzɔːstɪd/",
+      "p": "adj",
+      "m": "kiệt sức",
+      "e": "I felt exhausted after the shift.",
+      "v": "Tôi cảm thấy kiệt sức sau ca làm."
+    },
+    {
+      "t": "diagnose",
+      "r": "/ˈdaɪəɡnəʊz/",
+      "p": "v",
+      "m": "chẩn đoán",
+      "e": "The doctor diagnosed him with a mild infection.",
+      "v": "Bác sĩ chẩn đoán anh ấy bị nhiễm trùng nhẹ."
+    },
+    {
+      "t": "injury",
+      "r": "/ˈɪndʒəri/",
+      "p": "n",
+      "m": "chấn thương",
+      "e": "She suffered a minor injury.",
+      "v": "Cô ấy bị một chấn thương nhẹ."
+    },
+    {
+      "t": "immune system",
+      "r": "/ɪˈmjuːn ˈsɪstəm/",
+      "p": "n",
+      "m": "hệ miễn dịch",
+      "e": "Vitamin C supports the immune system.",
+      "v": "Vitamin C hỗ trợ hệ miễn dịch."
+    },
+    {
+      "t": "nutritious",
+      "r": "/njuːˈtrɪʃəs/",
+      "p": "adj",
+      "m": "bổ dưỡng",
+      "e": "Try to eat more nutritious food.",
+      "v": "Hãy cố ăn nhiều thực phẩm bổ dưỡng hơn."
+    },
+    {
+      "t": "fatigue",
+      "r": "/fəˈtiːɡ/",
+      "p": "n",
+      "m": "mệt mỏi",
+      "e": "Chronic fatigue can affect your mood.",
+      "v": "Mệt mỏi kéo dài có thể ảnh hưởng tâm trạng."
+    },
+    {
+      "t": "posture",
+      "r": "/ˈpɒstʃə/",
+      "p": "n",
+      "m": "tư thế",
+      "e": "Good posture prevents back pain.",
+      "v": "Tư thế đúng giúp phòng đau lưng."
+    },
+    {
+      "t": "workout",
+      "r": "/ˈwɜːkaʊt/",
+      "p": "n",
+      "m": "buổi tập luyện",
+      "e": "I have a workout every morning.",
+      "v": "Tôi có buổi tập mỗi sáng."
+    },
+    {
+      "t": "come down with",
+      "r": "/kʌm daʊn wɪð/",
+      "p": "phr v",
+      "m": "bị mắc (bệnh nhẹ)",
+      "e": "I think I'm coming down with a cold.",
+      "v": "Hình như tôi sắp bị cảm rồi."
+    },
+    {
+      "t": "work out",
+      "r": "/wɜːk aʊt/",
+      "p": "phr v",
+      "m": "tập thể dục",
+      "e": "She works out three times a week.",
+      "v": "Cô ấy tập thể dục ba lần một tuần."
+    },
+    {
+      "t": "burn out",
+      "r": "/bɜːn aʊt/",
+      "p": "phr v",
+      "m": "kiệt sức vì công việc",
+      "e": "He burned out after months of overtime.",
+      "v": "Anh ấy kiệt sức sau nhiều tháng làm thêm giờ."
+    },
+    {
+      "t": "under the weather",
+      "r": "/ˈʌndə ðə ˈweðə/",
+      "p": "idiom",
+      "m": "cảm thấy không khỏe",
+      "e": "I'm feeling a bit under the weather today.",
+      "v": "Hôm nay tôi cảm thấy hơi không khỏe."
+    }
+  ]
+}

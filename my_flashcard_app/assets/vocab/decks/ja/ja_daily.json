@@ -1,0 +1,139 @@
+{
+  "words": [
+    {
+      "t": "洗濯",
+      "r": "せんたく",
+      "ro": "sentaku",
+      "p": "n, v(する)",
+      "m": "giặt giũ",
+      "e": "週末に洗濯をします。",
+      "v": "Tôi giặt đồ vào cuối tuần."
+    },
+    {
+      "t": "掃除",
+      "r": "そうじ",
+      "ro": "sōji",
+      "p": "n, v(する)",
+      "m": "dọn dẹp",
+      "e": "部屋を掃除しました。",
+      "v": "Tôi đã dọn dẹp phòng."
+    },
+    {
+      "t": "買い物",
+      "r": "かいもの",
+      "ro": "kaimono",
+      "p": "n",
+      "m": "mua sắm",
+      "e": "スーパーへ買い物に行きます。",
+      "v": "Tôi đi mua sắm ở siêu thị."
+    },
+    {
+      "t": "支払う",
+      "r": "しはらう",
+      "ro": "shiharau",
+      "p": "v",
+      "m": "thanh toán",
+      "e": "現金で支払います。",
+      "v": "Tôi thanh toán bằng tiền mặt."
+    },
+    {
+      "t": "予定",
+      "r": "よてい",
+      "ro": "yotei",
+      "p": "n",
+      "m": "dự định, kế hoạch",
+      "e": "明日の予定を確認します。",
+      "v": "Tôi kiểm tra kế hoạch ngày mai."
+    },
+    {
+      "t": "用事",
+      "r": "ようじ",
+      "ro": "yōji",
+      "p": "n",
+      "m": "việc cần làm",
+      "e": "午後は用事があります。",
+      "v": "Chiều tôi có việc cần làm."
+    },
+    {
+      "t": "近所",
+      "r": "きんじょ",
+      "ro": "kinjo",
+      "p": "n",
+      "m": "hàng xóm, gần nhà",
+      "e": "近所にコンビニがあります。",
+      "v": "Gần nhà có cửa hàng tiện lợi."
+    },
+    {
+      "t": "引っ越す",
+      "r": "ひっこす",
+      "ro": "hikkosu",
+      "p": "v",
+      "m": "chuyển nhà",
+      "e": "来月、引っ越します。",
+      "v": "Tháng sau tôi chuyển nhà."
+    },
+    {
+      "t": "家賃",
+      "r": "やちん",
+      "ro": "yachin",
+      "p": "n",
+      "m": "tiền thuê nhà",
+      "e": "家賃は毎月払います。",
+      "v": "Tôi trả tiền thuê nhà hằng tháng."
+    },
+    {
+      "t": "郵便局",
+      "r": "ゆうびんきょく",
+      "ro": "yūbinkyoku",
+      "p": "n",
+      "m": "bưu điện",
+      "e": "郵便局で荷物を送りました。",
+      "v": "Tôi đã gửi hàng ở bưu điện."
+    },
+    {
+      "t": "役所",
+      "r": "やくしょ",
+      "ro": "yakusho",
+      "p": "n",
+      "m": "cơ quan hành chính",
+      "e": "役所で手続きをします。",
+      "v": "Tôi làm thủ tục ở cơ quan hành chính."
+    },
+    {
+      "t": "忙しい",
+      "r": "いそがしい",
+      "ro": "isogashii",
+      "p": "adj",
+      "m": "bận rộn",
+      "e": "今週はとても忙しいです。",
+      "v": "Tuần này tôi rất bận."
+    },
+    {
+      "t": "面倒くさい",
+      "r": "めんどうくさい",
+      "ro": "mendōkusai",
+      "p": "adj",
+      "m": "phiền phức, ngại làm",
+      "e": "手続きが面倒くさいです。",
+      "v": "Thủ tục này phiền phức quá."
+    },
+    {
+      "t": "助かる",
+      "r": "たすかる",
+      "ro": "tasukaru",
+      "p": "v",
+      "m": "được giúp đỡ, đỡ vất vả",
+      "e": "手伝ってくれて助かりました。",
+      "v": "Nhờ bạn giúp mà tôi đỡ vất vả."
+    },
+    {
+      "t": "片付ける",
+      "r": "かたづける",
+      "ro": "katazukeru",
+      "p": "v",
+      "m": "dọn dẹp, sắp xếp",
+      "e": "机の上を片付けてください。",
+      "v": "Hãy dọn dẹp trên bàn."
+    }
+  ]
+}

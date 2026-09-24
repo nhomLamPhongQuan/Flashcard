@@ -1,0 +1,116 @@
+{
+  "words": [
+    {
+      "t": "meticulous",
+      "r": "/məˈtɪkjələs/",
+      "p": "adj",
+      "m": "tỉ mỉ, kỹ lưỡng",
+      "e": "The researchers were meticulous in recording data.",
+      "v": "Các nhà nghiên cứu ghi chép dữ liệu rất tỉ mỉ."
+    },
+    {
+      "t": "abundant",
+      "r": "/əˈbʌndənt/",
+      "p": "adj",
+      "m": "dồi dào, phong phú",
+      "e": "The region has abundant natural resources.",
+      "v": "Vùng này có tài nguyên thiên nhiên dồi dào."
+    },
+    {
+      "t": "mitigate",
+      "r": "/ˈmɪtɪɡeɪt/",
+      "p": "v",
+      "m": "giảm nhẹ",
+      "e": "Governments should mitigate the effects of climate change.",
+      "v": "Chính phủ nên giảm nhẹ tác động của biến đổi khí hậu."
+    },
+    {
+      "t": "sustainable",
+      "r": "/səˈsteɪnəbl/",
+      "p": "adj",
+      "m": "bền vững",
+      "e": "Sustainable energy is essential for the future.",
+      "v": "Năng lượng bền vững là thiết yếu cho tương lai."
+    },
+    {
+      "t": "prevalent",
+      "r": "/ˈprevələnt/",
+      "p": "adj",
+      "m": "phổ biến, thịnh hành",
+      "e": "Obesity is increasingly prevalent among children.",
+      "v": "Béo phì ngày càng phổ biến ở trẻ em."
+    },
+    {
+      "t": "substantial",
+      "r": "/səbˈstænʃl/",
+      "p": "adj",
+      "m": "đáng kể, lớn",
+      "e": "There has been a substantial increase in prices.",
+      "v": "Giá cả đã tăng đáng kể."
+    },
+    {
+      "t": "fluctuate",
+      "r": "/ˈflʌktʃueɪt/",
+      "p": "v",
+      "m": "dao động",
+      "e": "Prices fluctuate throughout the year.",
+      "v": "Giá cả dao động quanh năm."
+    },
+    {
+      "t": "inevitable",
+      "r": "/ɪnˈevɪtəbl/",
+      "p": "adj",
+      "m": "không thể tránh khỏi",
+      "e": "Change is inevitable in a growing city.",
+      "v": "Thay đổi là điều không thể tránh khỏi ở một thành phố đang phát triển."
+    },
+    {
+      "t": "controversial",
+      "r": "/ˌkɒntrəˈvɜːʃl/",
+      "p": "adj",
+      "m": "gây tranh cãi",
+      "e": "The policy is highly controversial.",
+      "v": "Chính sách này gây tranh cãi lớn."
+    },
+    {
+      "t": "comprehensive",
+      "r": "/ˌkɒmprɪˈhensɪv/",
+      "p": "adj",
+      "m": "toàn diện",
+      "e": "The report gives a comprehensive analysis.",
+      "v": "Bản báo cáo đưa ra phân tích toàn diện."
+    },
+    {
+      "t": "detrimental",
+      "r": "/ˌdetrɪˈmentl/",
+      "p": "adj",
+      "m": "có hại",
+      "e": "Lack of sleep is detrimental to health.",
+      "v": "Thiếu ngủ có hại cho sức khỏe."
+    },
+    {
+      "t": "phenomenon",
+      "r": "/fəˈnɒmɪnən/",
+      "p": "n",
+      "m": "hiện tượng",
+      "e": "Urbanisation is a global phenomenon.",
+      "v": "Đô thị hóa là một hiện tượng toàn cầu."
+    },
+    {
+      "t": "exacerbate",
+      "r": "/ɪɡˈzæsəbeɪt/",
+      "p": "v",
+      "m": "làm trầm trọng thêm",
+      "e": "Heavy traffic exacerbates air pollution.",
+      "v": "Giao thông đông đúc làm ô nhiễm không khí trầm trọng thêm."
+    },
+    {
+      "t": "allocate",
+      "r": "/ˈæləkeɪt/",
+      "p": "v",
+      "m": "phân bổ",
+      "e": "The government allocated more funds to education.",
+      "v": "Chính phủ phân bổ thêm ngân sách cho giáo dục."
+    }
+  ]
+}

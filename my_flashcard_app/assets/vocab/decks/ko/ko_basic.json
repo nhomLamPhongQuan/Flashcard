@@ -1,0 +1,124 @@
+{
+  "words": [
+    {
+      "t": "안녕하세요",
+      "r": "annyeonghaseyo",
+      "p": "phr",
+      "m": "xin chào (lịch sự)",
+      "e": "안녕하세요, 처음 뵙겠습니다.",
+      "v": "Xin chào, rất vui được gặp bạn lần đầu."
+    },
+    {
+      "t": "감사합니다",
+      "r": "gamsahamnida",
+      "p": "phr",
+      "m": "cảm ơn (lịch sự)",
+      "e": "도와주셔서 감사합니다.",
+      "v": "Cảm ơn bạn đã giúp đỡ."
+    },
+    {
+      "t": "죄송합니다",
+      "r": "joesonghamnida",
+      "p": "phr",
+      "m": "xin lỗi (lịch sự)",
+      "e": "늦어서 죄송합니다.",
+      "v": "Xin lỗi vì tôi đến muộn."
+    },
+    {
+      "t": "친구",
+      "r": "chingu",
+      "p": "n",
+      "m": "bạn bè",
+      "e": "그는 제 가장 친한 친구입니다.",
+      "v": "Anh ấy là bạn thân nhất của tôi."
+    },
+    {
+      "t": "가족",
+      "r": "gajok",
+      "p": "n",
+      "m": "gia đình",
+      "e": "저는 가족과 함께 삽니다.",
+      "v": "Tôi sống cùng gia đình."
+    },
+    {
+      "t": "이름",
+      "r": "ireum",
+      "p": "n",
+      "m": "tên",
+      "e": "이름이 뭐예요?",
+      "v": "Bạn tên là gì?"
+    },
+    {
+      "t": "오늘",
+      "r": "oneul",
+      "p": "n",
+      "m": "hôm nay",
+      "e": "오늘 날씨가 좋아요.",
+      "v": "Hôm nay thời tiết đẹp."
+    },
+    {
+      "t": "내일",
+      "r": "naeil",
+      "p": "n",
+      "m": "ngày mai",
+      "e": "내일 만나요.",
+      "v": "Hẹn gặp lại vào ngày mai."
+    },
+    {
+      "t": "맛있다",
+      "r": "masitda",
+      "p": "adj",
+      "m": "ngon",
+      "e": "이 음식은 정말 맛있어요.",
+      "v": "Món này thật sự ngon."
+    },
+    {
+      "t": "좋아하다",
+      "r": "joahada",
+      "p": "v",
+      "m": "thích",
+      "e": "저는 한국 음악을 좋아해요.",
+      "v": "Tôi thích nhạc Hàn Quốc."
+    },
+    {
+      "t": "배우다",
+      "r": "baeuda",
+      "p": "v",
+      "m": "học",
+      "e": "한국어를 배우고 있어요.",
+      "v": "Tôi đang học tiếng Hàn."
+    },
+    {
+      "t": "일하다",
+      "r": "ilhada",
+      "p": "v",
+      "m": "làm việc",
+      "e": "저는 회사에서 일해요.",
+      "v": "Tôi làm việc ở công ty."
+    },
+    {
+      "t": "바쁘다",
+      "r": "bappeuda",
+      "p": "adj",
+      "m": "bận rộn",
+      "e": "요즘 너무 바빠요.",
+      "v": "Dạo này tôi rất bận."
+    },
+    {
+      "t": "피곤하다",
+      "r": "pigonhada",
+      "p": "adj",
+      "m": "mệt mỏi",
+      "e": "오늘 정말 피곤해요.",
+      "v": "Hôm nay tôi thực sự mệt."
+    },
+    {
+      "t": "괜찮다",
+      "r": "gwaenchanta",
+      "p": "adj",
+      "m": "ổn, không sao",
+      "e": "괜찮아요, 걱정하지 마세요.",
+      "v": "Không sao đâu, đừng lo lắng."
+    }
+  ]
+}

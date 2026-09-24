@@ -30,7 +30,7 @@ class _LibraryTabState extends State<LibraryTab> {
             return w.term.toLowerCase().contains(q) ||
                 w.meaning.toLowerCase().contains(q) ||
                 (w.reading?.toLowerCase().contains(q) ?? false) ||
-                (w.romaji?.toLowerCase().contains(q) ?? false);
+                (w.romanization?.toLowerCase().contains(q) ?? false);
           }).toList();
 
     OutlineInputBorder border(Color color) => OutlineInputBorder(

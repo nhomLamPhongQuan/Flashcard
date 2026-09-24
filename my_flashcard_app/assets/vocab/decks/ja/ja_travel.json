@@ -1,0 +1,139 @@
+{
+  "words": [
+    {
+      "t": "旅行",
+      "r": "りょこう",
+      "ro": "ryokō",
+      "p": "n, v(する)",
+      "m": "du lịch",
+      "e": "来月、日本へ旅行します。",
+      "v": "Tháng sau tôi đi du lịch Nhật Bản."
+    },
+    {
+      "t": "観光",
+      "r": "かんこう",
+      "ro": "kankō",
+      "p": "n, v(する)",
+      "m": "tham quan",
+      "e": "京都を観光しました。",
+      "v": "Tôi đã tham quan Kyoto."
+    },
+    {
+      "t": "宿泊",
+      "r": "しゅくはく",
+      "ro": "shukuhaku",
+      "p": "n, v(する)",
+      "m": "lưu trú (khách sạn)",
+      "e": "ホテルに三泊宿泊します。",
+      "v": "Tôi lưu trú tại khách sạn ba đêm."
+    },
+    {
+      "t": "切符",
+      "r": "きっぷ",
+      "ro": "kippu",
+      "p": "n",
+      "m": "vé (tàu, xe)",
+      "e": "新幹線の切符を買いました。",
+      "v": "Tôi đã mua vé tàu Shinkansen."
+    },
+    {
+      "t": "乗り換える",
+      "r": "のりかえる",
+      "ro": "norikaeru",
+      "p": "v",
+      "m": "đổi chuyến, chuyển tàu",
+      "e": "東京駅で乗り換えます。",
+      "v": "Tôi đổi tàu ở ga Tokyo."
+    },
+    {
+      "t": "案内所",
+      "r": "あんないじょ",
+      "ro": "annaijo",
+      "p": "n",
+      "m": "quầy hướng dẫn",
+      "e": "観光案内所で地図をもらいました。",
+      "v": "Tôi đã lấy bản đồ ở quầy hướng dẫn du lịch."
+    },
+    {
+      "t": "温泉",
+      "r": "おんせん",
+      "ro": "onsen",
+      "p": "n",
+      "m": "suối nước nóng",
+      "e": "週末は温泉に行きたいです。",
+      "v": "Cuối tuần tôi muốn đi suối nước nóng."
+    },
+    {
+      "t": "名所",
+      "r": "めいしょ",
+      "ro": "meisho",
+      "p": "n",
+      "m": "danh lam thắng cảnh",
+      "e": "この町にはたくさんの名所があります。",
+      "v": "Thị trấn này có nhiều danh lam thắng cảnh."
+    },
+    {
+      "t": "混雑する",
+      "r": "こんざつする",
+      "ro": "konzatsu suru",
+      "p": "v",
+      "m": "đông đúc, tắc nghẽn",
+      "e": "この時期は観光地が混雑します。",
+      "v": "Mùa này các điểm du lịch rất đông đúc."
+    },
+    {
+      "t": "両替",
+      "r": "りょうがえ",
+      "ro": "ryōgae",
+      "p": "n, v(する)",
+      "m": "đổi tiền",
+      "e": "空港で両替しました。",
+      "v": "Tôi đã đổi tiền ở sân bay."
+    },
+    {
+      "t": "荷物",
+      "r": "にもつ",
+      "ro": "nimotsu",
+      "p": "n",
+      "m": "hành lý",
+      "e": "荷物を預けてください。",
+      "v": "Xin hãy gửi hành lý."
+    },
+    {
+      "t": "出発",
+      "r": "しゅっぱつ",
+      "ro": "shuppatsu",
+      "p": "n, v(する)",
+      "m": "khởi hành",
+      "e": "明日の朝、出発します。",
+      "v": "Sáng mai chúng tôi khởi hành."
+    },
+    {
+      "t": "到着",
+      "r": "とうちゃく",
+      "ro": "tōchaku",
+      "p": "n, v(する)",
+      "m": "đến nơi",
+      "e": "予定より早く到着しました。",
+      "v": "Chúng tôi đã đến sớm hơn dự kiến."
+    },
+    {
+      "t": "迷子になる",
+      "r": "まいごになる",
+      "ro": "maigo ni naru",
+      "p": "v",
+      "m": "bị lạc đường",
+      "e": "駅で迷子になってしまいました。",
+      "v": "Tôi đã bị lạc ở nhà ga."
+    },
+    {
+      "t": "お土産",
+      "r": "おみやげ",
+      "ro": "omiyage",
+      "p": "n",
+      "m": "quà lưu niệm",
+      "e": "家族にお土産を買いました。",
+      "v": "Tôi đã mua quà lưu niệm cho gia đình."
+    }
+  ]
+}

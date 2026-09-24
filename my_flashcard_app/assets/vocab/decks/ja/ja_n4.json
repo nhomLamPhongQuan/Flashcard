@@ -1,0 +1,130 @@
+{
+  "words": [
+    {
+      "t": "質問",
+      "r": "しつもん",
+      "ro": "shitsumon",
+      "p": "n",
+      "m": "câu hỏi",
+      "e": "先生に質問があります。",
+      "v": "Tôi có câu hỏi muốn hỏi thầy cô."
+    },
+    {
+      "t": "準備",
+      "r": "じゅんび",
+      "ro": "junbi",
+      "p": "n",
+      "m": "sự chuẩn bị",
+      "e": "旅行の準備をしています。",
+      "v": "Tôi đang chuẩn bị cho chuyến du lịch."
+    },
+    {
+      "t": "説明",
+      "r": "せつめい",
+      "ro": "setsumei",
+      "p": "n",
+      "m": "giải thích",
+      "e": "もう一度説明してください。",
+      "v": "Xin hãy giải thích lại một lần nữa."
+    },
+    {
+      "t": "予約",
+      "r": "よやく",
+      "ro": "yoyaku",
+      "p": "n",
+      "m": "đặt trước",
+      "e": "レストランを予約しました。",
+      "v": "Tôi đã đặt bàn ở nhà hàng."
+    },
+    {
+      "t": "心配",
+      "r": "しんぱい",
+      "ro": "shinpai",
+      "p": "n, adj-na",
+      "m": "lo lắng",
+      "e": "試験が心配です。",
+      "v": "Tôi lo lắng về kỳ thi."
+    },
+    {
+      "t": "経験",
+      "r": "けいけん",
+      "ro": "keiken",
+      "p": "n",
+      "m": "kinh nghiệm",
+      "e": "日本で働いた経験があります。",
+      "v": "Tôi có kinh nghiệm làm việc ở Nhật."
+    },
+    {
+      "t": "大切",
+      "r": "たいせつ",
+      "ro": "taisetsu",
+      "p": "adj-na",
+      "m": "quan trọng, quý giá",
+      "e": "家族は大切です。",
+      "v": "Gia đình rất quan trọng."
+    },
+    {
+      "t": "忘れる",
+      "r": "わすれる",
+      "ro": "wasureru",
+      "p": "v",
+      "m": "quên",
+      "e": "宿題を忘れました。",
+      "v": "Tôi quên bài tập về nhà."
+    },
+    {
+      "t": "集める",
+      "r": "あつめる",
+      "ro": "atsumeru",
+      "p": "v",
+      "m": "thu thập, sưu tầm",
+      "e": "切手を集めています。",
+      "v": "Tôi đang sưu tầm tem."
+    },
+    {
+      "t": "特別",
+      "r": "とくべつ",
+      "ro": "tokubetsu",
+      "p": "adj-na",
+      "m": "đặc biệt",
+      "e": "今日は特別な日です。",
+      "v": "Hôm nay là một ngày đặc biệt."
+    },
+    {
+      "t": "約束",
+      "r": "やくそく",
+      "ro": "yakusoku",
+      "p": "n",
+      "m": "lời hứa, cuộc hẹn",
+      "e": "友達と約束があります。",
+      "v": "Tôi có hẹn với bạn."
+    },
+    {
+      "t": "危ない",
+      "r": "あぶない",
+      "ro": "abunai",
+      "p": "adj-i",
+      "m": "nguy hiểm",
+      "e": "ここは危ないです。",
+      "v": "Ở đây nguy hiểm."
+    },
+    {
+      "t": "続ける",
+      "r": "つづける",
+      "ro": "tsuzukeru",
+      "p": "v",
+      "m": "tiếp tục",
+      "e": "毎日練習を続けます。",
+      "v": "Tôi tiếp tục luyện tập mỗi ngày."
+    },
+    {
+      "t": "遅れる",
+      "r": "おくれる",
+      "ro": "okureru",
+      "p": "v",
+      "m": "bị trễ",
+      "e": "電車が遅れました。",
+      "v": "Tàu điện bị trễ."
+    }
+  ]
+}

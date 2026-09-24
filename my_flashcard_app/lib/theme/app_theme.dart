@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/vocab.dart';
 
 /// Bảng màu riêng của ứng dụng. Mỗi ngôn ngữ có một màu nhấn:
-/// tiếng Anh là xanh biển, tiếng Nhật là đỏ hồng (beni).
+/// tiếng Anh là xanh biển, tiếng Nhật là đỏ hồng (beni), tiếng Hàn là tím.
 class Palette {
   const Palette({
     required this.bg,
@@ -13,6 +13,7 @@ class Palette {
     required this.line,
     required this.en,
     required this.ja,
+    required this.ko,
   });
 
   final Color bg;
@@ -22,8 +23,18 @@ class Palette {
   final Color line;
   final Color en;
   final Color ja;
+  final Color ko;
 
-  Color accent(Lang lang) => lang == Lang.ja ? ja : en;
+  Color accent(Lang lang) {
+    switch (lang) {
+      case Lang.ja:
+        return ja;
+      case Lang.ko:
+        return ko;
+      case Lang.en:
+        return en;
+    }
+  }
 
   static const light = Palette(
     bg: Color(0xFFF3F5FA),
@@ -33,6 +44,7 @@ class Palette {
     line: Color(0xFFE3E7F0),
     en: Color(0xFF1B6FC2),
     ja: Color(0xFFC83653),
+    ko: Color(0xFF7B4FE0),
   );
 
   static const dark = Palette(
@@ -43,6 +55,7 @@ class Palette {
     line: Color(0xFF283149),
     en: Color(0xFF6DB3F2),
     ja: Color(0xFFFF8299),
+    ko: Color(0xFFB79CFF),
   );
 
   static Palette of(Brightness brightness) =>
@@ -59,6 +72,10 @@ class AppTheme {
     'Hiragino Sans',
     'Yu Gothic',
     'Meiryo',
+    'Noto Sans KR',
+    'Noto Sans CJK KR',
+    'Malgun Gothic',
+    'Apple SD Gothic Neo',
   ];
 
   static ThemeData build(Brightness brightness, Lang lang) {

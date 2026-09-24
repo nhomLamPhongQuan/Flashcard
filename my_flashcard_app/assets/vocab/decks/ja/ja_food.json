@@ -1,0 +1,139 @@
+{
+  "words": [
+    {
+      "t": "味",
+      "r": "あじ",
+      "ro": "aji",
+      "p": "n",
+      "m": "hương vị",
+      "e": "このスープは味がいいです。",
+      "v": "Món súp này có hương vị ngon."
+    },
+    {
+      "t": "苦い",
+      "r": "にがい",
+      "ro": "nigai",
+      "p": "adj",
+      "m": "đắng",
+      "e": "このコーヒーは苦いです。",
+      "v": "Cà phê này đắng."
+    },
+    {
+      "t": "甘い",
+      "r": "あまい",
+      "ro": "amai",
+      "p": "adj",
+      "m": "ngọt",
+      "e": "このケーキはとても甘いです。",
+      "v": "Chiếc bánh này rất ngọt."
+    },
+    {
+      "t": "辛い",
+      "r": "からい",
+      "ro": "karai",
+      "p": "adj",
+      "m": "cay",
+      "e": "このカレーは辛いです。",
+      "v": "Món cà ri này cay."
+    },
+    {
+      "t": "酸っぱい",
+      "r": "すっぱい",
+      "ro": "suppai",
+      "p": "adj",
+      "m": "chua",
+      "e": "レモンは酸っぱいです。",
+      "v": "Chanh có vị chua."
+    },
+    {
+      "t": "出前",
+      "r": "でまえ",
+      "ro": "demae",
+      "p": "n",
+      "m": "giao đồ ăn tận nơi",
+      "e": "今夜は出前を頼みましょう。",
+      "v": "Tối nay hãy gọi giao đồ ăn."
+    },
+    {
+      "t": "定食",
+      "r": "ていしょく",
+      "ro": "teishoku",
+      "p": "n",
+      "m": "cơm phần (set)",
+      "e": "焼き魚定食を注文しました。",
+      "v": "Tôi đã gọi cơm phần cá nướng."
+    },
+    {
+      "t": "お代わり",
+      "r": "おかわり",
+      "ro": "okawari",
+      "p": "n",
+      "m": "xin thêm một suất nữa",
+      "e": "ご飯のお代わりをください。",
+      "v": "Cho tôi thêm cơm."
+    },
+    {
+      "t": "食欲",
+      "r": "しょくよく",
+      "ro": "shokuyoku",
+      "p": "n",
+      "m": "cảm giác thèm ăn",
+      "e": "今日は食欲がありません。",
+      "v": "Hôm nay tôi không thấy thèm ăn."
+    },
+    {
+      "t": "新鮮",
+      "r": "しんせん",
+      "ro": "shinsen",
+      "p": "na-adj",
+      "m": "tươi mới",
+      "e": "この魚はとても新鮮です。",
+      "v": "Con cá này rất tươi."
+    },
+    {
+      "t": "盛り付け",
+      "r": "もりつけ",
+      "ro": "moritsuke",
+      "p": "n",
+      "m": "cách bày trí món ăn",
+      "e": "盛り付けがきれいですね。",
+      "v": "Cách bày trí món ăn đẹp thật."
+    },
+    {
+      "t": "予約する",
+      "r": "よやくする",
+      "ro": "yoyaku suru",
+      "p": "v",
+      "m": "đặt trước (bàn, chỗ)",
+      "e": "レストランを予約しました。",
+      "v": "Tôi đã đặt trước nhà hàng."
+    },
+    {
+      "t": "満腹",
+      "r": "まんぷく",
+      "ro": "manpuku",
+      "p": "n",
+      "m": "no bụng",
+      "e": "食べ過ぎて満腹です。",
+      "v": "Tôi ăn quá nhiều nên no căng bụng."
+    },
+    {
+      "t": "空腹",
+      "r": "くうふく",
+      "ro": "kūfuku",
+      "p": "n",
+      "m": "đói bụng",
+      "e": "空腹で何も考えられません。",
+      "v": "Đói bụng nên tôi chẳng nghĩ được gì."
+    },
+    {
+      "t": "居酒屋",
+      "r": "いざかや",
+      "ro": "izakaya",
+      "p": "n",
+      "m": "quán nhậu kiểu Nhật",
+      "e": "会社の後、居酒屋に行きます。",
+      "v": "Sau giờ làm, chúng tôi đi quán nhậu."
+    }
+  ]
+}

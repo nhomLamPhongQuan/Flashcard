@@ -1,0 +1,124 @@
+{
+  "words": [
+    {
+      "t": "여행",
+      "r": "yeohaeng",
+      "p": "n",
+      "m": "du lịch",
+      "e": "다음 달에 한국으로 여행 가요.",
+      "v": "Tháng sau tôi đi du lịch Hàn Quốc."
+    },
+    {
+      "t": "공항",
+      "r": "gonghang",
+      "p": "n",
+      "m": "sân bay",
+      "e": "공항까지 얼마나 걸려요?",
+      "v": "Đến sân bay mất bao lâu?"
+    },
+    {
+      "t": "호텔",
+      "r": "hotel",
+      "p": "n",
+      "m": "khách sạn",
+      "e": "호텔을 예약했어요.",
+      "v": "Tôi đã đặt khách sạn."
+    },
+    {
+      "t": "지하철",
+      "r": "jihacheol",
+      "p": "n",
+      "m": "tàu điện ngầm",
+      "e": "지하철로 이동하는 게 편해요.",
+      "v": "Di chuyển bằng tàu điện ngầm rất tiện."
+    },
+    {
+      "t": "기차표",
+      "r": "gichapyo",
+      "p": "n",
+      "m": "vé tàu",
+      "e": "기차표를 미리 샀어요.",
+      "v": "Tôi đã mua vé tàu trước."
+    },
+    {
+      "t": "환전",
+      "r": "hwanjeon",
+      "p": "n",
+      "m": "đổi tiền",
+      "e": "공항에서 환전했어요.",
+      "v": "Tôi đã đổi tiền ở sân bay."
+    },
+    {
+      "t": "관광지",
+      "r": "gwangwangji",
+      "p": "n",
+      "m": "điểm du lịch",
+      "e": "이곳은 유명한 관광지예요.",
+      "v": "Nơi này là điểm du lịch nổi tiếng."
+    },
+    {
+      "t": "길을 잃다",
+      "r": "gireul ilta",
+      "p": "v phr",
+      "m": "bị lạc đường",
+      "e": "지하철역에서 길을 잃었어요.",
+      "v": "Tôi đã bị lạc ở ga tàu điện ngầm."
+    },
+    {
+      "t": "예약하다",
+      "r": "yeyakhada",
+      "p": "v",
+      "m": "đặt trước",
+      "e": "식당을 예약했어요.",
+      "v": "Tôi đã đặt trước nhà hàng."
+    },
+    {
+      "t": "짐",
+      "r": "jim",
+      "p": "n",
+      "m": "hành lý",
+      "e": "짐을 맡겨도 될까요?",
+      "v": "Tôi có thể gửi hành lý được không?"
+    },
+    {
+      "t": "출발하다",
+      "r": "chulbalhada",
+      "p": "v",
+      "m": "khởi hành",
+      "e": "내일 아침에 출발해요.",
+      "v": "Sáng mai chúng tôi khởi hành."
+    },
+    {
+      "t": "도착하다",
+      "r": "dochakhada",
+      "p": "v",
+      "m": "đến nơi",
+      "e": "예정보다 일찍 도착했어요.",
+      "v": "Chúng tôi đã đến sớm hơn dự kiến."
+    },
+    {
+      "t": "기념품",
+      "r": "ginyeompum",
+      "p": "n",
+      "m": "quà lưu niệm",
+      "e": "가족을 위해 기념품을 샀어요.",
+      "v": "Tôi đã mua quà lưu niệm cho gia đình."
+    },
+    {
+      "t": "시장",
+      "r": "sijang",
+      "p": "n",
+      "m": "chợ",
+      "e": "전통 시장을 구경했어요.",
+      "v": "Tôi đã tham quan chợ truyền thống."
+    },
+    {
+      "t": "사진을 찍다",
+      "r": "sajineul jjikda",
+      "p": "v phr",
+      "m": "chụp ảnh",
+      "e": "여기서 사진을 찍어도 돼요?",
+      "v": "Tôi có thể chụp ảnh ở đây không?"
+    }
+  ]
+}

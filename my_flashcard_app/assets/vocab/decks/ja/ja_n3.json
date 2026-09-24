@@ -1,0 +1,130 @@
+{
+  "words": [
+    {
+      "t": "遠慮",
+      "r": "えんりょ",
+      "ro": "enryo",
+      "p": "n",
+      "m": "khách sáo, e ngại",
+      "e": "遠慮しないで食べてください。",
+      "v": "Đừng khách sáo, cứ ăn đi."
+    },
+    {
+      "t": "経済",
+      "r": "けいざい",
+      "ro": "keizai",
+      "p": "n",
+      "m": "kinh tế",
+      "e": "経済のニュースをよく読みます。",
+      "v": "Tôi hay đọc tin kinh tế."
+    },
+    {
+      "t": "環境",
+      "r": "かんきょう",
+      "ro": "kankyou",
+      "p": "n",
+      "m": "môi trường",
+      "e": "環境を守ることは大切です。",
+      "v": "Bảo vệ môi trường là điều quan trọng."
+    },
+    {
+      "t": "関係",
+      "r": "かんけい",
+      "ro": "kankei",
+      "p": "n",
+      "m": "quan hệ, liên quan",
+      "e": "それは私に関係ありません。",
+      "v": "Chuyện đó không liên quan đến tôi."
+    },
+    {
+      "t": "増える",
+      "r": "ふえる",
+      "ro": "fueru",
+      "p": "v",
+      "m": "tăng lên",
+      "e": "外国人観光客が増えています。",
+      "v": "Khách du lịch nước ngoài đang tăng."
+    },
+    {
+      "t": "我慢",
+      "r": "がまん",
+      "ro": "gaman",
+      "p": "n",
+      "m": "chịu đựng, nhẫn nại",
+      "e": "もう少しだけ我慢してください。",
+      "v": "Xin hãy chịu đựng thêm một chút."
+    },
+    {
+      "t": "結果",
+      "r": "けっか",
+      "ro": "kekka",
+      "p": "n",
+      "m": "kết quả",
+      "e": "試験の結果が出ました。",
+      "v": "Kết quả kỳ thi đã có."
+    },
+    {
+      "t": "習慣",
+      "r": "しゅうかん",
+      "ro": "shuukan",
+      "p": "n",
+      "m": "thói quen, phong tục",
+      "e": "早く起きる習慣をつけたいです。",
+      "v": "Tôi muốn tập thói quen dậy sớm."
+    },
+    {
+      "t": "目標",
+      "r": "もくひょう",
+      "ro": "mokuhyou",
+      "p": "n",
+      "m": "mục tiêu",
+      "e": "今年の目標はN3に合格することです。",
+      "v": "Mục tiêu năm nay là đỗ N3."
+    },
+    {
+      "t": "比べる",
+      "r": "くらべる",
+      "ro": "kuraberu",
+      "p": "v",
+      "m": "so sánh",
+      "e": "二つの商品を比べます。",
+      "v": "Tôi so sánh hai sản phẩm."
+    },
+    {
+      "t": "影響",
+      "r": "えいきょう",
+      "ro": "eikyou",
+      "p": "n",
+      "m": "ảnh hưởng",
+      "e": "天気は気分に影響します。",
+      "v": "Thời tiết ảnh hưởng đến tâm trạng."
+    },
+    {
+      "t": "迷う",
+      "r": "まよう",
+      "ro": "mayou",
+      "p": "v",
+      "m": "lạc đường, phân vân",
+      "e": "道に迷ってしまいました。",
+      "v": "Tôi bị lạc đường mất rồi."
+    },
+    {
+      "t": "伝える",
+      "r": "つたえる",
+      "ro": "tsutaeru",
+      "p": "v",
+      "m": "truyền đạt",
+      "e": "自分の気持ちを相手に伝えます。",
+      "v": "Tôi truyền đạt cảm xúc của mình cho đối phương."
+    },
+    {
+      "t": "確認",
+      "r": "かくにん",
+      "ro": "kakunin",
+      "p": "n",
+      "m": "xác nhận",
+      "e": "予定を確認してください。",
+      "v": "Xin hãy xác nhận lịch trình."
+    }
+  ]
+}

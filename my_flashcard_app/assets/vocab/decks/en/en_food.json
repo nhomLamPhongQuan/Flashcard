@@ -1,0 +1,124 @@
+{
+  "words": [
+    {
+      "t": "appetizer",
+      "r": "/ˈæpɪtaɪzə/",
+      "p": "n",
+      "m": "món khai vị",
+      "e": "We shared an appetizer before the main course.",
+      "v": "Chúng tôi dùng chung món khai vị trước món chính."
+    },
+    {
+      "t": "recipe",
+      "r": "/ˈresəpi/",
+      "p": "n",
+      "m": "công thức nấu ăn",
+      "e": "She shared her grandmother's recipe.",
+      "v": "Cô ấy chia sẻ công thức của bà mình."
+    },
+    {
+      "t": "ingredient",
+      "r": "/ɪnˈɡriːdiənt/",
+      "p": "n",
+      "m": "nguyên liệu",
+      "e": "Fresh ingredients make a big difference.",
+      "v": "Nguyên liệu tươi tạo nên sự khác biệt lớn."
+    },
+    {
+      "t": "flavor",
+      "r": "/ˈfleɪvə/",
+      "p": "n",
+      "m": "hương vị",
+      "e": "The soup has a rich flavor.",
+      "v": "Món súp có hương vị đậm đà."
+    },
+    {
+      "t": "portion",
+      "r": "/ˈpɔːʃn/",
+      "p": "n",
+      "m": "khẩu phần",
+      "e": "The portions here are quite large.",
+      "v": "Khẩu phần ở đây khá lớn."
+    },
+    {
+      "t": "leftovers",
+      "r": "/ˈleftəʊvəz/",
+      "p": "n",
+      "m": "đồ ăn thừa",
+      "e": "We had leftovers for lunch the next day.",
+      "v": "Chúng tôi ăn đồ thừa vào hôm sau."
+    },
+    {
+      "t": "craving",
+      "r": "/ˈkreɪvɪŋ/",
+      "p": "n",
+      "m": "cơn thèm ăn",
+      "e": "I have a craving for chocolate.",
+      "v": "Tôi đang thèm sô cô la."
+    },
+    {
+      "t": "bland",
+      "r": "/blænd/",
+      "p": "adj",
+      "m": "nhạt nhẽo",
+      "e": "The dish tasted a bit bland.",
+      "v": "Món ăn có vị hơi nhạt."
+    },
+    {
+      "t": "savory",
+      "r": "/ˈseɪvəri/",
+      "p": "adj",
+      "m": "đậm đà, mặn (không ngọt)",
+      "e": "I prefer savory snacks over sweet ones.",
+      "v": "Tôi thích đồ ăn vặt mặn hơn ngọt."
+    },
+    {
+      "t": "skip a meal",
+      "r": "/skɪp ə miːl/",
+      "p": "phr",
+      "m": "bỏ bữa",
+      "e": "Don't skip breakfast.",
+      "v": "Đừng bỏ bữa sáng."
+    },
+    {
+      "t": "eat out",
+      "r": "/iːt aʊt/",
+      "p": "phr v",
+      "m": "ăn ngoài",
+      "e": "We eat out once a week.",
+      "v": "Chúng tôi ăn ngoài mỗi tuần một lần."
+    },
+    {
+      "t": "dine in",
+      "r": "/daɪn ɪn/",
+      "p": "phr v",
+      "m": "ăn tại chỗ",
+      "e": "Will you dine in or take out?",
+      "v": "Bạn ăn tại đây hay mang về?"
+    },
+    {
+      "t": "take out",
+      "r": "/teɪk aʊt/",
+      "p": "phr v",
+      "m": "mang về",
+      "e": "I'd like to take out this dish, please.",
+      "v": "Cho tôi mang món này về nhé."
+    },
+    {
+      "t": "allergic",
+      "r": "/əˈlɜːdʒɪk/",
+      "p": "adj",
+      "m": "dị ứng",
+      "e": "I'm allergic to peanuts.",
+      "v": "Tôi bị dị ứng với đậu phộng."
+    },
+    {
+      "t": "garnish",
+      "r": "/ˈɡɑːnɪʃ/",
+      "p": "v, n",
+      "m": "trang trí món ăn",
+      "e": "The chef garnished the plate with herbs.",
+      "v": "Đầu bếp trang trí đĩa ăn bằng rau thơm."
+    }
+  ]
+}

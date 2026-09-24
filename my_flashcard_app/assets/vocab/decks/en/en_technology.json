@@ -1,0 +1,124 @@
+{
+  "words": [
+    {
+      "t": "device",
+      "r": "/dɪˈvaɪs/",
+      "p": "n",
+      "m": "thiết bị",
+      "e": "Charge your device before the trip.",
+      "v": "Sạc thiết bị trước chuyến đi."
+    },
+    {
+      "t": "upload",
+      "r": "/ʌpˈləʊd/",
+      "p": "v",
+      "m": "tải lên",
+      "e": "Please upload the file to the server.",
+      "v": "Vui lòng tải tệp lên máy chủ."
+    },
+    {
+      "t": "download",
+      "r": "/daʊnˈləʊd/",
+      "p": "v",
+      "m": "tải xuống",
+      "e": "I downloaded the app yesterday.",
+      "v": "Tôi đã tải ứng dụng hôm qua."
+    },
+    {
+      "t": "software",
+      "r": "/ˈsɒftweə/",
+      "p": "n",
+      "m": "phần mềm",
+      "e": "We need to update the software.",
+      "v": "Chúng tôi cần cập nhật phần mềm."
+    },
+    {
+      "t": "hardware",
+      "r": "/ˈhɑːdweə/",
+      "p": "n",
+      "m": "phần cứng",
+      "e": "The hardware needs to be replaced.",
+      "v": "Phần cứng cần được thay thế."
+    },
+    {
+      "t": "glitch",
+      "r": "/ɡlɪtʃ/",
+      "p": "n",
+      "m": "lỗi nhỏ, trục trặc",
+      "e": "There was a glitch in the system.",
+      "v": "Có một trục trặc trong hệ thống."
+    },
+    {
+      "t": "backup",
+      "r": "/ˈbækʌp/",
+      "p": "n, v",
+      "m": "sao lưu",
+      "e": "Always keep a backup of your files.",
+      "v": "Luôn giữ bản sao lưu tệp của bạn."
+    },
+    {
+      "t": "encrypt",
+      "r": "/ɪnˈkrɪpt/",
+      "p": "v",
+      "m": "mã hóa",
+      "e": "The company encrypts all user data.",
+      "v": "Công ty mã hóa toàn bộ dữ liệu người dùng."
+    },
+    {
+      "t": "malware",
+      "r": "/ˈmælweə/",
+      "p": "n",
+      "m": "phần mềm độc hại",
+      "e": "The email contained malware.",
+      "v": "Email đó chứa phần mềm độc hại."
+    },
+    {
+      "t": "troubleshoot",
+      "r": "/ˈtrʌblʃuːt/",
+      "p": "v",
+      "m": "khắc phục sự cố",
+      "e": "Our team helped troubleshoot the issue.",
+      "v": "Đội của chúng tôi giúp khắc phục sự cố."
+    },
+    {
+      "t": "artificial intelligence",
+      "r": "/ˌɑːtɪˈfɪʃl ɪnˈtelɪdʒəns/",
+      "p": "n",
+      "m": "trí tuệ nhân tạo",
+      "e": "Artificial intelligence is changing many industries.",
+      "v": "Trí tuệ nhân tạo đang thay đổi nhiều ngành."
+    },
+    {
+      "t": "log in",
+      "r": "/lɒɡ ɪn/",
+      "p": "phr v",
+      "m": "đăng nhập",
+      "e": "You need to log in first.",
+      "v": "Bạn cần đăng nhập trước."
+    },
+    {
+      "t": "log out",
+      "r": "/lɒɡ aʊt/",
+      "p": "phr v",
+      "m": "đăng xuất",
+      "e": "Remember to log out on shared computers.",
+      "v": "Nhớ đăng xuất khi dùng máy tính chung."
+    },
+    {
+      "t": "update",
+      "r": "/ʌpˈdeɪt/",
+      "p": "v, n",
+      "m": "cập nhật",
+      "e": "There's a new update available.",
+      "v": "Có một bản cập nhật mới."
+    },
+    {
+      "t": "crash",
+      "r": "/kræʃ/",
+      "p": "v, n",
+      "m": "treo, sập (hệ thống)",
+      "e": "The app crashed twice today.",
+      "v": "Ứng dụng bị treo hai lần hôm nay."
+    }
+  ]
+}

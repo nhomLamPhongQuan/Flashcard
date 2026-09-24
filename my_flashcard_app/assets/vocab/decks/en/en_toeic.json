@@ -1,0 +1,116 @@
+{
+  "words": [
+    {
+      "t": "negotiate",
+      "r": "/nɪˈɡəʊʃieɪt/",
+      "p": "v",
+      "m": "đàm phán, thương lượng",
+      "e": "We negotiated a new contract with the supplier.",
+      "v": "Chúng tôi đã đàm phán hợp đồng mới với nhà cung cấp."
+    },
+    {
+      "t": "invoice",
+      "r": "/ˈɪnvɔɪs/",
+      "p": "n",
+      "m": "hóa đơn",
+      "e": "Please send the invoice by email.",
+      "v": "Vui lòng gửi hóa đơn qua email."
+    },
+    {
+      "t": "agenda",
+      "r": "/əˈdʒendə/",
+      "p": "n",
+      "m": "chương trình nghị sự",
+      "e": "What's on the agenda for today's meeting?",
+      "v": "Cuộc họp hôm nay có những nội dung gì?"
+    },
+    {
+      "t": "postpone",
+      "r": "/pəˈspəʊn/",
+      "p": "v",
+      "m": "hoãn lại",
+      "e": "The meeting was postponed until Monday.",
+      "v": "Cuộc họp bị hoãn đến thứ Hai."
+    },
+    {
+      "t": "reimburse",
+      "r": "/ˌriːɪmˈbɜːs/",
+      "p": "v",
+      "m": "hoàn trả (chi phí)",
+      "e": "The company will reimburse your travel expenses.",
+      "v": "Công ty sẽ hoàn lại chi phí đi lại cho bạn."
+    },
+    {
+      "t": "supervisor",
+      "r": "/ˈsuːpəvaɪzə/",
+      "p": "n",
+      "m": "người giám sát, quản lý trực tiếp",
+      "e": "Please report the problem to your supervisor.",
+      "v": "Hãy báo vấn đề này cho quản lý của bạn."
+    },
+    {
+      "t": "recruit",
+      "r": "/rɪˈkruːt/",
+      "p": "v",
+      "m": "tuyển dụng",
+      "e": "We plan to recruit ten new employees.",
+      "v": "Chúng tôi dự định tuyển mười nhân viên mới."
+    },
+    {
+      "t": "revenue",
+      "r": "/ˈrevənjuː/",
+      "p": "n",
+      "m": "doanh thu",
+      "e": "Annual revenue rose by 12 percent.",
+      "v": "Doanh thu hằng năm tăng 12 phần trăm."
+    },
+    {
+      "t": "warranty",
+      "r": "/ˈwɒrənti/",
+      "p": "n",
+      "m": "bảo hành",
+      "e": "The laptop comes with a two-year warranty.",
+      "v": "Chiếc laptop này được bảo hành hai năm."
+    },
+    {
+      "t": "shipment",
+      "r": "/ˈʃɪpmənt/",
+      "p": "n",
+      "m": "lô hàng",
+      "e": "The shipment arrived two days late.",
+      "v": "Lô hàng đến trễ hai ngày."
+    },
+    {
+      "t": "attendee",
+      "r": "/əˌtenˈdiː/",
+      "p": "n",
+      "m": "người tham dự",
+      "e": "All attendees must register at the front desk.",
+      "v": "Tất cả người tham dự phải đăng ký ở quầy lễ tân."
+    },
+    {
+      "t": "inventory",
+      "r": "/ˈɪnvəntri/",
+      "p": "n",
+      "m": "hàng tồn kho",
+      "e": "We check the inventory every month.",
+      "v": "Chúng tôi kiểm kê hàng tồn kho mỗi tháng."
+    },
+    {
+      "t": "eligible",
+      "r": "/ˈelɪdʒəbl/",
+      "p": "adj",
+      "m": "đủ điều kiện",
+      "e": "Full-time staff are eligible for health insurance.",
+      "v": "Nhân viên toàn thời gian đủ điều kiện nhận bảo hiểm y tế."
+    },
+    {
+      "t": "compliance",
+      "r": "/kəmˈplaɪəns/",
+      "p": "n",
+      "m": "sự tuân thủ",
+      "e": "The factory is in compliance with safety rules.",
+      "v": "Nhà máy tuân thủ các quy định an toàn."
+    }
+  ]
+}

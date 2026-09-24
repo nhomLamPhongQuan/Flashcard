@@ -1,0 +1,124 @@
+{
+  "words": [
+    {
+      "t": "itinerary",
+      "r": "/aɪˈtɪnərəri/",
+      "p": "n",
+      "m": "lịch trình chuyến đi",
+      "e": "We planned our itinerary before the trip.",
+      "v": "Chúng tôi lên lịch trình trước chuyến đi."
+    },
+    {
+      "t": "accommodation",
+      "r": "/əˌkɒməˈdeɪʃn/",
+      "p": "n",
+      "m": "chỗ ở",
+      "e": "The accommodation was close to the beach.",
+      "v": "Chỗ ở gần bãi biển."
+    },
+    {
+      "t": "boarding pass",
+      "r": "/ˈbɔːdɪŋ pɑːs/",
+      "p": "n",
+      "m": "thẻ lên máy bay",
+      "e": "Don't forget your boarding pass.",
+      "v": "Đừng quên thẻ lên máy bay."
+    },
+    {
+      "t": "layover",
+      "r": "/ˈleɪəʊvə/",
+      "p": "n",
+      "m": "thời gian quá cảnh",
+      "e": "We had a two-hour layover in Seoul.",
+      "v": "Chúng tôi quá cảnh hai tiếng ở Seoul."
+    },
+    {
+      "t": "currency exchange",
+      "r": "/ˈkʌrənsi ɪksˈtʃeɪndʒ/",
+      "p": "n",
+      "m": "đổi ngoại tệ",
+      "e": "I need to find a currency exchange.",
+      "v": "Tôi cần tìm chỗ đổi ngoại tệ."
+    },
+    {
+      "t": "souvenir",
+      "r": "/ˌsuːvəˈnɪə/",
+      "p": "n",
+      "m": "quà lưu niệm",
+      "e": "I bought a souvenir for my sister.",
+      "v": "Tôi mua quà lưu niệm cho em gái."
+    },
+    {
+      "t": "sightseeing",
+      "r": "/ˈsaɪtsiːɪŋ/",
+      "p": "n",
+      "m": "tham quan",
+      "e": "We spent the day sightseeing.",
+      "v": "Chúng tôi dành cả ngày để tham quan."
+    },
+    {
+      "t": "reservation",
+      "r": "/ˌrezəˈveɪʃn/",
+      "p": "n",
+      "m": "đặt chỗ",
+      "e": "I made a reservation for two.",
+      "v": "Tôi đã đặt chỗ cho hai người."
+    },
+    {
+      "t": "delay",
+      "r": "/dɪˈleɪ/",
+      "p": "n, v",
+      "m": "trì hoãn, hoãn chuyến",
+      "e": "Our flight was delayed by an hour.",
+      "v": "Chuyến bay của chúng tôi bị hoãn một giờ."
+    },
+    {
+      "t": "customs",
+      "r": "/ˈkʌstəmz/",
+      "p": "n",
+      "m": "hải quan",
+      "e": "We went through customs quickly.",
+      "v": "Chúng tôi qua hải quan nhanh chóng."
+    },
+    {
+      "t": "pack",
+      "r": "/pæk/",
+      "p": "v",
+      "m": "đóng gói hành lý",
+      "e": "I still need to pack my suitcase.",
+      "v": "Tôi vẫn cần đóng gói va li."
+    },
+    {
+      "t": "get around",
+      "r": "/ɡet əˈraʊnd/",
+      "p": "phr v",
+      "m": "di chuyển, đi lại",
+      "e": "It's easy to get around by subway.",
+      "v": "Đi lại bằng tàu điện ngầm rất dễ."
+    },
+    {
+      "t": "check in",
+      "r": "/tʃek ɪn/",
+      "p": "phr v",
+      "m": "làm thủ tục nhận phòng / lên máy bay",
+      "e": "We checked in at the hotel around noon.",
+      "v": "Chúng tôi nhận phòng khách sạn vào khoảng trưa."
+    },
+    {
+      "t": "off the beaten track",
+      "r": "/ɒf ðə ˈbiːtn træk/",
+      "p": "idiom",
+      "m": "nơi ít người biết đến",
+      "e": "We found a restaurant off the beaten track.",
+      "v": "Chúng tôi tìm được một nhà hàng ít ai biết đến."
+    },
+    {
+      "t": "jet lag",
+      "r": "/dʒet læɡ/",
+      "p": "n",
+      "m": "mệt mỏi do lệch múi giờ",
+      "e": "I still have jet lag after the flight.",
+      "v": "Tôi vẫn còn mệt vì lệch múi giờ sau chuyến bay."
+    }
+  ]
+}

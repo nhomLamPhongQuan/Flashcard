@@ -160,7 +160,7 @@ class _WordSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Palette.ofContext(context);
     final accent = p.accent(word.lang);
-    final isJa = word.lang == Lang.ja;
+    final isCjk = word.lang.hidesReadingOnFront;
     final state = AppScope.of(context);
     final learned = state.isLearned(word);
     return SafeArea(
@@ -173,17 +173,17 @@ class _WordSheet extends StatelessWidget {
             Text(
               word.term,
               style: TextStyle(
-                fontSize: isJa ? 44 : 34,
+                fontSize: isCjk ? 44 : 34,
                 fontWeight: FontWeight.w700,
                 height: 1.15,
               ),
             ),
-            if (word.reading != null) ...[
+            if (word.reading != null || word.romanization != null) ...[
               const SizedBox(height: 4),
               Text(
-                isJa && word.romaji != null
-                    ? '${word.reading}  ·  ${word.romaji}'
-                    : word.reading!,
+                [word.reading, word.romanization]
+                    .whereType<String>()
+                    .join('  ·  '),
                 style: TextStyle(
                     fontSize: 18, color: accent, fontWeight: FontWeight.w600),
               ),

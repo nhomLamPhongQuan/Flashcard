@@ -4,22 +4,37 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/vocab.dart';
 
-/// Đọc kho từ vựng có sẵn từ assets/vocab/vocabulary.json.
+/// Đọc kho từ vựng từ assets/vocab/.
+///
+/// Cấu trúc (từ khi kho từ được mở rộng lên nhiều chủ đề):
+///   assets/vocab/manifest.json        -> danh sách bộ thẻ (metadata, KHÔNG có từ)
+///   assets/vocab/decks/<deckId>.json  -> nội dung từ vựng của từng bộ thẻ
+///
+/// Tách metadata (manifest) ra khỏi nội dung (decks/*.json) giúp:
+///   - Mỗi bộ thẻ là 1 file riêng, dễ thêm/sửa/xoá mà không đụng file khác.
+///   - Có thể mở rộng sang tải "lười" (lazy load) từng bộ khi cần, thay vì
+///     phải đọc toàn bộ hàng nghìn từ ngay lúc khởi động app.
 class VocabRepository {
-  static const _assetPath = 'assets/vocab/vocabulary.json';
+  static const _manifestPath = 'assets/vocab/manifest.json';
+  static const _decksDir = 'assets/vocab';
 
   Future<List<Deck>> load() async {
-    final raw = await rootBundle.loadString(_assetPath);
-    final data = jsonDecode(raw) as Map<String, dynamic>;
+    final manifestRaw = await rootBundle.loadString(_manifestPath);
+    final manifest = jsonDecode(manifestRaw) as Map<String, dynamic>;
+    final deckMetas = manifest['decks'] as List<dynamic>;
+
     final decks = <Deck>[];
+    for (final item in deckMetas) {
+      final meta = item as Map<String, dynamic>;
+      final deckId = meta['id'] as String;
+      final lang = langFromCode(meta['lang'] as String?);
+      final file = meta['file'] as String;
 
-    for (final item in data['decks'] as List<dynamic>) {
-      final d = item as Map<String, dynamic>;
-      final deckId = d['id'] as String;
-      final lang = langFromCode(d['lang'] as String?);
-      final rawWords = d['words'] as List<dynamic>;
+      final wordsRaw = await rootBundle.loadString('$_decksDir/$file');
+      final wordsData = jsonDecode(wordsRaw) as Map<String, dynamic>;
+      final rawWords = wordsData['words'] as List<dynamic>;
+
       final words = <Word>[];
-
       for (var i = 0; i < rawWords.length; i++) {
         final w = rawWords[i] as Map<String, dynamic>;
         words.add(Word(
@@ -28,7 +43,7 @@ class VocabRepository {
           lang: lang,
           term: w['t'] as String,
           reading: w['r'] as String?,
-          romaji: w['ro'] as String?,
+          romanization: w['ro'] as String?,
           pos: w['p'] as String?,
           meaning: w['m'] as String,
           example: w['e'] as String?,
@@ -39,10 +54,10 @@ class VocabRepository {
       decks.add(Deck(
         id: deckId,
         lang: lang,
-        title: d['title'] as String,
-        subtitle: (d['subtitle'] as String?) ?? '',
-        level: (d['level'] as String?) ?? '',
-        badge: (d['badge'] as String?) ?? '',
+        title: meta['title'] as String,
+        subtitle: (meta['subtitle'] as String?) ?? '',
+        level: (meta['level'] as String?) ?? '',
+        badge: (meta['badge'] as String?) ?? '',
         words: words,
       ));
     }
