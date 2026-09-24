@@ -15,7 +15,8 @@ class StatsTab extends StatelessWidget {
     final p = Palette.ofContext(context);
     final accent = p.accent(state.lang);
     final allWords = state.decks.expand((d) => d.words).toList();
-    final totalLearned = state.learnedCountOf(allWords);
+    final totalMastered = state.masteredCountOf(allWords);
+    final totalDue = state.dueCountOf(allWords);
 
     return SafeArea(
       child: ListView(
@@ -32,8 +33,17 @@ class StatsTab extends StatelessWidget {
               Expanded(
                 child: _Metric(
                   icon: Icons.verified_rounded,
-                  value: '$totalLearned',
-                  label: 'Từ đã thuộc',
+                  value: '$totalMastered',
+                  label: 'Đã thành thạo',
+                  color: accent,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _Metric(
+                  icon: Icons.alarm_rounded,
+                  value: '$totalDue',
+                  label: 'Cần ôn hôm nay',
                   color: accent,
                 ),
               ),
@@ -60,9 +70,9 @@ class StatsTab extends StatelessWidget {
                 const SizedBox(height: 14),
                 for (final deck in state.decks)
                   Builder(builder: (context) {
-                    final learned = state.learnedCountOf(deck.words);
+                    final mastered = state.masteredCountOf(deck.words);
                     final total = deck.words.length;
-                    final ratio = total == 0 ? 0.0 : learned / total;
+                    final ratio = total == 0 ? 0.0 : mastered / total;
                     final color = p.accent(deck.lang);
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 14),
@@ -80,7 +90,7 @@ class StatsTab extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '$learned/$total',
+                                '$mastered/$total',
                                 style: TextStyle(fontSize: 13, color: p.muted),
                               ),
                             ],

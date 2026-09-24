@@ -25,7 +25,8 @@ class DeckPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = AppScope.of(context);
     final p = Palette.ofContext(context);
-    final learned = state.learnedCountOf(deck.words);
+    final mastered = state.masteredCountOf(deck.words);
+    final due = state.dueWords(deck.words);
     final total = deck.words.length;
 
     return Scaffold(
@@ -44,10 +45,11 @@ class DeckPage extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                      child: _MiniStat(
-                          value: total - learned, label: 'Chưa thuộc')),
+                      child: _MiniStat(value: due.length, label: 'Đến hạn ôn')),
                   const SizedBox(width: 10),
-                  Expanded(child: _MiniStat(value: learned, label: 'Đã thuộc')),
+                  Expanded(
+                      child:
+                          _MiniStat(value: mastered, label: 'Đã thành thạo')),
                   const SizedBox(width: 10),
                   Expanded(child: _MiniStat(value: total, label: 'Tổng số từ')),
                 ],
@@ -58,14 +60,24 @@ class DeckPage extends StatelessWidget {
                 child: FilledButton(
                   onPressed: deck.words.isEmpty
                       ? null
-                      : () => _startStudy(context, deck.words),
+                      : () => _startStudy(
+                          context, due.isNotEmpty ? due : deck.words),
                   child: Text(
-                    'Bắt đầu học ${deck.words.length} từ',
+                    due.isNotEmpty
+                        ? 'Ôn ${due.length} từ đến hạn'
+                        : 'Học lại ${deck.words.length} từ',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
+              if (due.isEmpty && total > 0) ...[
+                const SizedBox(height: 6),
+                Text(
+                  'Không có từ nào đến hạn ôn hôm nay — bạn có thể học lại toàn bộ bộ thẻ để luyện thêm.',
+                  style: TextStyle(fontSize: 12, height: 1.35, color: p.muted),
+                ),
+              ],
               const SizedBox(height: 8),
               TextButton.icon(
                 onPressed: () {

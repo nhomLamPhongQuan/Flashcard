@@ -14,8 +14,10 @@ class LearnTab extends StatelessWidget {
     final state = AppScope.of(context);
     final p = Palette.ofContext(context);
     final decks = state.decksOfLang;
-    final totalWords = state.wordsOfLang.length;
-    final totalLearned = state.learnedCountOf(state.wordsOfLang);
+    final words = state.wordsOfLang;
+    final totalWords = words.length;
+    final totalMastered = state.masteredCountOf(words);
+    final totalDue = state.dueCountOf(words);
 
     return SafeArea(
       child: ListView(
@@ -30,7 +32,9 @@ class LearnTab extends StatelessWidget {
           Text(
             totalWords == 0
                 ? 'Chưa có từ vựng nào'
-                : 'Đã thuộc $totalLearned/$totalWords từ trong ngôn ngữ này',
+                : totalDue > 0
+                    ? 'Có $totalDue từ đến hạn ôn · đã thành thạo $totalMastered/$totalWords từ'
+                    : 'Đã thành thạo $totalMastered/$totalWords từ trong ngôn ngữ này',
             style: TextStyle(fontSize: 14, color: p.muted),
           ),
           const SizedBox(height: 20),

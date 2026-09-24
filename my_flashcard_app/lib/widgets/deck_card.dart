@@ -15,9 +15,9 @@ class DeckCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Palette.ofContext(context);
     final accent = p.accent(deck.lang);
-    final learned = AppScope.of(context).learnedCountOf(deck.words);
+    final mastered = AppScope.of(context).masteredCountOf(deck.words);
     final total = deck.words.length;
-    final ratio = total == 0 ? 0.0 : learned / total;
+    final ratio = total == 0 ? 0.0 : mastered / total;
 
     return Panel(
       onTap: () => Navigator.of(context).push(
@@ -82,7 +82,7 @@ class DeckCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                '$learned/$total đã thuộc',
+                '$mastered/$total đã thành thạo',
                 style: TextStyle(fontSize: 13, color: p.muted),
               ),
               const Spacer(),

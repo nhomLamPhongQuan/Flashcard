@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../models/srs.dart';
 import '../models/vocab.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/flip_card.dart';
 
-/// Màn hình học: lật thẻ và tự đánh giá "Cần học lại" / "Đã thuộc".
-/// Bản giao diện: chưa lập lịch ôn tập, chỉ ghi nhận trạng thái trong phiên.
+/// Màn hình học: lật thẻ rồi tự đánh giá theo hộp Leitner (4 mức:
+/// Học lại / Khó / Nhớ / Dễ). Mỗi đánh giá cập nhật hộp + ngày ôn tiếp theo
+/// của từ đó và được lưu vĩnh viễn qua AppState.rate().
 class StudyPage extends StatefulWidget {
   const StudyPage({
     super.key,
@@ -28,6 +30,7 @@ class _StudyPageState extends State<StudyPage> {
   late final int _total = widget.words.length;
   int _index = 0;
   bool _revealed = false;
+  int _masteredThisRound = 0;
 
   Word get _current => widget.words[_index];
   bool get _finished => _index >= widget.words.length;
@@ -37,9 +40,13 @@ class _StudyPageState extends State<StudyPage> {
     setState(() => _revealed = !_revealed);
   }
 
-  void _answer({required bool learned}) {
+  void _answer(SrsRating rating) {
     if (!_revealed || _finished) return;
-    AppScope.of(context).markLearned(_current, learned: learned);
+    final state = AppScope.of(context);
+    state.rate(_current, rating);
+    if (rating == SrsRating.good || rating == SrsRating.easy) {
+      if (state.isMastered(_current)) _masteredThisRound++;
+    }
     setState(() {
       _index++;
       _revealed = false;
@@ -60,9 +67,13 @@ class _StudyPageState extends State<StudyPage> {
               bindings: <ShortcutActivator, VoidCallback>{
                 const SingleActivator(LogicalKeyboardKey.space): _flip,
                 const SingleActivator(LogicalKeyboardKey.digit1): () =>
-                    _answer(learned: false),
+                    _answer(SrsRating.again),
                 const SingleActivator(LogicalKeyboardKey.digit2): () =>
-                    _answer(learned: true),
+                    _answer(SrsRating.hard),
+                const SingleActivator(LogicalKeyboardKey.digit3): () =>
+                    _answer(SrsRating.good),
+                const SingleActivator(LogicalKeyboardKey.digit4): () =>
+                    _answer(SrsRating.easy),
               },
               child: Focus(
                 autofocus: true,
@@ -79,7 +90,11 @@ class _StudyPageState extends State<StudyPage> {
                       const SizedBox(height: 12),
                       Expanded(
                         child: _finished
-                            ? _Summary(total: _total, accent: accent)
+                            ? _Summary(
+                                total: _total,
+                                mastered: _masteredThisRound,
+                                accent: accent,
+                              )
                             : Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8),
@@ -213,32 +228,29 @@ class _TopBar extends StatelessWidget {
 
 class _AnswerRow extends StatelessWidget {
   const _AnswerRow({super.key, required this.onAnswer});
-  final void Function({required bool learned}) onAnswer;
+  final void Function(SrsRating rating) onAnswer;
 
   @override
   Widget build(BuildContext context) {
+    final buttons = <(SrsRating, Color)>[
+      (SrsRating.again, toneFor(context, const Color(0xFFD64550))),
+      (SrsRating.hard, toneFor(context, const Color(0xFFDB9438))),
+      (SrsRating.good, toneFor(context, const Color(0xFF2A9D6A))),
+      (SrsRating.easy, toneFor(context, const Color(0xFF2F8FD1))),
+    ];
     return Row(
       children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: _AnswerButton(
-              label: 'Cần học lại',
-              color: toneFor(context, const Color(0xFFD64550)),
-              onTap: () => onAnswer(learned: false),
+        for (final (rating, color) in buttons)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: _AnswerButton(
+                label: rating.label,
+                color: color,
+                onTap: () => onAnswer(rating),
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: _AnswerButton(
-              label: 'Đã thuộc',
-              color: toneFor(context, const Color(0xFF2A9D6A)),
-              onTap: () => onAnswer(learned: true),
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -266,7 +278,7 @@ class _AnswerButton extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                  fontSize: 15, fontWeight: FontWeight.w700, color: color),
+                  fontSize: 14, fontWeight: FontWeight.w700, color: color),
             ),
           ),
         ),
@@ -276,9 +288,11 @@ class _AnswerButton extends StatelessWidget {
 }
 
 class _Summary extends StatelessWidget {
-  const _Summary({required this.total, required this.accent});
+  const _Summary(
+      {required this.total, required this.mastered, required this.accent});
 
   final int total;
+  final int mastered;
   final Color accent;
 
   @override
@@ -298,7 +312,9 @@ class _Summary extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Bạn đã ôn qua $total từ trong bộ thẻ này.',
+              mastered > 0
+                  ? 'Bạn đã ôn qua $total từ, trong đó $mastered từ vừa đạt mức thành thạo.'
+                  : 'Bạn đã ôn qua $total từ trong bộ thẻ này.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 15, height: 1.4, color: p.muted),
             ),

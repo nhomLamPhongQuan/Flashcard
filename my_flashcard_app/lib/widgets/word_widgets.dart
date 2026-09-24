@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../models/srs.dart';
 import '../models/vocab.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
@@ -66,15 +67,19 @@ class ExampleBlock extends StatelessWidget {
   }
 }
 
-/// Trạng thái học của một từ: Mới / Đã thuộc.
+/// Trạng thái học của một từ, theo hộp Leitner: Mới / Hộp n / Đã thành thạo.
 class StatusPill extends StatelessWidget {
-  const StatusPill({super.key, required this.learned});
-  final bool learned;
+  const StatusPill({super.key, required this.box});
+  final int box;
 
   @override
   Widget build(BuildContext context) {
     final p = Palette.ofContext(context);
-    final color = learned ? toneFor(context, const Color(0xFF2A9D6A)) : p.muted;
+    final mastered = box >= kMasteredBox;
+    final color = mastered
+        ? toneFor(context, const Color(0xFF2A9D6A))
+        : (box > 0 ? toneFor(context, const Color(0xFFDB9438)) : p.muted);
+    final label = mastered ? 'Đã thành thạo' : (box > 0 ? 'Hộp $box' : 'Mới');
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -82,7 +87,7 @@ class StatusPill extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
-        learned ? 'Đã thuộc' : 'Mới',
+        label,
         style:
             TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.w700),
       ),
@@ -98,7 +103,7 @@ class WordTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Palette.ofContext(context);
-    final learned = AppScope.of(context).isLearned(word);
+    final box = AppScope.of(context).progressOf(word).box;
     return Panel(
       radius: 16,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -134,7 +139,7 @@ class WordTile extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          StatusPill(learned: learned),
+          StatusPill(box: box),
         ],
       ),
     );
@@ -162,7 +167,8 @@ class _WordSheet extends StatelessWidget {
     final accent = p.accent(word.lang);
     final isCjk = word.lang.hidesReadingOnFront;
     final state = AppScope.of(context);
-    final learned = state.isLearned(word);
+    final box = state.progressOf(word).box;
+    final mastered = box >= kMasteredBox;
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
@@ -192,6 +198,8 @@ class _WordSheet extends StatelessWidget {
               const SizedBox(height: 12),
               PosChip(word.pos!),
             ],
+            const SizedBox(height: 12),
+            StatusPill(box: box),
             const SizedBox(height: 16),
             Text(
               word.meaning,
@@ -205,10 +213,11 @@ class _WordSheet extends StatelessWidget {
               width: double.infinity,
               height: 52,
               child: FilledButton.icon(
-                onPressed: () => state.markLearned(word, learned: !learned),
+                onPressed: () => state.markMastered(word, mastered: !mastered),
                 icon:
-                    Icon(learned ? Icons.replay_rounded : Icons.check_rounded),
-                label: Text(learned ? 'Học lại từ này' : 'Đánh dấu đã thuộc'),
+                    Icon(mastered ? Icons.replay_rounded : Icons.check_rounded),
+                label: Text(
+                    mastered ? 'Học lại từ đầu' : 'Đánh dấu đã thành thạo'),
               ),
             ),
           ],
