@@ -128,6 +128,46 @@ class StatsTab extends StatelessWidget {
               onSelectionChanged: (s) => state.setThemeMode(s.first),
             ),
           ),
+          const SizedBox(height: 28),
+          const Text('Tài khoản',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 12),
+          Panel(
+            child: Row(
+              children: [
+                Icon(
+                  state.auth.isAnonymous
+                      ? Icons.person_outline_rounded
+                      : Icons.person_rounded,
+                  color: p.muted,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        state.auth.isAnonymous
+                            ? 'Đang dùng thử (chưa có tài khoản)'
+                            : (state.auth.currentEmail ?? 'Đã đăng nhập'),
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w600),
+                      ),
+                      if (state.syncing)
+                        Text(
+                          'Đang đồng bộ tiến độ...',
+                          style: TextStyle(fontSize: 12, color: p.muted),
+                        ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => state.auth.signOut(),
+                  child: const Text('Đăng xuất'),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
