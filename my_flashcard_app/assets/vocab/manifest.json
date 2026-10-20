@@ -1,0 +1,157 @@
+{
+  "decks": [
+    {
+      "id": "en_daily",
+      "lang": "en",
+      "title": "Giao tiếp hằng ngày",
+      "subtitle": "Từ và cụm từ dùng liên tục trong đời sống",
+      "level": "A2 – B1",
+      "badge": "Aa",
+      "file": "decks/en/en_daily.json"
+    },
+    {
+      "id": "en_food",
+      "lang": "en",
+      "title": "Ẩm thực & Nhà hàng",
+      "subtitle": "Từ vựng dùng khi ăn uống, gọi món và nấu ăn",
+      "level": "A2 – B1",
+      "badge": "Fd",
+      "file": "decks/en/en_food.json"
+    },
+    {
+      "id": "en_health",
+      "lang": "en",
+      "title": "Sức khỏe",
+      "subtitle": "Từ vựng về bệnh tật, khám chữa bệnh và thể chất",
+      "level": "B1 – B2",
+      "badge": "Hl",
+      "file": "decks/en/en_health.json"
+    },
+    {
+      "id": "en_idioms",
+      "lang": "en",
+      "title": "Idioms thông dụng",
+      "subtitle": "Thành ngữ tiếng Anh dùng nhiều trong giao tiếp",
+      "level": "B2",
+      "badge": "Id",
+      "file": "decks/en/en_idioms.json"
+    },
+    {
+      "id": "en_ielts",
+      "lang": "en",
+      "title": "IELTS Academic",
+      "subtitle": "Từ vựng ăn điểm cho Reading và Writing",
+      "level": "Band 6.5+",
+      "badge": "Ac",
+      "file": "decks/en/en_ielts.json"
+    },
+    {
+      "id": "en_technology",
+      "lang": "en",
+      "title": "Công nghệ",
+      "subtitle": "Từ vựng công nghệ, phần mềm và thiết bị thường gặp",
+      "level": "B1 – B2",
+      "badge": "Tc",
+      "file": "decks/en/en_technology.json"
+    },
+    {
+      "id": "en_toeic",
+      "lang": "en",
+      "title": "TOEIC Business",
+      "subtitle": "Từ vựng văn phòng và thương mại",
+      "level": "TOEIC 600+",
+      "badge": "Bz",
+      "file": "decks/en/en_toeic.json"
+    },
+    {
+      "id": "en_travel",
+      "lang": "en",
+      "title": "Du lịch",
+      "subtitle": "Từ vựng cần thiết khi đi du lịch nước ngoài",
+      "level": "A2 – B1",
+      "badge": "Tr",
+      "file": "decks/en/en_travel.json"
+    },
+    {
+      "id": "ja_daily",
+      "lang": "ja",
+      "title": "Đời sống hằng ngày",
+      "subtitle": "Từ vựng sinh hoạt, nhà cửa và thủ tục thường gặp",
+      "level": "Sơ cấp – Trung cấp",
+      "badge": "会",
+      "file": "decks/ja/ja_daily.json"
+    },
+    {
+      "id": "ja_food",
+      "lang": "ja",
+      "title": "Ẩm thực Nhật Bản",
+      "subtitle": "Từ vựng về hương vị và văn hóa ăn uống",
+      "level": "Sơ cấp – Trung cấp",
+      "badge": "食",
+      "file": "decks/ja/ja_food.json"
+    },
+    {
+      "id": "ja_n2",
+      "lang": "ja",
+      "title": "JLPT N2",
+      "subtitle": "Từ vựng thường gặp trong đề thi N2",
+      "level": "N2",
+      "badge": "N2",
+      "file": "decks/ja/ja_n2.json"
+    },
+    {
+      "id": "ja_n3",
+      "lang": "ja",
+      "title": "JLPT N3",
+      "subtitle": "Từ vựng trung cấp thường gặp trong đề thi",
+      "level": "Trung cấp",
+      "badge": "三",
+      "file": "decks/ja/ja_n3.json"
+    },
+    {
+      "id": "ja_n4",
+      "lang": "ja",
+      "title": "JLPT N4",
+      "subtitle": "Giao tiếp cơ bản trong sinh hoạt và công việc",
+      "level": "Sơ trung cấp",
+      "badge": "四",
+      "file": "decks/ja/ja_n4.json"
+    },
+    {
+      "id": "ja_n5",
+      "lang": "ja",
+      "title": "JLPT N5",
+      "subtitle": "Nền tảng cho người mới bắt đầu",
+      "level": "Sơ cấp",
+      "badge": "五",
+      "file": "decks/ja/ja_n5.json"
+    },
+    {
+      "id": "ja_travel",
+      "lang": "ja",
+      "title": "Du lịch Nhật Bản",
+      "subtitle": "Từ vựng cần thiết khi đi lại và tham quan tại Nhật",
+      "level": "Sơ cấp – Trung cấp",
+      "badge": "旅",
+      "file": "decks/ja/ja_travel.json"
+    },
+    {
+      "id": "ko_basic",
+      "lang": "ko",
+      "title": "Từ vựng cơ bản",
+      "subtitle": "Chào hỏi và từ dùng hằng ngày",
+      "level": "Sơ cấp",
+      "badge": "한",
+      "file": "decks/ko/ko_basic.json"
+    },
+    {
+      "id": "ko_travel",
+      "lang": "ko",
+      "title": "Du lịch Hàn Quốc",
+      "subtitle": "Từ vựng cần thiết khi đi lại và tham quan tại Hàn Quốc",
+      "level": "Sơ cấp – Trung cấp",
+      "badge": "여",
+      "file": "decks/ko/ko_travel.json"
+    }
+  ]
+}

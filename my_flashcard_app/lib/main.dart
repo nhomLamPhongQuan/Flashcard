@@ -11,7 +11,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // firebase_options.dart được sinh tự động bằng lệnh `flutterfire configure`
-  // (xem hướng dẫn thiết lập Firebase trước khi chạy app).
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final state = AppState(VocabRepository());
@@ -25,7 +24,7 @@ class FlashcardApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // AppScope.of đăng ký widget này là dependent của AppState, nên mỗi lần
+    // AppScope.of đăng ký widget này là dependent của AppState
     // notifyListeners() được gọi, FlashcardApp sẽ tự rebuild với theme mới.
     final state = AppScope.of(context);
     return MaterialApp(
