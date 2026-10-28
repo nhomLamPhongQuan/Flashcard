@@ -10,16 +10,30 @@ class AuthService {
 
   /// Phát ra uid mỗi khi trạng thái đăng nhập đổi; null nghĩa là chưa
   /// đăng nhập (kể cả chưa từng vào app lần nào).
-  Stream<String?> get uidChanges => _auth.authStateChanges().map((u) => u?.uid);
+  Stream<String?> get uidChanges =>
+      _auth.authStateChanges().map((user) => user?.uid);
 
   String? get currentUid => _auth.currentUser?.uid;
   String? get currentEmail => _auth.currentUser?.email;
+  String? get currentDisplayName => _auth.currentUser?.displayName;
 
   /// true nếu đang dùng phiên "khách" (chưa gắn email/mật khẩu thật).
   bool get isAnonymous => _auth.currentUser?.isAnonymous ?? true;
 
-  Future<void> register(String email, String password) =>
-      _auth.createUserWithEmailAndPassword(email: email, password: password);
+  //Register now require a Name and a confirmation password step, like every other apps.
+  Future<void> register({
+    required String displayName,
+    required String email,
+    required String password,
+  }) async {
+    final credential = await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    final user = credential.user;
+    if (user == null) {
+      throw StateError('Firebase chưa trả về tài khoản mới đăng ký.');
+    }
+    await user.updateDisplayName(displayName);
+  }
 
   Future<void> signIn(String email, String password) =>
       _auth.signInWithEmailAndPassword(email: email, password: password);
@@ -41,6 +55,33 @@ class AuthService {
 
   Future<void> signOut() => _auth.signOut();
 
+  Future<void> updateDisplayName(String displayName) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw StateError('Chưa có phiên đăng nhập để cập nhật tên.');
+    }
+    await user.updateDisplayName(displayName);
+    await user.reload();
+  }
+
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final user = _auth.currentUser;
+    final email = user?.email;
+    if (user == null || email == null || user.isAnonymous) {
+      throw StateError('Tài khoản này chưa dùng đăng nhập bằng email.');
+    }
+
+    final credential = EmailAuthProvider.credential(
+      email: email,
+      password: currentPassword,
+    );
+    await user.reauthenticateWithCredential(credential);
+    await user.updatePassword(newPassword);
+  }
+
   /// Dịch mã lỗi Firebase sang câu tiếng Việt dễ hiểu cho người dùng.
   String friendlyError(Object error) {
     if (error is FirebaseAuthException) {
@@ -55,6 +96,8 @@ class AuthService {
         case 'wrong-password':
         case 'invalid-credential':
           return 'Email hoặc mật khẩu không đúng.';
+        case 'requires-recent-login':
+          return 'Vui lòng đăng nhập lại rồi thử đổi mật khẩu.';
         case 'network-request-failed':
           return 'Không có kết nối mạng.';
         default:

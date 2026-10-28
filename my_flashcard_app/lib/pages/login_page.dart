@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/panel.dart';
+import 'register_page.dart';
 
-enum _Mode { signIn, register }
-
-/// Màn hình đăng nhập / đăng ký, hoặc "Dùng thử không cần tài khoản"
+/// Màn hình đăng nhập, hoặc "Dùng thử không cần tài khoản"
 /// (đăng nhập ẩn danh — vẫn đồng bộ được, chỉ là chưa gắn email).
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.auth});
@@ -20,7 +19,6 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
-  _Mode _mode = _Mode.signIn;
   bool _loading = false;
   String? _error;
 
@@ -33,43 +31,33 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
+    final email = _emailCtrl.text.trim();
+    await _runAuthAction(() => widget.auth.signIn(email, _passwordCtrl.text));
+  }
+
+  Future<void> _continueAsGuest() =>
+      _runAuthAction(widget.auth.continueAsGuest);
+
+  Future<void> _runAuthAction(Future<void> Function() action) async {
     setState(() {
       _loading = true;
       _error = null;
     });
     try {
-      if (_mode == _Mode.signIn) {
-        await widget.auth.signIn(_emailCtrl.text.trim(), _passwordCtrl.text);
-      } else {
-        await widget.auth.register(_emailCtrl.text.trim(), _passwordCtrl.text);
+      await action();
+    } catch (e) {
+      if (mounted) {
+        setState(() => _error = widget.auth.friendlyError(e));
       }
-      // Đăng nhập/đăng ký thành công -> AuthGate tự chuyển màn hình qua
-      // stream uidChanges, không cần tự điều hướng ở đây.
-    } catch (e) {
-      setState(() => _error = widget.auth.friendlyError(e));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
   }
 
-  Future<void> _continueAsGuest() async {
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
-    try {
-      await widget.auth.continueAsGuest();
-    } catch (e) {
-      setState(() => _error = widget.auth.friendlyError(e));
-    } finally {
-      if (mounted) setState(() => _loading = false);
-    }
-  }
-
+  //So I change the code a little bit to make it easier to read and also split it into 2 different pages - login and register.
   @override
   Widget build(BuildContext context) {
     final p = Palette.ofContext(context);
-    final isSignIn = _mode == _Mode.signIn;
 
     return Scaffold(
       backgroundColor: p.bg,
@@ -93,9 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    isSignIn
-                        ? 'Đăng nhập để đồng bộ tiến độ học trên mọi thiết bị'
-                        : 'Tạo tài khoản để lưu tiến độ học lâu dài',
+                    'Đăng nhập để đồng bộ tiến độ học trên mọi thiết bị',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, color: p.muted),
                   ),
@@ -145,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                                       child: CircularProgressIndicator(
                                           strokeWidth: 2),
                                     )
-                                  : Text(isSignIn ? 'Đăng nhập' : 'Đăng ký'),
+                                  : const Text('Đăng nhập'),
                             ),
                           ),
                         ],
@@ -156,15 +142,12 @@ class _LoginPageState extends State<LoginPage> {
                   TextButton(
                     onPressed: _loading
                         ? null
-                        : () => setState(() {
-                              _mode = isSignIn ? _Mode.register : _Mode.signIn;
-                              _error = null;
-                            }),
-                    child: Text(
-                      isSignIn
-                          ? 'Chưa có tài khoản? Đăng ký'
-                          : 'Đã có tài khoản? Đăng nhập',
-                    ),
+                        : () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => RegisterPage(auth: widget.auth),
+                              ),
+                            ),
+                    child: const Text('Chưa có tài khoản? Đăng ký'),
                   ),
                   const SizedBox(height: 8),
                   Row(
