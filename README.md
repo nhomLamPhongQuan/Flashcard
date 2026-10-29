@@ -67,5 +67,34 @@ Ensure the following system dependencies are running on your host machine:
 
 #### 1. Clone the Repository
 ```bash
-git clone [https://github.com/your-username/my_flashcard_app.git](https://github.com/your-username/my_flashcard_app.git)
+git clone https://github.com/your-username/my_flashcard_app.git
 cd my_flashcard_app
+```
+
+### Firebase display names
+
+Email account names are reserved case-insensitively in Firestore. Guest names
+are not reserved, but a guest must choose an available name when linking an
+email account. Existing email account names are reserved the next time the
+account signs in; if a name is already claimed, the account needs to choose a
+different one. Guests are local-only: progress and guest names stay in local
+device storage, with no Firebase Auth session, Firestore writes, or Storage
+uploads. Email-linked accounts sync progress to Firestore and store profile
+pictures as a selected built-in avatar ID in Firestore. Avatar images are local
+assets and do not require Firebase Storage or a paid Storage plan. A device keeps one guest profile; when a saved
+guest exists, the user can resume it or replace it with a new guest and discard
+the old guest progress. Linked-account progress is cached separately and the
+local cache is removed on sign-out; Firebase data remains. Unlinking requires
+name and password, removes the Firebase Auth account, progress document,
+avatar selection, and reserved name, then temporarily exposes that account's
+local progress in guest mode. Logging out of that unlinked session deletes its
+local cache while leaving the separately saved guest profile intact. Linking a
+different email before logging out carries the current unlinked progress to
+that new linked account; it never replaces the device's saved guest progress.
+
+Deploy the Firestore rules before using name reservations:
+
+```bash
+cd my_flashcard_app
+firebase deploy --only firestore:rules
+```

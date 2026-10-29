@@ -83,6 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         children: [
                           TextFormField(
                             controller: _nameCtrl,
+                            maxLength: 60,
                             textCapitalization: TextCapitalization.words,
                             decoration: const InputDecoration(labelText: 'Tên'),
                             validator: (value) =>

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../models/avatar_catalog.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/panel.dart';
 
-//This is the account page, I move the themeMode to here. I think its better to stay here
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
 
@@ -16,9 +16,29 @@ class _AccountPageState extends State<AccountPage> {
   bool _working = false;
   String? _error;
 
+  Future<void> _chooseAvatar(AppState state) async {
+    final avatarId = await showDialog<String>(
+      context: context,
+      builder: (_) => _AvatarPickerDialog(selectedAvatarId: state.avatarId),
+    );
+    if (!mounted || avatarId == null || avatarId == state.avatarId) return;
+
+    setState(() {
+      _working = true;
+      _error = null;
+    });
+    try {
+      await state.selectAvatar(avatarId);
+    } catch (error) {
+      if (mounted) setState(() => _error = state.auth.friendlyError(error));
+    } finally {
+      if (mounted) setState(() => _working = false);
+    }
+  }
+
   Future<void> _editDisplayName(AppState state) async {
     final controller =
-        TextEditingController(text: state.auth.currentDisplayName ?? '');
+        TextEditingController(text: state.currentDisplayName ?? '');
     final name = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
@@ -44,7 +64,7 @@ class _AccountPageState extends State<AccountPage> {
       ),
     );
     controller.dispose();
-    if (name == null || name.isEmpty || name == state.auth.currentDisplayName) {
+    if (name == null || name.isEmpty || name == state.currentDisplayName) {
       return;
     }
 
@@ -53,7 +73,8 @@ class _AccountPageState extends State<AccountPage> {
       _error = null;
     });
     try {
-      await state.auth.updateDisplayName(name);
+      await state.updateDisplayName(name);
+      state.clearDisplayNameIssue();
     } catch (error) {
       if (mounted) setState(() => _error = state.auth.friendlyError(error));
     } finally {
@@ -65,8 +86,14 @@ class _AccountPageState extends State<AccountPage> {
     final shouldSignOut = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Đăng xuất?'),
-        content: const Text('Tiến độ học trên thiết bị này vẫn được giữ lại.'),
+        title: const Text('Xác nhận đăng xuất'),
+        content: Text(
+          state.unlinkedSession
+              ? 'Tài khoản chưa được liên kết và sẽ bị xóa khi đăng xuất'
+              : state.auth.isAnonymous
+                  ? 'Tài khoản khách và tiến độ của bạn vẫn được giữ trên thiết bị.'
+                  : 'Tài khoản và tiến độ trên Firebase vẫn được giữ. Bản sao tiến độ trên thiết bị này sẽ bị xóa.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -82,7 +109,7 @@ class _AccountPageState extends State<AccountPage> {
     if (shouldSignOut != true) return;
 
     try {
-      await state.auth.signOut();
+      await state.signOut();
     } catch (error) {
       if (mounted) {
         setState(() => _error = state.auth.friendlyError(error));
@@ -118,15 +145,84 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
+  Future<void> _linkAccount(AppState state) async {
+    final details = await showDialog<(String, String, String)>(
+      context: context,
+      builder: (_) => const _LinkAccountDialog(),
+    );
+    if (details == null) return;
+
+    setState(() {
+      _error = null;
+      _working = true;
+    });
+    try {
+      await state.linkEmail(
+        displayName: details.$1,
+        email: details.$2,
+        password: details.$3,
+      );
+      state.clearDisplayNameIssue();
+      if (mounted) {
+        setState(() {});
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Đã liên kết email với tài khoản.')),
+        );
+      }
+    } catch (error) {
+      if (mounted) setState(() => _error = state.auth.friendlyError(error));
+    } finally {
+      if (mounted) setState(() => _working = false);
+    }
+  }
+
+  Future<void> _unlinkAccount(AppState state) async {
+    final details = await showDialog<(String, String)>(
+      context: context,
+      builder: (_) => const _UnlinkAccountDialog(),
+    );
+    if (details == null) return;
+
+    setState(() {
+      _working = true;
+      _error = null;
+    });
+    try {
+      await state.unlinkEmailAccount(
+        confirmationName: details.$1,
+        password: details.$2,
+      );
+      if (mounted) {
+        setState(() {});
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Tài khoản và dữ liệu Firebase đã được xóa. Tiến độ vẫn còn trên thiết bị.',
+            ),
+          ),
+        );
+      }
+    } catch (error) {
+      if (mounted) setState(() => _error = state.auth.friendlyError(error));
+    } finally {
+      if (mounted) setState(() => _working = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = AppScope.of(context);
     final auth = state.auth;
     final palette = Palette.ofContext(context);
-    final displayName = auth.currentDisplayName?.trim();
+    final displayName = state.currentDisplayName?.trim();
     final name = displayName == null || displayName.isEmpty
-        ? (auth.isAnonymous ? 'Tài khoản khách' : 'Chưa đặt tên')
+        ? (state.unlinkedSession
+            ? 'Tài khoản chưa liên kết'
+            : auth.isAnonymous
+                ? 'Tài khoản khách'
+                : 'Chưa đặt tên')
         : displayName;
+    final avatar = avatarOptionById(state.avatarId);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Tài khoản')),
@@ -139,14 +235,25 @@ class _AccountPageState extends State<AccountPage> {
                 CircleAvatar(
                   radius: 36,
                   backgroundColor: palette.accent(state.lang).withAlpha(36),
-                  child: Text(
-                    name.substring(0, 1).toUpperCase(),
-                    style: TextStyle(
-                      color: palette.accent(state.lang),
-                      fontSize: 28,
-                      fontWeight: FontWeight.w700,
+                  child: ClipOval(
+                    child: Image.asset(
+                      avatar.assetPath,
+                      width: 72,
+                      height: 72,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Icon(
+                        Icons.person_rounded,
+                        color: palette.accent(state.lang),
+                        size: 40,
+                      ),
                     ),
                   ),
+                ),
+                const SizedBox(height: 8),
+                TextButton.icon(
+                  onPressed: _working ? null : () => _chooseAvatar(state),
+                  icon: const Icon(Icons.face_retouching_natural_outlined),
+                  label: const Text('Chọn ảnh đại diện'),
                 ),
                 const SizedBox(height: 14),
                 Text(
@@ -160,7 +267,9 @@ class _AccountPageState extends State<AccountPage> {
                 const SizedBox(height: 4),
                 Text(
                   auth.isAnonymous
-                      ? 'Đang dùng thử'
+                      ? (state.unlinkedSession
+                          ? 'Tài khoản chưa được liên kết'
+                          : 'Đang dùng thử')
                       : (auth.currentEmail ?? 'Tài khoản email'),
                   textAlign: TextAlign.center,
                   style: TextStyle(color: palette.muted),
@@ -195,7 +304,9 @@ class _AccountPageState extends State<AccountPage> {
                     Icon(
                       state.syncing
                           ? Icons.sync_rounded
-                          : Icons.cloud_done_outlined,
+                          : (auth.isAnonymous
+                              ? Icons.storage_outlined
+                              : Icons.cloud_done_outlined),
                       color: palette.accent(state.lang),
                     ),
                     const SizedBox(width: 10),
@@ -203,7 +314,11 @@ class _AccountPageState extends State<AccountPage> {
                       child: Text(
                         state.syncing
                             ? 'Đang đồng bộ tiến độ học...'
-                            : 'Tiến độ học được lưu trên thiết bị và đồng bộ khi đăng nhập.',
+                            : (auth.isAnonymous
+                                ? (state.unlinkedSession
+                                    ? 'Dữ liệu tạm thời chỉ được lưu trên thiết bị này.'
+                                    : 'Dữ liệu chỉ được lưu trên thiết bị này.')
+                                : 'Tiến độ học được lưu trên thiết bị và đồng bộ khi đăng nhập.'),
                         style: TextStyle(color: palette.muted),
                       ),
                     ),
@@ -250,22 +365,129 @@ class _AccountPageState extends State<AccountPage> {
               ),
             ),
           ],
-          if (_error != null) ...[
+          if (_error != null ||
+              state.displayNameIssue != null ||
+              state.localGuestIssue != null) ...[
             const SizedBox(height: 12),
             Text(
-              _error!,
+              _error ?? state.displayNameIssue ?? state.localGuestIssue!,
               style: const TextStyle(color: Color(0xFFD64550)),
               textAlign: TextAlign.center,
             ),
           ],
+          if (state.localGuestIssue != null && auth.isAnonymous)
+            TextButton(
+              onPressed: _working
+                  ? null
+                  : () async {
+                      setState(() => _working = true);
+                      try {
+                        await state.retryLegacyGuestCleanup();
+                      } catch (error) {
+                        if (mounted) {
+                          setState(() {
+                            _error = state.auth.friendlyError(error);
+                          });
+                        }
+                      } finally {
+                        if (mounted) setState(() => _working = false);
+                      }
+                    },
+              child: const Text('Thử xóa dữ liệu Firebase lần nữa'),
+            ),
           const SizedBox(height: 24),
+          if (auth.isAnonymous) ...[
+            FilledButton.tonalIcon(
+              onPressed: _working ? null : () => _linkAccount(state),
+              icon: const Icon(Icons.link_rounded),
+              label: const Text('Liên kết email và mật khẩu'),
+            ),
+            const SizedBox(height: 12),
+          ],
           FilledButton.tonalIcon(
-            onPressed: () => _signOut(state),
+            onPressed: _working ? null : () => _signOut(state),
             icon: const Icon(Icons.logout_rounded),
             label: const Text('Đăng xuất'),
           ),
+          if (!auth.isAnonymous) ...[
+            const SizedBox(height: 24),
+            OutlinedButton.icon(
+              onPressed: _working ? null : () => _unlinkAccount(state),
+              icon: const Icon(Icons.link_off_rounded),
+              label: const Text('Hủy liên kết email'),
+            ),
+          ],
         ],
       ),
+    );
+  }
+}
+
+class _AvatarPickerDialog extends StatelessWidget {
+  const _AvatarPickerDialog({required this.selectedAvatarId});
+
+  final String selectedAvatarId;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = Palette.ofContext(context);
+    return AlertDialog(
+      title: const Text('Chọn ảnh đại diện'),
+      content: SizedBox(
+        width: 320,
+        child: GridView.builder(
+          shrinkWrap: true,
+          itemCount: avatarOptions.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+          ),
+          itemBuilder: (context, index) {
+            final avatar = avatarOptions[index];
+            final selected = avatar.id == selectedAvatarId;
+            return InkWell(
+              borderRadius: BorderRadius.circular(48),
+              onTap: () => Navigator.of(context).pop(avatar.id),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: selected
+                        ? palette.accent(AppScope.of(context).lang)
+                        : Colors.transparent,
+                    width: 3,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(3),
+                  child: ClipOval(
+                    child: Image.asset(
+                      avatar.assetPath,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => ColoredBox(
+                        color: palette
+                            .accent(AppScope.of(context).lang)
+                            .withAlpha(36),
+                        child: Icon(
+                          Icons.person_rounded,
+                          color: palette.accent(AppScope.of(context).lang),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Đóng'),
+        ),
+      ],
     );
   }
 }
@@ -352,6 +574,195 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
         FilledButton(
           onPressed: _submit,
           child: const Text('Cập nhật'),
+        ),
+      ],
+    );
+  }
+}
+
+class _LinkAccountDialog extends StatefulWidget {
+  const _LinkAccountDialog();
+
+  @override
+  State<_LinkAccountDialog> createState() => _LinkAccountDialogState();
+}
+
+class _LinkAccountDialogState extends State<_LinkAccountDialog> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    if (!_formKey.currentState!.validate()) return;
+    Navigator.of(context).pop((
+      _nameController.text.trim(),
+      _emailController.text.trim(),
+      _passwordController.text,
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Tạo tài khoản email'),
+      content: Form(
+        key: _formKey,
+        child: AutofillGroup(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  autofocus: true,
+                  maxLength: 60,
+                  textCapitalization: TextCapitalization.words,
+                  decoration: const InputDecoration(labelText: 'Tên'),
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? 'Nhập tên của bạn'
+                      : null,
+                ),
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  autofillHints: const [AutofillHints.email],
+                  decoration: const InputDecoration(labelText: 'Email'),
+                  validator: (value) => value == null || !value.contains('@')
+                      ? 'Nhập email hợp lệ'
+                      : null,
+                ),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  autofillHints: const [AutofillHints.newPassword],
+                  decoration: const InputDecoration(labelText: 'Mật khẩu'),
+                  validator: (value) => value == null || value.length < 6
+                      ? 'Tối thiểu 6 ký tự'
+                      : null,
+                ),
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  obscureText: true,
+                  autofillHints: const [AutofillHints.newPassword],
+                  decoration:
+                      const InputDecoration(labelText: 'Xác nhận mật khẩu'),
+                  validator: (value) => value != _passwordController.text
+                      ? 'Mật khẩu xác nhận không khớp'
+                      : null,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Hủy'),
+        ),
+        FilledButton(
+          onPressed: _submit,
+          child: const Text('Liên kết'),
+        ),
+      ],
+    );
+  }
+}
+
+class _UnlinkAccountDialog extends StatefulWidget {
+  const _UnlinkAccountDialog();
+
+  @override
+  State<_UnlinkAccountDialog> createState() => _UnlinkAccountDialogState();
+}
+
+class _UnlinkAccountDialogState extends State<_UnlinkAccountDialog> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    if (!_formKey.currentState!.validate()) return;
+    Navigator.of(context).pop((
+      _nameController.text,
+      _passwordController.text,
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final auth = AppScope.of(context).auth;
+    final displayName = auth.currentDisplayName?.trim();
+    final expectedName = displayName == null || displayName.isEmpty
+        ? 'Chưa đặt tên'
+        : displayName;
+
+    return AlertDialog(
+      title: const Text('Bạn có muốn hủy liên kết với tài khoản này?'),
+      content: Form(
+        key: _formKey,
+        child: AutofillGroup(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Tiến trình học vẫn sẽ được lưu trên máy tính của bạn',
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Tài khoản, tiến độ trên Firebase và tên đã đăng ký trên đám mây sẽ bị xóa.',
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _nameController,
+                  autofocus: true,
+                  textCapitalization: TextCapitalization.words,
+                  decoration: const InputDecoration(
+                      labelText: 'Nhập lại tên tài khoản'),
+                  validator: (value) =>
+                      value?.trim() != expectedName ? 'Tên không khớp' : null,
+                ),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  autofillHints: const [AutofillHints.password],
+                  decoration: const InputDecoration(labelText: 'Nhập mật khẩu'),
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'Nhập mật khẩu' : null,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Hủy'),
+        ),
+        FilledButton(
+          onPressed: _submit,
+          child: const Text('Hủy liên kết'),
         ),
       ],
     );

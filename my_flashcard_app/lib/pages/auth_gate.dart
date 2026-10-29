@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
+import '../state/app_state.dart';
 import '../theme/app_theme.dart';
+import 'account_page.dart';
 import 'home_shell.dart';
 import 'login_page.dart';
 
-/// Màn hình gác cổng: chưa có phiên đăng nhập (kể cả ẩn danh) -> LoginPage,
-/// đã có phiên -> vào thẳng app.
+/// Tài khoản email hoặc phiên khách chỉ lưu trên thiết bị đều vào ứng dụng.
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key, required this.auth});
   final AuthService auth;
@@ -26,6 +27,7 @@ class _AuthGateState extends State<AuthGate> {
 
   @override
   Widget build(BuildContext context) {
+    final state = AppScope.of(context);
     return StreamBuilder<String?>(
       stream: _uidChanges,
       builder: (context, snapshot) {
@@ -37,7 +39,10 @@ class _AuthGateState extends State<AuthGate> {
           );
         }
         final uid = snapshot.data;
-        if (uid == null) return LoginPage(auth: widget.auth);
+        if (uid == null && !state.localGuest) {
+          return LoginPage(auth: widget.auth);
+        }
+        if (state.displayNameConflict) return const AccountPage();
         return const HomeShell();
       },
     );

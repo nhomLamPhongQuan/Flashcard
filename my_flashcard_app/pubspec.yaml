@@ -14,7 +14,6 @@ dependencies:
   firebase_core: ^3.6.0
   firebase_auth: ^5.3.1
   cloud_firestore: ^5.4.4
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -27,3 +26,4 @@ flutter:
     - assets/vocab/decks/en/
     - assets/vocab/decks/ja/
     - assets/vocab/decks/ko/
+    - assets/avatars/

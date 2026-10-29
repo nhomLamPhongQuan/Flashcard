@@ -32,4 +32,14 @@ class CloudProgressService {
       SetOptions(merge: true),
     );
   }
+
+  Future<void> delete(String uid) => _doc(uid).delete();
+
+  Future<String?> fetchAvatarId(String uid) async {
+    final snapshot = await _doc(uid).get();
+    return snapshot.data()?['avatarId'] as String?;
+  }
+
+  Future<void> setAvatarId(String uid, String avatarId) =>
+      _doc(uid).set({'avatarId': avatarId}, SetOptions(merge: true));
 }

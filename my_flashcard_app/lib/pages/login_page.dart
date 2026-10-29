@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
+import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/panel.dart';
 import 'register_page.dart';
 
 /// Màn hình đăng nhập, hoặc "Dùng thử không cần tài khoản"
-/// (đăng nhập ẩn danh — vẫn đồng bộ được, chỉ là chưa gắn email).
+/// (chỉ lưu dữ liệu trên thiết bị, không tạo tài khoản Firebase).
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.auth});
   final AuthService auth;
@@ -35,8 +36,32 @@ class _LoginPageState extends State<LoginPage> {
     await _runAuthAction(() => widget.auth.signIn(email, _passwordCtrl.text));
   }
 
-  Future<void> _continueAsGuest() =>
-      _runAuthAction(widget.auth.continueAsGuest);
+  Future<void> _continueAsGuest() async {
+    final state = AppScope.of(context);
+    if (state.hasSavedGuest) {
+      final choice = await showDialog<_GuestChoice>(
+        context: context,
+        builder: (_) => const _ExistingGuestDialog(),
+      );
+      if (!mounted || choice == null) return;
+      if (choice == _GuestChoice.continueExisting) {
+        await _runAuthAction(state.continueLocalGuest);
+        return;
+      }
+    }
+
+    final displayName = await showDialog<String>(
+      context: context,
+      builder: (_) => const _GuestNameDialog(),
+    );
+    if (!mounted || displayName == null) return;
+    await _runAuthAction(() async {
+      await state.startLocalGuest(
+        displayName,
+        replaceExisting: state.hasSavedGuest,
+      );
+    });
+  }
 
   Future<void> _runAuthAction(Future<void> Function() action) async {
     setState(() {
@@ -54,7 +79,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  //So I change the code a little bit to make it easier to read and also split it into 2 different pages - login and register.
   @override
   Widget build(BuildContext context) {
     final p = Palette.ofContext(context);
@@ -168,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Học thử vẫn được lưu trên máy; nếu muốn đồng bộ nhiều thiết bị, bạn có thể tạo tài khoản sau trong mục Tiến độ.',
+                    'Khách chỉ lưu dữ liệu trên thiết bị. Tạo hoặc liên kết tài khoản email để đồng bộ tiến độ.',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 12, color: p.muted, height: 1.4),
                   ),
@@ -178,6 +202,94 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _GuestNameDialog extends StatefulWidget {
+  const _GuestNameDialog();
+
+  @override
+  State<_GuestNameDialog> createState() => _GuestNameDialogState();
+}
+
+class _GuestNameDialogState extends State<_GuestNameDialog> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Dùng thử với tư cách khách'),
+      content: Form(
+        key: _formKey,
+        child: TextFormField(
+          controller: _nameController,
+          autofocus: true,
+          maxLength: 60,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(labelText: 'Tên của bạn'),
+          validator: (value) => value == null || value.trim().isEmpty
+              ? 'Nhập tên để tiếp tục'
+              : null,
+          onFieldSubmitted: (_) => _continue(),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Hủy'),
+        ),
+        FilledButton(
+          onPressed: _continue,
+          child: const Text('Tiếp tục'),
+        ),
+      ],
+    );
+  }
+
+  void _continue() {
+    if (!_formKey.currentState!.validate()) return;
+    Navigator.of(context).pop(_nameController.text.trim());
+  }
+}
+
+enum _GuestChoice { continueExisting, replaceExisting }
+
+class _ExistingGuestDialog extends StatelessWidget {
+  const _ExistingGuestDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    final name = AppScope.of(context).savedGuestName;
+    return AlertDialog(
+      title: const Text('Đã có tài khoản khách trên thiết bị'),
+      content: Text(
+        'Bạn muốn tiếp tục với ${name?.isNotEmpty == true ? name : 'tài khoản khách hiện có'} '
+        'hay tạo tài khoản khách mới? Tạo mới sẽ thay thế toàn bộ tiến độ khách cũ.',
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Hủy'),
+        ),
+        OutlinedButton(
+          onPressed: () =>
+              Navigator.of(context).pop(_GuestChoice.replaceExisting),
+          child: const Text('Tạo mới'),
+        ),
+        FilledButton(
+          onPressed: () =>
+              Navigator.of(context).pop(_GuestChoice.continueExisting),
+          child: const Text('Tiếp tục'),
+        ),
+      ],
     );
   }
 }
