@@ -146,6 +146,60 @@ class WordTile extends StatelessWidget {
   }
 }
 
+class WordBlock extends StatelessWidget {
+  const WordBlock({super.key, required this.word});
+  final Word word;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.ofContext(context);
+    final box = AppScope.of(context).progressOf(word).box;
+    final reading = [word.reading, word.romanization]
+        .whereType<String>()
+        .where((value) => value.isNotEmpty)
+        .join(' · ');
+    return Panel(
+      radius: 16,
+      padding: const EdgeInsets.all(14),
+      onTap: () => showWordSheet(context, word),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            word.term,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+          ),
+          if (reading.isNotEmpty) ...[
+            const SizedBox(height: 3),
+            Text(
+              reading,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 13, color: p.muted),
+            ),
+          ],
+          const SizedBox(height: 8),
+          Expanded(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                word.meaning,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 14, color: p.muted),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          StatusPill(box: box),
+        ],
+      ),
+    );
+  }
+}
+
 void showWordSheet(BuildContext context, Word word) {
   final p = Palette.ofContext(context);
   showModalBottomSheet<void>(

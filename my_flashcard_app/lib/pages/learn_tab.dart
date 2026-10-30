@@ -5,6 +5,7 @@ import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/deck_card.dart';
 import '../widgets/lang_switcher.dart';
+import '../widgets/page_title_bar.dart';
 import '../widgets/slide_page_route.dart';
 import '../widgets/study_backdrop.dart';
 import 'study_page.dart';
@@ -26,58 +27,65 @@ class LearnTab extends StatelessWidget {
     return StudyBackdrop(
       accent: p.accent(state.lang),
       child: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+        child: Column(
           children: [
-            Center(
-              child: Text(
-                'Học Từ Vựng',
-                textAlign: TextAlign.center,
-                style: AppTheme.pageTitleStyle.copyWith(color: p.ink),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: PageTitleBar(
+                title: 'Học Từ Vựng',
+                icon: Icons.style_rounded,
+                accent: p.accent(state.lang),
               ),
             ),
-            const SizedBox(height: 16),
-            _WelcomeCard(
-              language: state.lang.label,
-              totalDue: totalDue,
-              totalMastered: totalMastered,
-              totalWords: totalWords,
-              accent: p.accent(state.lang),
-              onContinue: () {
-                if (decks.isEmpty) return;
-                final deck = decks.firstWhere(
-                  (item) => state.dueWords(item.words).isNotEmpty,
-                  orElse: () => decks.firstWhere(
-                    (item) => item.words.isNotEmpty,
-                    orElse: () => decks.first,
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+                children: [
+                  _WelcomeCard(
+                    language: state.lang.label,
+                    totalDue: totalDue,
+                    totalMastered: totalMastered,
+                    totalWords: totalWords,
+                    accent: p.accent(state.lang),
+                    onContinue: () {
+                      if (decks.isEmpty) return;
+                      final deck = decks.firstWhere(
+                        (item) => state.dueWords(item.words).isNotEmpty,
+                        orElse: () => decks.firstWhere(
+                          (item) => item.words.isNotEmpty,
+                          orElse: () => decks.first,
+                        ),
+                      );
+                      final due = state.dueWords(deck.words);
+                      final words = due.isNotEmpty ? due : List.of(deck.words)
+                        ..shuffle();
+                      if (words.isEmpty) return;
+                      Navigator.of(context).push(
+                        slidePageRoute<void>(
+                          builder: (_) => StudyPage(
+                            title: deck.title,
+                            words: words,
+                            lang: deck.lang,
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-                final due = state.dueWords(deck.words);
-                final words = due.isNotEmpty ? due : List.of(deck.words)
-                  ..shuffle();
-                if (words.isEmpty) return;
-                Navigator.of(context).push(
-                  slidePageRoute<void>(
-                    builder: (_) => StudyPage(
-                      title: deck.title,
-                      words: words,
-                      lang: deck.lang,
+                  const SizedBox(height: 18),
+                  const LangSwitcher(),
+                  const SizedBox(height: 24),
+                  const Text('Bộ thẻ',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 12),
+                  for (final deck in decks)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: DeckCard(deck: deck),
                     ),
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 18),
-            const LangSwitcher(),
-            const SizedBox(height: 24),
-            const Text('Bộ thẻ',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 12),
-            for (final deck in decks)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: DeckCard(deck: deck),
+                ],
               ),
+            ),
           ],
         ),
       ),

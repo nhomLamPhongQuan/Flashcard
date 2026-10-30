@@ -6,6 +6,7 @@ import '../models/vocab.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/flip_card.dart';
+import '../widgets/page_title_bar.dart';
 
 /// Màn hình học: lật thẻ rồi tự đánh giá theo hộp Leitner (4 mức:
 /// Học lại / Khó / Nhớ / Dễ). Mỗi đánh giá cập nhật hộp + ngày ôn tiếp theo
@@ -192,25 +193,21 @@ class _TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Palette.ofContext(context);
+    final titleBar = PageTitleBar(
+      title: title,
+      icon: Icons.auto_stories_rounded,
+      accent: color,
+    );
     return Column(
       children: [
         Row(
           children: [
             IconButton(
               tooltip: 'Thoát',
-              icon: const Icon(Icons.close_rounded),
+              icon: Icon(Icons.close_rounded, color: p.ink),
               onPressed: () => Navigator.of(context).maybePop(),
             ),
-            Expanded(
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: 15, fontWeight: FontWeight.w600, color: p.muted),
-              ),
-            ),
+            Expanded(child: titleBar),
             SizedBox(
               width: 56,
               child: Text(

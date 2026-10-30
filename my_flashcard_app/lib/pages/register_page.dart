@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/panel.dart';
+import '../widgets/page_title_bar.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key, required this.auth});
@@ -58,7 +59,11 @@ class _RegisterPageState extends State<RegisterPage> {
       backgroundColor: p.bg,
       appBar: AppBar(
         backgroundColor: p.bg,
-        title: const Text('Tạo Tài Khoản'),
+        title: PageTitleBar(
+          title: 'Tạo Tài Khoản',
+          icon: Icons.person_add_alt_1_rounded,
+          accent: p.muted,
+        ),
       ),
       body: SafeArea(
         child: Center(

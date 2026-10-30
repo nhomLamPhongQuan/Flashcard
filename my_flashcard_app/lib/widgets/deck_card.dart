@@ -5,7 +5,6 @@ import '../pages/deck_page.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import 'panel.dart';
-import 'slide_page_route.dart';
 
 /// Thẻ giới thiệu một bộ từ vựng kèm tiến độ.
 class DeckCard extends StatelessWidget {
@@ -23,7 +22,14 @@ class DeckCard extends StatelessWidget {
     return Panel(
       padding: EdgeInsets.zero,
       onTap: () => Navigator.of(context).push(
-        slidePageRoute<void>(builder: (_) => DeckPage(deck: deck)),
+        PageRouteBuilder<void>(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              DeckPage(deck: deck),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              child,
+        ),
       ),
       child: Container(
         decoration: BoxDecoration(

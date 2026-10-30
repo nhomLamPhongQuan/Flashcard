@@ -4,6 +4,7 @@ import '../models/avatar_catalog.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/panel.dart';
+import '../widgets/page_title_bar.dart';
 import 'account_dialogs.dart';
 
 class AccountPage extends StatefulWidget {
@@ -266,7 +267,13 @@ class _AccountPageState extends State<AccountPage> {
     return Theme(
       data: AppTheme.neutralizeAccents(Theme.of(context), palette),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Tài Khoản')),
+        appBar: AppBar(
+          title: PageTitleBar(
+            title: 'Tài Khoản',
+            icon: Icons.person_rounded,
+            accent: palette.muted,
+          ),
+        ),
         body: ListView(
           padding: const EdgeInsets.all(20),
           children: [

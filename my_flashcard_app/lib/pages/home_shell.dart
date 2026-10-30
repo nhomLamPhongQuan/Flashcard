@@ -26,12 +26,12 @@ class _HomeShellState extends State<HomeShell> {
           // IndexedStack giữ trạng thái các tab khi chuyển qua lại.
           child: IndexedStack(
             index: _index,
-            children: const [
-              LearnTab(),
-              LibraryTab(),
-              ExamPage(),
-              StatsTab(),
-              AccountPage(),
+            children: [
+              const LearnTab(),
+              LibraryTab(isActive: _index == 1),
+              const ExamPage(),
+              const StatsTab(),
+              const AccountPage(),
             ],
           ),
         ),
