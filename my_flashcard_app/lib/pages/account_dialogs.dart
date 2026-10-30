@@ -152,9 +152,7 @@ class AvatarPickerDialog extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: selected
-                        ? palette.accent(AppScope.of(context).lang)
-                        : Colors.transparent,
+                    color: selected ? palette.muted : Colors.transparent,
                     width: 3,
                   ),
                 ),
@@ -165,12 +163,10 @@ class AvatarPickerDialog extends StatelessWidget {
                       avatar.assetPath,
                       fit: BoxFit.cover,
                       errorBuilder: (_, __, ___) => ColoredBox(
-                        color: palette
-                            .accent(AppScope.of(context).lang)
-                            .withAlpha(36),
+                        color: palette.muted.withAlpha(36),
                         child: Icon(
                           Icons.person_rounded,
-                          color: palette.accent(AppScope.of(context).lang),
+                          color: palette.muted,
                         ),
                       ),
                     ),

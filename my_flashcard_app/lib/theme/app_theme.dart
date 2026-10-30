@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/vocab.dart';
 
 /// Bảng màu riêng của ứng dụng. Mỗi ngôn ngữ có một màu nhấn:
-/// tiếng Anh là xanh biển, tiếng Nhật là đỏ hồng (beni), tiếng Hàn là tím,
+/// tiếng Anh là xanh biển, tiếng Nhật là hồng sakura, tiếng Hàn là tím sáng,
 /// tiếng Trung là đỏ.
 class Palette {
   const Palette({
@@ -48,8 +48,8 @@ class Palette {
     muted: Color(0xFF667089),
     line: Color(0xFFE3E7F0),
     en: Color(0xFF1B6FC2),
-    ja: Color(0xFFC83653),
-    ko: Color(0xFF7B4FE0),
+    ja: Color(0xFFE88AAE),
+    ko: Color(0xFF9B4DFF),
     zh: Color(0xFFD62828),
   );
 
@@ -60,8 +60,8 @@ class Palette {
     muted: Color(0xFF9AA5BD),
     line: Color(0xFF283149),
     en: Color(0xFF6DB3F2),
-    ja: Color(0xFFFF8299),
-    ko: Color(0xFFB79CFF),
+    ja: Color(0xFFF4A7C2),
+    ko: Color(0xFFC28AFF),
     zh: Color(0xFFFF5C5C),
   );
 
@@ -78,6 +78,26 @@ class AppTheme {
     fontWeight: FontWeight.w800,
     height: 1.1,
   );
+
+  static ThemeData neutralizeAccents(ThemeData theme, Palette palette) {
+    final scheme = theme.colorScheme;
+    return theme.copyWith(
+      colorScheme: scheme.copyWith(
+        primary: palette.muted,
+        onPrimary: palette.surface,
+        primaryContainer: palette.line,
+        onPrimaryContainer: palette.ink,
+        secondary: palette.muted,
+        onSecondary: palette.surface,
+        secondaryContainer: palette.bg,
+        onSecondaryContainer: palette.ink,
+        tertiary: palette.muted,
+        onTertiary: palette.surface,
+        tertiaryContainer: palette.bg,
+        onTertiaryContainer: palette.ink,
+      ),
+    );
+  }
 
   static const _cjkFallback = [
     'Noto Sans JP',

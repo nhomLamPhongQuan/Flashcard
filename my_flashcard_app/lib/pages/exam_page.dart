@@ -179,44 +179,98 @@ class _ExamPageState extends State<ExamPage> {
           ),
         ),
         const SizedBox(height: 16),
-        Panel(
-          color: accent.withAlpha(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Expanded(
-                    child: Text(
-                      'Số từ mỗi bộ thẻ',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Text(
-                    '$_percentage%',
-                    style: TextStyle(
-                      color: accent,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-              Slider(
-                value: _percentage.toDouble(),
-                min: 10,
-                max: 100,
-                divisions: 90,
-                label: '$_percentage%',
-                onChanged: (value) =>
-                    setState(() => _percentage = value.round()),
-              ),
-              Text(
-                'Số từ được làm tròn xuống riêng cho từng bộ thẻ.',
-                style: TextStyle(fontSize: 12, color: palette.muted),
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [accent, Color.lerp(accent, palette.ink, .22)!],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: accent.withAlpha(40),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
               ),
             ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: Stack(
+              children: [
+                Positioned(
+                  right: -14,
+                  top: -24,
+                  child: Icon(
+                    Icons.quiz_rounded,
+                    size: 150,
+                    color: Colors.white.withAlpha(24),
+                  ),
+                ),
+                Positioned(
+                  right: 24,
+                  top: 24,
+                  child: Icon(
+                    Icons.sentiment_very_satisfied_rounded,
+                    size: 34,
+                    color: Colors.white.withAlpha(110),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                              'Số từ mỗi bộ thẻ',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          Text(
+                            '$_percentage%',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          activeTrackColor: Colors.white,
+                          inactiveTrackColor: Colors.white.withAlpha(70),
+                          thumbColor: Colors.white,
+                          overlayColor: Colors.white.withAlpha(32),
+                          valueIndicatorColor: palette.ink,
+                        ),
+                        child: Slider(
+                          value: _percentage.toDouble(),
+                          min: 10,
+                          max: 100,
+                          divisions: 90,
+                          label: '$_percentage%',
+                          onChanged: (value) =>
+                              setState(() => _percentage = value.round()),
+                        ),
+                      ),
+                      Text(
+                        'Số từ được làm tròn xuống riêng cho từng bộ thẻ.',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white.withAlpha(220),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 16),

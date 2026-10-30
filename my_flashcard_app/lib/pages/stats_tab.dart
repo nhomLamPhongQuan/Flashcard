@@ -91,73 +91,122 @@ class _StatsTabState extends State<StatsTab> {
               ),
             ),
             const SizedBox(height: 16),
-            Panel(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      ProgressRing(
-                        value: masteryRatio,
-                        accent: accent,
-                        size: 78,
-                        strokeWidth: 7,
-                        label: '${(masteryRatio * 100).round()}%',
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Hành trình học tập',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '$totalMastered trong ${allWords.length} từ đã thành thạo',
-                              style: TextStyle(color: p.muted),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(Icons.auto_awesome_rounded, color: accent),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _Metric(
-                          icon: Icons.verified_rounded,
-                          value: '$totalMastered',
-                          label: 'Đã thành thạo',
-                          color: accent,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: _Metric(
-                          icon: Icons.alarm_rounded,
-                          value: '$totalDue',
-                          label: 'Cần ôn hôm nay',
-                          color: accent,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: _Metric(
-                          icon: Icons.menu_book_rounded,
-                          value: '${allWords.length}',
-                          label: 'Tổng số từ',
-                          color: accent,
-                        ),
-                      ),
-                    ],
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [accent, Color.lerp(accent, p.ink, .22)!],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: accent.withAlpha(40),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
                   ),
                 ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      right: -14,
+                      top: -24,
+                      child: Icon(
+                        Icons.insights_rounded,
+                        size: 150,
+                        color: Colors.white.withAlpha(24),
+                      ),
+                    ),
+                    Positioned(
+                      right: 24,
+                      top: 24,
+                      child: Icon(
+                        Icons.celebration_rounded,
+                        size: 34,
+                        color: Colors.white.withAlpha(110),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              ProgressRing(
+                                value: masteryRatio,
+                                accent: Colors.white,
+                                size: 78,
+                                strokeWidth: 7,
+                                label: '${(masteryRatio * 100).round()}%',
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Hành trình học tập',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      '$totalMastered trong ${allWords.length} từ đã thành thạo',
+                                      style: TextStyle(
+                                        color: Colors.white.withAlpha(220),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Icon(Icons.auto_awesome_rounded,
+                                  color: Colors.white),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _Metric(
+                                  icon: Icons.verified_rounded,
+                                  value: '$totalMastered',
+                                  label: 'Đã thành thạo',
+                                  color: Colors.white,
+                                  onAccent: true,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: _Metric(
+                                  icon: Icons.alarm_rounded,
+                                  value: '$totalDue',
+                                  label: 'Cần ôn hôm nay',
+                                  color: Colors.white,
+                                  onAccent: true,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: _Metric(
+                                  icon: Icons.menu_book_rounded,
+                                  value: '${allWords.length}',
+                                  label: 'Tổng số từ',
+                                  color: Colors.white,
+                                  onAccent: true,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -305,30 +354,54 @@ class _Metric extends StatelessWidget {
     required this.value,
     required this.label,
     required this.color,
+    this.onAccent = false,
   });
 
   final IconData icon;
   final String value;
   final String label;
   final Color color;
+  final bool onAccent;
 
   @override
   Widget build(BuildContext context) {
     final p = Palette.ofContext(context);
+    final tileColor = onAccent
+        ? Color.lerp(
+            p.accent(AppScope.of(context).lang),
+            p.surface,
+            0.78,
+          )!
+        : null;
     return Panel(
       radius: 16,
       padding: const EdgeInsets.all(14),
+      color: tileColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: color),
+          Icon(icon,
+              size: 20,
+              color: onAccent ? p.accent(AppScope.of(context).lang) : color),
           const SizedBox(height: 10),
-          Text(value,
-              style: const TextStyle(
-                  fontSize: 26, fontWeight: FontWeight.w800, height: 1)),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.w800,
+              height: 1,
+              color: onAccent ? p.ink : null,
+            ),
+          ),
           const SizedBox(height: 4),
-          Text(label,
-              style: TextStyle(fontSize: 12, height: 1.25, color: p.muted)),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              height: 1.25,
+              color: p.muted,
+            ),
+          ),
         ],
       ),
     );

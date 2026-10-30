@@ -37,11 +37,26 @@ class _LoginPageState extends State<LoginPage> {
     await _runAuthAction(() => widget.auth.signIn(email, _passwordCtrl.text));
   }
 
+  Future<T?> _showNeutralDialog<T>({
+    required WidgetBuilder builder,
+  }) {
+    final theme = AppTheme.neutralizeAccents(
+      Theme.of(context),
+      Palette.ofContext(context),
+    );
+    return showDialog<T>(
+      context: context,
+      builder: (dialogContext) => Theme(
+        data: theme,
+        child: builder(dialogContext),
+      ),
+    );
+  }
+
   Future<void> _continueAsGuest() async {
     final state = AppScope.of(context);
     if (state.hasSavedGuest) {
-      final choice = await showDialog<_GuestChoice>(
-        context: context,
+      final choice = await _showNeutralDialog<_GuestChoice>(
         builder: (_) => const _ExistingGuestDialog(),
       );
       if (!mounted || choice == null) return;
@@ -51,8 +66,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
 
-    final displayName = await showDialog<String>(
-      context: context,
+    final displayName = await _showNeutralDialog<String>(
       builder: (_) => const _GuestNameDialog(),
     );
     if (!mounted || displayName == null) return;
@@ -85,133 +99,138 @@ class _LoginPageState extends State<LoginPage> {
     final p = Palette.ofContext(context);
     final state = AppScope.of(context);
 
-    return Scaffold(
-      backgroundColor: p.bg,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 420),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(height: 24),
-                  Text(
-                    'Từ Vựng Anh · Nhật · Hàn',
-                    textAlign: TextAlign.center,
-                    style: AppTheme.pageTitleStyle.copyWith(color: p.ink),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Đăng nhập để đồng bộ tiến độ học trên mọi thiết bị',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: p.muted),
-                  ),
-                  const SizedBox(height: 28),
-                  Panel(
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          TextFormField(
-                            controller: _emailCtrl,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration:
-                                const InputDecoration(labelText: 'Email'),
-                            validator: (v) => (v == null || !v.contains('@'))
-                                ? 'Nhập email hợp lệ'
-                                : null,
-                          ),
-                          const SizedBox(height: 12),
-                          TextFormField(
-                            controller: _passwordCtrl,
-                            obscureText: true,
-                            decoration:
-                                const InputDecoration(labelText: 'Mật khẩu'),
-                            validator: (v) => (v == null || v.length < 6)
-                                ? 'Tối thiểu 6 ký tự'
-                                : null,
-                          ),
-                          if (_error != null) ...[
-                            const SizedBox(height: 12),
-                            Text(
-                              _error!,
-                              style: const TextStyle(
-                                  color: Color(0xFFD64550), fontSize: 13),
-                            ),
-                          ],
-                          const SizedBox(height: 18),
-                          SizedBox(
-                            height: 50,
-                            child: FilledButton(
-                              onPressed: _loading ? null : _submit,
-                              child: _loading
-                                  ? const SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
-                                          strokeWidth: 2),
-                                    )
-                                  : const Text('Đăng nhập'),
-                            ),
-                          ),
-                        ],
-                      ),
+    return Theme(
+      data: AppTheme.neutralizeAccents(Theme.of(context), p),
+      child: Scaffold(
+        backgroundColor: p.bg,
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 420),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 24),
+                    Text(
+                      'Từ Vựng Anh · Nhật · Hàn',
+                      textAlign: TextAlign.center,
+                      style: AppTheme.pageTitleStyle.copyWith(color: p.ink),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: _loading
-                        ? null
-                        : () => Navigator.of(context).push(
-                              slidePageRoute<void>(
-                                builder: (_) => RegisterPage(auth: widget.auth),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Đăng nhập để đồng bộ tiến độ học trên mọi thiết bị',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: p.muted),
+                    ),
+                    const SizedBox(height: 28),
+                    Panel(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextFormField(
+                              controller: _emailCtrl,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration:
+                                  const InputDecoration(labelText: 'Email'),
+                              validator: (v) => (v == null || !v.contains('@'))
+                                  ? 'Nhập email hợp lệ'
+                                  : null,
+                            ),
+                            const SizedBox(height: 12),
+                            TextFormField(
+                              controller: _passwordCtrl,
+                              obscureText: true,
+                              decoration:
+                                  const InputDecoration(labelText: 'Mật khẩu'),
+                              validator: (v) => (v == null || v.length < 6)
+                                  ? 'Tối thiểu 6 ký tự'
+                                  : null,
+                            ),
+                            if (_error != null) ...[
+                              const SizedBox(height: 12),
+                              Text(
+                                _error!,
+                                style: const TextStyle(
+                                    color: Color(0xFFD64550), fontSize: 13),
+                              ),
+                            ],
+                            const SizedBox(height: 18),
+                            SizedBox(
+                              height: 50,
+                              child: FilledButton(
+                                onPressed: _loading ? null : _submit,
+                                child: _loading
+                                    ? const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                            strokeWidth: 2),
+                                      )
+                                    : const Text('Đăng nhập'),
                               ),
                             ),
-                    child: const Text('Chưa có tài khoản? Đăng ký'),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(child: Divider(color: p.line)),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Text('hoặc',
-                            style: TextStyle(fontSize: 12, color: p.muted)),
+                          ],
+                        ),
                       ),
-                      Expanded(child: Divider(color: p.line)),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  if (state.hasSavedGuest) ...[
-                    OutlinedButton.icon(
+                    ),
+                    const SizedBox(height: 12),
+                    TextButton(
                       onPressed: _loading
                           ? null
-                          : () => _runAuthAction(state.continueLocalGuest),
-                      icon: const Icon(Icons.person_outline_rounded),
-                      label: Text(
-                        'Tiếp tục với ${state.savedGuestName?.isNotEmpty == true ? state.savedGuestName : 'tài khoản khách đã lưu'}',
-                      ),
+                          : () => Navigator.of(context).push(
+                                slidePageRoute<void>(
+                                  builder: (_) =>
+                                      RegisterPage(auth: widget.auth),
+                                ),
+                              ),
+                      child: const Text('Chưa có tài khoản? Đăng ký'),
                     ),
                     const SizedBox(height: 8),
-                  ],
-                  OutlinedButton(
-                    onPressed: _loading ? null : _continueAsGuest,
-                    child: Text(
-                      state.hasSavedGuest
-                          ? 'Tạo tài khoản khách mới'
-                          : 'Dùng thử không cần tài khoản',
+                    Row(
+                      children: [
+                        Expanded(child: Divider(color: p.line)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text('hoặc',
+                              style: TextStyle(fontSize: 12, color: p.muted)),
+                        ),
+                        Expanded(child: Divider(color: p.line)),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Khách chỉ lưu dữ liệu trên thiết bị. Tạo hoặc liên kết tài khoản email để đồng bộ tiến độ.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, color: p.muted, height: 1.4),
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    if (state.hasSavedGuest) ...[
+                      OutlinedButton.icon(
+                        onPressed: _loading
+                            ? null
+                            : () => _runAuthAction(state.continueLocalGuest),
+                        icon: const Icon(Icons.person_outline_rounded),
+                        label: Text(
+                          'Tiếp tục với ${state.savedGuestName?.isNotEmpty == true ? state.savedGuestName : 'tài khoản khách đã lưu'}',
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                    OutlinedButton(
+                      onPressed: _loading ? null : _continueAsGuest,
+                      child: Text(
+                        state.hasSavedGuest
+                            ? 'Tạo tài khoản khách mới'
+                            : 'Dùng thử không cần tài khoản',
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Khách chỉ lưu dữ liệu trên thiết bị. Tạo hoặc liên kết tài khoản email để đồng bộ tiến độ.',
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 12, color: p.muted, height: 1.4),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
