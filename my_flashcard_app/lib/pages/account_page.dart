@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/avatar_catalog.dart';
+import '../models/public_stats.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/panel.dart';
@@ -209,6 +210,35 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
+  Future<void> _editStatsPrivacy(AppState state) async {
+    final settings = await showDialog<_StatsPrivacyDraft>(
+      context: context,
+      builder: (_) => _StatsPrivacyDialog(settings: state.statsPrivacy),
+    );
+    if (settings == null) return;
+
+    setState(() {
+      _working = true;
+      _error = null;
+    });
+    try {
+      await state.saveStatsPrivacy(
+        mode: settings.mode,
+        allowedViewerNames: settings.allowedViewerNames,
+        blockedViewerNames: settings.blockedViewerNames,
+      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Đã cập nhật quyền riêng tư thống kê.')),
+        );
+      }
+    } catch (error) {
+      if (mounted) setState(() => _error = state.auth.friendlyError(error));
+    } finally {
+      if (mounted) setState(() => _working = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = AppScope.of(context);
@@ -289,6 +319,26 @@ class _AccountPageState extends State<AccountPage> {
               ],
             ),
           ),
+          if (!auth.isAnonymous && !state.unlinkedSession) ...[
+            const SizedBox(height: 16),
+            Panel(
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.visibility_outlined),
+                title: const Text('Quyền riêng tư thống kê'),
+                subtitle: Text(
+                  state.statsPrivacyReady
+                      ? '${state.statsPrivacy.mode.label} · '
+                          '${state.statsPrivacy.mode.description}'
+                      : 'Đang tải cài đặt quyền riêng tư...',
+                ),
+                trailing: const Icon(Icons.chevron_right_rounded),
+                onTap: _working || !state.statsPrivacyReady
+                    ? null
+                    : () => _editStatsPrivacy(state),
+              ),
+            ),
+          ],
           const SizedBox(height: 16),
           Panel(
             child: Column(
@@ -367,10 +417,14 @@ class _AccountPageState extends State<AccountPage> {
           ],
           if (_error != null ||
               state.displayNameIssue != null ||
-              state.localGuestIssue != null) ...[
+              state.localGuestIssue != null ||
+              state.publicStatsIssue != null) ...[
             const SizedBox(height: 12),
             Text(
-              _error ?? state.displayNameIssue ?? state.localGuestIssue!,
+              _error ??
+                  state.displayNameIssue ??
+                  state.localGuestIssue ??
+                  state.publicStatsIssue!,
               style: const TextStyle(color: Color(0xFFD64550)),
               textAlign: TextAlign.center,
             ),
@@ -419,6 +473,123 @@ class _AccountPageState extends State<AccountPage> {
           ],
         ],
       ),
+    );
+  }
+}
+
+class _StatsPrivacyDraft {
+  const _StatsPrivacyDraft({
+    required this.mode,
+    required this.allowedViewerNames,
+    required this.blockedViewerNames,
+  });
+
+  final StatsPrivacyMode mode;
+  final List<String> allowedViewerNames;
+  final List<String> blockedViewerNames;
+}
+
+class _StatsPrivacyDialog extends StatefulWidget {
+  const _StatsPrivacyDialog({required this.settings});
+
+  final StatsPrivacySettings settings;
+
+  @override
+  State<_StatsPrivacyDialog> createState() => _StatsPrivacyDialogState();
+}
+
+class _StatsPrivacyDialogState extends State<_StatsPrivacyDialog> {
+  late StatsPrivacyMode _mode = widget.settings.mode;
+  late final TextEditingController _allowedController = TextEditingController(
+      text: widget.settings.allowedViewerNames.join('\n'));
+  late final TextEditingController _blockedController = TextEditingController(
+      text: widget.settings.blockedViewerNames.join('\n'));
+
+  @override
+  void dispose() {
+    _allowedController.dispose();
+    _blockedController.dispose();
+    super.dispose();
+  }
+
+  List<String> _namesFrom(TextEditingController controller) =>
+      controller.text.split('\n').map((name) => name.trim()).toList();
+
+  void _save() {
+    Navigator.of(context).pop(
+      _StatsPrivacyDraft(
+        mode: _mode,
+        allowedViewerNames: _namesFrom(_allowedController),
+        blockedViewerNames: _namesFrom(_blockedController),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final listController = _mode == StatsPrivacyMode.open
+        ? _blockedController
+        : _allowedController;
+    final isBlockedList = _mode == StatsPrivacyMode.open;
+
+    return AlertDialog(
+      title: const Text('Quyền riêng tư thống kê'),
+      content: SizedBox(
+        width: 420,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SegmentedButton<StatsPrivacyMode>(
+                showSelectedIcon: false,
+                segments: [
+                  for (final mode in StatsPrivacyMode.values)
+                    ButtonSegment(value: mode, label: Text(mode.label)),
+                ],
+                selected: {_mode},
+                onSelectionChanged: (selection) =>
+                    setState(() => _mode = selection.first),
+              ),
+              const SizedBox(height: 8),
+              Text(_mode.description),
+              if (_mode != StatsPrivacyMode.cloaked) ...[
+                const SizedBox(height: 8),
+                Text(
+                  isBlockedList ? 'Blacklist' : 'Whitelist',
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  isBlockedList
+                      ? 'Một tên tài khoản trên mỗi dòng. Những người này không thể xem thống kê của bạn.'
+                      : 'Một tên tài khoản trên mỗi dòng. Chỉ những người này có thể xem thống kê của bạn.',
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: listController,
+                  minLines: 3,
+                  maxLines: 5,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Tên tài khoản',
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Hủy'),
+        ),
+        FilledButton(
+          onPressed: _save,
+          child: const Text('Lưu'),
+        ),
+      ],
     );
   }
 }

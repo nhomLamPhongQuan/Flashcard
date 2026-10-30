@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'account_page.dart';
+import 'exam_page.dart';
 import 'learn_tab.dart';
 import 'library_tab.dart';
 import 'stats_tab.dart';
 
-/// Khung điều hướng chính với các tab học, kho từ, tiến độ và tài khoản.
+/// Khung điều hướng chính cho học, kho từ, kiểm tra, tiến độ và tài khoản.
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
 
@@ -22,12 +23,13 @@ class _HomeShellState extends State<HomeShell> {
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 720),
-          //IndexedStack giữ trạng thái cả 3 tab không bị mất khi chuyển qua lại
+          // IndexedStack giữ trạng thái các tab khi chuyển qua lại.
           child: IndexedStack(
             index: _index,
             children: const [
               LearnTab(),
               LibraryTab(),
+              ExamPage(),
               StatsTab(),
               AccountPage(),
             ],
@@ -47,6 +49,11 @@ class _HomeShellState extends State<HomeShell> {
             icon: Icon(Icons.menu_book_outlined),
             selectedIcon: Icon(Icons.menu_book),
             label: 'Kho từ',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.assignment_outlined),
+            selectedIcon: Icon(Icons.assignment),
+            label: 'Kiểm tra',
           ),
           NavigationDestination(
             icon: Icon(Icons.insights_outlined),

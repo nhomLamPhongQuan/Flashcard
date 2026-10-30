@@ -98,3 +98,10 @@ Deploy the Firestore rules before using name reservations:
 cd my_flashcard_app
 firebase deploy --only firestore:rules
 ```
+
+Linked accounts can look up another linked user's statistics by display name.
+Stats privacy defaults to **Cloaked**. Users can choose **Open** with a
+blacklist, **Restricted** with a whitelist, or **Cloaked**. Viewer lists use
+unique account display names. Only linked accounts can use the lookup feature;
+guest sessions remain local-only. Deploy the Firestore rules after changing
+privacy or stats access rules.

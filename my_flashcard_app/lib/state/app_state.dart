@@ -7,9 +7,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/srs.dart';
 import '../models/vocab.dart';
 import '../models/avatar_catalog.dart';
+import '../models/public_stats.dart';
 import '../services/auth_service.dart';
 import '../services/cloud_progress_service.dart';
 import '../services/display_name_service.dart';
+import '../services/public_stats_service.dart';
 import '../services/vocab_repository.dart';
 
 /// Trạng thái dùng chung cho toàn app.
@@ -23,8 +25,10 @@ class AppState extends ChangeNotifier {
     this._repo, {
     AuthService? auth,
     CloudProgressService? cloud,
+    PublicStatsService? publicStats,
   })  : auth = auth ?? AuthService(),
-        _cloud = cloud ?? CloudProgressService();
+        _cloud = cloud ?? CloudProgressService(),
+        _publicStats = publicStats ?? PublicStatsService();
 
   static const _progressKey = 'srs_progress_v1';
   static const _guestProgressKey = 'srs_guest_progress_v1';
@@ -37,12 +41,15 @@ class AppState extends ChangeNotifier {
   static const _unlinkedNameKey = 'local_unlinked_name_v1';
   static const _guestAvatarKey = 'local_guest_avatar_v1';
   static const _unlinkedAvatarKey = 'local_unlinked_avatar_v1';
+  static const _legacyExamStatsKey = 'exam_stats_v1';
+  static const _examStatsKeyPrefix = 'exam_stats_v1_';
 
   final VocabRepository _repo;
 
   /// Public để UI (LoginPage, StatsTab...) gọi thẳng các hàm đăng nhập/đăng xuất.
   final AuthService auth;
   final CloudProgressService _cloud;
+  final PublicStatsService _publicStats;
 
   SharedPreferences? _prefs;
   StreamSubscription<String?>? _authSub;
@@ -69,6 +76,12 @@ class AppState extends ChangeNotifier {
   bool _syncing = false;
   String? _displayNameIssue;
   bool _displayNameConflict = false;
+  StatsPrivacySettings _statsPrivacy = const StatsPrivacySettings();
+  bool _statsPrivacyReady = false;
+  String? _publicStatsIssue;
+  int _examCount = 0;
+  int _examWordsTotal = 0;
+  int _examCorrectTotal = 0;
 
   List<Deck> get decks => _decks;
   Lang get lang => _lang;
@@ -95,6 +108,14 @@ class AppState extends ChangeNotifier {
   bool get hasSavedGuest =>
       (_guestDisplayName?.isNotEmpty ?? false) ||
       (_prefs?.containsKey(_guestProgressKey) ?? false);
+  int get examCount => _examCount;
+  double get averageExamWords =>
+      _examCount == 0 ? 0 : _examWordsTotal / _examCount;
+  double get averageExamCorrect =>
+      _examCount == 0 ? 0 : _examCorrectTotal / _examCount;
+  StatsPrivacySettings get statsPrivacy => _statsPrivacy;
+  bool get statsPrivacyReady => _statsPrivacyReady;
+  String? get publicStatsIssue => _publicStatsIssue;
 
   List<Deck> get decksOfLang =>
       _decks.where((d) => d.lang == _lang).toList(growable: false);
@@ -111,6 +132,179 @@ class AppState extends ChangeNotifier {
 
     // Chế độ khách không tạo phiên Firebase; chỉ tài khoản email được đồng bộ.
     _authSub = auth.uidChanges.listen(_onAuthChanged);
+  }
+
+  Future<void> recordExamResult({
+    required int wordCount,
+    required int correctCount,
+  }) async {
+    if (wordCount <= 0 || correctCount < 0 || correctCount > wordCount) {
+      throw ArgumentError('Invalid exam result.');
+    }
+    final prefs = _prefs;
+    if (prefs == null) throw StateError('AppState has not been initialized.');
+
+    final uid = _uid ?? auth.currentUid;
+    final isLinked = uid != null && !auth.isAnonymous && !_localGuest;
+    final totals = isLinked
+        ? await _publicStats.recordExamResult(
+            uid: uid,
+            displayName: auth.currentDisplayName ?? '',
+            wordCount: wordCount,
+            correctCount: correctCount,
+          )
+        : {
+            'examCount': _examCount + 1,
+            'examWordsTotal': _examWordsTotal + wordCount,
+            'examCorrectTotal': _examCorrectTotal + correctCount,
+          };
+    final examCount = totals['examCount']!;
+    final wordsTotal = totals['examWordsTotal']!;
+    final correctTotal = totals['examCorrectTotal']!;
+    final saved = await prefs.setString(
+      _activeExamStatsKey,
+      jsonEncode({
+        'count': examCount,
+        'words': wordsTotal,
+        'correct': correctTotal,
+      }),
+    );
+    if (!saved) throw StateError('Could not save exam statistics.');
+
+    _examCount = examCount;
+    _examWordsTotal = wordsTotal;
+    _examCorrectTotal = correctTotal;
+    notifyListeners();
+  }
+
+  Future<void> saveStatsPrivacy({
+    required StatsPrivacyMode mode,
+    required List<String> allowedViewerNames,
+    required List<String> blockedViewerNames,
+  }) async {
+    final uid = _uid ?? auth.currentUid;
+    if (uid == null || auth.isAnonymous || _localGuest) {
+      throw StateError(
+          'Sign in with a linked account to manage stats privacy.');
+    }
+
+    final allowedNames = mode == StatsPrivacyMode.restricted
+        ? _cleanNames(allowedViewerNames)
+        : <String>[];
+    final blockedNames = mode == StatsPrivacyMode.open
+        ? _cleanNames(blockedViewerNames)
+        : <String>[];
+    final allowedUids = await _resolveViewerUids(allowedNames);
+    final blockedUids = await _resolveViewerUids(blockedNames);
+    await _publicStats.savePrivacySettings(
+      uid: uid,
+      mode: mode,
+      allowedViewerNames: allowedNames,
+      allowedViewerUids: allowedUids,
+      blockedViewerNames: blockedNames,
+      blockedViewerUids: blockedUids,
+    );
+    _statsPrivacy = StatsPrivacySettings(
+      mode: mode,
+      allowedViewerNames: allowedNames,
+      blockedViewerNames: blockedNames,
+    );
+    _publicStatsIssue = null;
+    notifyListeners();
+  }
+
+  Future<PublicStats?> lookupPublicStats(String displayName) async {
+    final uid = _uid ?? auth.currentUid;
+    if (uid == null || auth.isAnonymous || _localGuest) {
+      throw StateError('Sign in with a linked account to view stats.');
+    }
+    return _publicStats.findByName(displayName);
+  }
+
+  List<String> _cleanNames(List<String> names) {
+    final unique = <String, String>{};
+    for (final name in names) {
+      final trimmed = name.trim();
+      if (trimmed.isNotEmpty) unique[trimmed.toLowerCase()] = trimmed;
+    }
+    return unique.values.toList(growable: false);
+  }
+
+  Future<List<String>> _resolveViewerUids(List<String> names) async {
+    final uids = <String>[];
+    for (final name in names) {
+      uids.add(await DisplayNameService().uidForName(name));
+    }
+    return uids.toSet().toList(growable: false);
+  }
+
+  String get _activeExamStatsKey {
+    final uid = _unlinkedUid ?? (_uid ?? auth.currentUid);
+    return '$_examStatsKeyPrefix${uid ?? 'guest'}';
+  }
+
+  Future<void> _saveExamStatsLocally() async {
+    final prefs = _prefs;
+    if (prefs == null) return;
+    final saved = await prefs.setString(
+      _activeExamStatsKey,
+      jsonEncode({
+        'count': _examCount,
+        'words': _examWordsTotal,
+        'correct': _examCorrectTotal,
+      }),
+    );
+    if (!saved) throw StateError('Could not save exam statistics locally.');
+  }
+
+  Future<void> _loadExamStatsFromPrefs(String key) async {
+    final prefs = _prefs;
+    final raw = prefs?.getString(key);
+    if (raw == null) {
+      _loadExamStats(null);
+      return;
+    }
+    _loadExamStats(jsonDecode(raw) as Map<String, dynamic>);
+  }
+
+  void _loadExamStats(Map<String, dynamic>? data) {
+    _examCount = data?['count'] as int? ?? 0;
+    _examWordsTotal = data?['words'] as int? ?? 0;
+    _examCorrectTotal = data?['correct'] as int? ?? 0;
+  }
+
+  Map<String, dynamic> _publicStatsPayload() {
+    final allWords = _decks.expand((deck) => deck.words).toList();
+    return {
+      'masteredCount': masteredCountOf(allWords),
+      'dueCount': dueCountOf(allWords),
+      'totalWords': allWords.length,
+      'examCount': _examCount,
+      'examWordsTotal': _examWordsTotal,
+      'examCorrectTotal': _examCorrectTotal,
+      'decks': _decks
+          .map((deck) => {
+                'title': deck.title,
+                'language': deck.lang.label,
+                'mastered': masteredCountOf(deck.words),
+                'total': deck.words.length,
+              })
+          .toList(growable: false),
+    };
+  }
+
+  Future<void> _publishStudyStats(String uid) async {
+    final displayName = auth.currentDisplayName;
+    if (displayName == null || displayName.trim().isEmpty) return;
+    final stats = _publicStatsPayload();
+    await _publicStats.updateStudyStats(
+      uid: uid,
+      displayName: displayName,
+      masteredCount: stats['masteredCount'] as int,
+      dueCount: stats['dueCount'] as int,
+      totalWords: stats['totalWords'] as int,
+      decks: List<Map<String, dynamic>>.from(stats['decks'] as List),
+    );
   }
 
   @override
@@ -130,6 +324,7 @@ class AppState extends ChangeNotifier {
     }
     final previousUid = _uid;
     final previousUnlinkedUid = _unlinkedUid;
+    final wasLocalGuest = _localGuest;
     final previousUnlinkedProgress = previousUnlinkedUid == null
         ? null
         : Map<String, WordProgress>.of(_progress);
@@ -161,6 +356,7 @@ class AppState extends ChangeNotifier {
         _progress.clear();
         _localGuest = false;
         await _persistLocalGuest();
+        await _loadExamStatsFromPrefs('$_examStatsKeyPrefix' 'guest');
       }
       notifyListeners();
       return;
@@ -188,11 +384,17 @@ class AppState extends ChangeNotifier {
     }
 
     _localGuest = false;
+    _statsPrivacyReady = false;
+    final carryGuestExamStats =
+        previousUid == null && wasLocalGuest && previousUnlinkedUid == null;
     final previousAvatarId = _avatarId;
     _unlinkedUid = null;
     _unlinkedDisplayName = null;
     _unlinkedAvatarId = null;
     await _persistLocalGuest();
+    if (!carryGuestExamStats) {
+      await _loadExamStatsFromPrefs('$_examStatsKeyPrefix$uid');
+    }
     _loadProgress(_linkedProgressKey(uid));
     try {
       final pendingLinkAvatarId = _pendingLinkAvatarId;
@@ -230,8 +432,38 @@ class AppState extends ChangeNotifier {
       _displayNameConflict = error is DisplayNameTakenException;
       notifyListeners();
     }
+    if (carryGuestExamStats) await _saveExamStatsLocally();
+    try {
+      final displayName = auth.currentDisplayName?.trim();
+      if (displayName != null && displayName.isNotEmpty) {
+        _statsPrivacy = await _publicStats.ensurePrivacySettings(uid);
+        await _publicStats.ensureStatsDocument(
+          uid: uid,
+          displayName: displayName,
+          initialStats: _publicStatsPayload(),
+        );
+        _statsPrivacyReady = true;
+        final cloudStats = await _publicStats.fetchOwnStats(uid);
+        if (cloudStats != null) {
+          _examCount = cloudStats['examCount'] as int? ?? 0;
+          _examWordsTotal = cloudStats['examWordsTotal'] as int? ?? 0;
+          _examCorrectTotal = cloudStats['examCorrectTotal'] as int? ?? 0;
+          await _saveExamStatsLocally();
+        }
+        _publicStatsIssue = null;
+      }
+    } catch (error) {
+      _publicStatsIssue = auth.friendlyError(error);
+    }
     _cloudSync = _syncWithCloud(uid);
     await _cloudSync;
+    try {
+      await _publishStudyStats(uid);
+      _publicStatsIssue = null;
+    } catch (error) {
+      _publicStatsIssue = auth.friendlyError(error);
+    }
+    notifyListeners();
   }
 
   bool _unlinking = false;
@@ -290,11 +522,13 @@ class AppState extends ChangeNotifier {
       if (unlinkedUid != null) {
         await _pendingLocalWrite;
         await _removeLinkedProgress(unlinkedUid);
+        await _prefs?.remove('$_examStatsKeyPrefix$unlinkedUid');
         _unlinkedUid = null;
         _unlinkedDisplayName = null;
         _unlinkedAvatarId = null;
         _uid = null;
         _progress.clear();
+        _loadExamStats(null);
         await _persistUnlinkedSession();
         _localGuest = false;
         _localGuestIssue = null;
@@ -304,12 +538,15 @@ class AppState extends ChangeNotifier {
         await _pendingCloudPush;
         await _pendingLocalWrite;
         await _removeLinkedProgress(uid);
+        await _prefs?.remove('$_examStatsKeyPrefix$uid');
         _progress.clear();
         _uid = null;
+        _loadExamStats(null);
       } else {
         _localGuest = false;
         _localGuestIssue = null;
         await _persistLocalGuest();
+        await _loadExamStatsFromPrefs('$_examStatsKeyPrefix' 'guest');
       }
       await auth.signOut();
     } finally {
@@ -321,6 +558,15 @@ class AppState extends ChangeNotifier {
   Future<void> updateDisplayName(String displayName) async {
     if (auth.currentUid != null && !auth.isAnonymous) {
       await auth.updateDisplayName(displayName);
+      final uid = auth.currentUid!;
+      await _publicStats.ensureStatsDocument(
+        uid: uid,
+        displayName: displayName.trim(),
+        initialStats: _publicStatsPayload(),
+      );
+      await _publishStudyStats(uid);
+      _publicStatsIssue = null;
+      notifyListeners();
       return;
     }
     if (!_localGuest) {
@@ -407,6 +653,7 @@ class AppState extends ChangeNotifier {
     _unlinkedDisplayName = auth.currentDisplayName?.trim();
     _unlinkedAvatarId = _avatarId;
     await _prefs?.setString(_unlinkedAvatarKey, _avatarId);
+    await _saveExamStatsLocally();
     _localGuestIssue = null;
 
     try {
@@ -553,15 +800,30 @@ class AppState extends ChangeNotifier {
 
     final signedInUid = auth.currentUid;
     final String activeKey;
+    final String statsKey;
     if (signedInUid != null) {
       activeKey = _linkedProgressKey(signedInUid);
+      statsKey = '$_examStatsKeyPrefix$signedInUid';
     } else if (_unlinkedUid != null) {
       _localGuest = true;
       _avatarId = _unlinkedAvatarId ?? 'avatar_01';
       activeKey = _linkedProgressKey(_unlinkedUid!);
+      statsKey = '$_examStatsKeyPrefix$_unlinkedUid';
     } else {
       _avatarId = _guestAvatarId;
       activeKey = _guestProgressKey;
+      statsKey = '$_examStatsKeyPrefix' 'guest';
+    }
+    final oldStats = prefs.getString(_legacyExamStatsKey);
+    if (prefs.containsKey(statsKey)) {
+      await _loadExamStatsFromPrefs(statsKey);
+      await prefs.remove(_legacyExamStatsKey);
+    } else if (oldStats != null) {
+      await prefs.setString(statsKey, oldStats);
+      await prefs.remove(_legacyExamStatsKey);
+      _loadExamStats(jsonDecode(oldStats) as Map<String, dynamic>);
+    } else {
+      _loadExamStats(null);
     }
 
     if (prefs.containsKey(activeKey)) {
@@ -606,6 +868,7 @@ class AppState extends ChangeNotifier {
       await _persistLocal();
       if (!_cloudWritesPaused && !auth.isAnonymous) {
         await _queueCloudPush(uid, _progress);
+        await _publishStudyStats(uid);
       }
     } catch (_) {
       // Không có mạng hoặc Firestore lỗi: cứ tiếp tục với dữ liệu local,
@@ -658,6 +921,13 @@ class AppState extends ChangeNotifier {
       return;
     }
     _queueCloudPush(uid, _progress).catchError((_) {});
+    _publishStudyStats(uid).then((_) {
+      _publicStatsIssue = null;
+      notifyListeners();
+    }).catchError((Object error) {
+      _publicStatsIssue = auth.friendlyError(error);
+      notifyListeners();
+    });
   }
 
   Future<void> _queueCloudPush(

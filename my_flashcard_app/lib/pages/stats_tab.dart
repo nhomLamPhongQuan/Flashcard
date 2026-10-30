@@ -1,13 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
+import '../models/public_stats.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/panel.dart';
 
-/// Tab tiến độ: tổng quan theo từng bộ thẻ và cài đặt giao diện.
-/// Bản giao diện: số liệu chỉ tính trong phiên hiện tại (chưa lưu trữ lâu dài).
-class StatsTab extends StatelessWidget {
+/// Tab tiến độ: kết quả kiểm tra đã lưu và tổng quan học tập theo bộ thẻ.
+class StatsTab extends StatefulWidget {
   const StatsTab({super.key});
+
+  @override
+  State<StatsTab> createState() => _StatsTabState();
+}
+
+class _StatsTabState extends State<StatsTab> {
+  final TextEditingController _nameController = TextEditingController();
+  PublicStats? _viewedStats;
+  String? _lookupError;
+  bool _lookingUp = false;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _lookupStats(AppState state) async {
+    final name = _nameController.text.trim();
+    if (name.isEmpty) {
+      setState(() {
+        _viewedStats = null;
+        _lookupError = 'Nhập tên tài khoản để tìm.';
+      });
+      return;
+    }
+
+    setState(() {
+      _lookingUp = true;
+      _lookupError = null;
+      _viewedStats = null;
+    });
+    try {
+      final result = await state.lookupPublicStats(name);
+      if (!mounted) return;
+      setState(() {
+        _viewedStats = result;
+        if (result == null) _lookupError = 'Không tìm thấy thống kê công khai.';
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _lookupError =
+            error is FirebaseException && error.code == 'permission-denied'
+                ? 'Không tìm thấy thống kê hoặc bạn không có quyền xem.'
+                : state.auth.friendlyError(error);
+      });
+    } finally {
+      if (mounted) setState(() => _lookingUp = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +78,16 @@ class StatsTab extends StatelessWidget {
             'Tiến độ',
             style: TextStyle(
                 fontSize: 28, fontWeight: FontWeight.w800, height: 1.1),
+          ),
+          const SizedBox(height: 16),
+          _PublicStatsLookup(
+            state: state,
+            controller: _nameController,
+            profile: _viewedStats,
+            error: _lookupError,
+            loading: _lookingUp,
+            onLookup: () => _lookupStats(state),
+            palette: p,
           ),
           const SizedBox(height: 16),
           Row(
@@ -57,6 +119,49 @@ class StatsTab extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 16),
+          Panel(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Kết quả kiểm tra',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 14),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _Metric(
+                        icon: Icons.assignment_turned_in_outlined,
+                        value: '${state.examCount}',
+                        label: 'Số bài kiểm tra',
+                        color: accent,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _Metric(
+                        icon: Icons.format_list_numbered_rounded,
+                        value: state.averageExamWords.toStringAsFixed(1),
+                        label: 'Từ trung bình / bài',
+                        color: accent,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _Metric(
+                        icon: Icons.check_circle_outline_rounded,
+                        value: state.averageExamCorrect.toStringAsFixed(1),
+                        label: 'Đúng trung bình / bài',
+                        color: accent,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 16),
           Panel(
@@ -110,6 +215,154 @@ class StatsTab extends StatelessWidget {
                     );
                   }),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PublicStatsLookup extends StatelessWidget {
+  const _PublicStatsLookup({
+    required this.state,
+    required this.controller,
+    required this.profile,
+    required this.error,
+    required this.loading,
+    required this.onLookup,
+    required this.palette,
+  });
+
+  final AppState state;
+  final TextEditingController controller;
+  final PublicStats? profile;
+  final String? error;
+  final bool loading;
+  final VoidCallback onLookup;
+  final Palette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    final canLookup = !state.auth.isAnonymous && !state.unlinkedSession;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Panel(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Xem thống kê người dùng',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                canLookup
+                    ? 'Tìm bằng tên tài khoản. Chỉ hồ sơ được phép xem sẽ hiển thị.'
+                    : 'Tính năng này chỉ dành cho tài khoản đã liên kết email.',
+                style: TextStyle(color: palette.muted),
+              ),
+              if (canLookup) ...[
+                const SizedBox(height: 12),
+                TextField(
+                  controller: controller,
+                  enabled: !loading,
+                  textInputAction: TextInputAction.search,
+                  onSubmitted: (_) => onLookup(),
+                  decoration: const InputDecoration(
+                    labelText: 'Tên tài khoản',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                FilledButton(
+                  onPressed: loading ? null : onLookup,
+                  child: Text(loading ? 'Đang tìm...' : 'Tìm thống kê'),
+                ),
+              ],
+              if (error != null) ...[
+                const SizedBox(height: 8),
+                Text(error!, style: const TextStyle(color: Colors.red)),
+              ],
+            ],
+          ),
+        ),
+        if (profile != null) ...[
+          const SizedBox(height: 12),
+          Panel(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Thống kê của ${profile!.displayName}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _PublicMetric(
+                  label: 'Đã thành thạo',
+                  value: '${profile!.masteredCount} / ${profile!.totalWords}',
+                ),
+                _PublicMetric(
+                  label: 'Cần ôn hôm nay',
+                  value: '${profile!.dueCount}',
+                ),
+                _PublicMetric(
+                  label: 'Số bài kiểm tra',
+                  value: '${profile!.examCount}',
+                ),
+                _PublicMetric(
+                  label: 'Từ trung bình / bài',
+                  value: profile!.averageExamWords.toStringAsFixed(1),
+                ),
+                _PublicMetric(
+                  label: 'Đúng trung bình / bài',
+                  value: profile!.averageExamCorrect.toStringAsFixed(1),
+                ),
+                if (profile!.decks.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Theo bộ thẻ',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  const SizedBox(height: 6),
+                  for (final deck in profile!.decks)
+                    _PublicMetric(
+                      label: '${deck.title} · ${deck.language}',
+                      value: '${deck.mastered}/${deck.total}',
+                    ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _PublicMetric extends StatelessWidget {
+  const _PublicMetric({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Expanded(child: Text(label)),
+          const SizedBox(width: 8),
+          Text(
+            value,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ],

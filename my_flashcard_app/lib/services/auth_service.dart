@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'cloud_progress_service.dart';
 import 'display_name_service.dart';
+import 'public_stats_service.dart';
 
 /// Bọc FirebaseAuth: phần còn lại của app chỉ thấy `uidChanges` / các hàm
 /// đăng nhập-đăng ký, không đụng trực tiếp vào kiểu `User` của Firebase.
@@ -14,12 +15,15 @@ class AuthService {
     FirebaseAuth? auth,
     CloudProgressService? cloudProgress,
     DisplayNameService? displayNames,
+    PublicStatsService? publicStats,
   })  : _auth = auth ?? FirebaseAuth.instance,
         _cloudProgress = cloudProgress ?? CloudProgressService(),
-        _displayNames = displayNames ?? DisplayNameService();
+        _displayNames = displayNames ?? DisplayNameService(),
+        _publicStats = publicStats ?? PublicStatsService();
   final FirebaseAuth _auth;
   final CloudProgressService _cloudProgress;
   final DisplayNameService _displayNames;
+  final PublicStatsService _publicStats;
 
   /// Emits the UID for sign-in and profile changes; null means signed out.
   Stream<String?> get uidChanges =>
@@ -218,6 +222,7 @@ class AuthService {
     var reservationReleased = false;
     try {
       await _cloudProgress.delete(user.uid);
+      await _publicStats.deleteProfileData(user.uid);
       if (displayName != null && displayName.isNotEmpty) {
         await _displayNames.release(displayName: displayName, uid: user.uid);
         reservationReleased = true;
@@ -249,6 +254,7 @@ class AuthService {
 
     final displayName = user.displayName;
     await _cloudProgress.delete(user.uid);
+    await _publicStats.deleteProfileData(user.uid);
     if (displayName != null && displayName.trim().isNotEmpty) {
       await _displayNames.release(
         displayName: displayName,
@@ -297,6 +303,9 @@ class AuthService {
   String friendlyError(Object error) {
     if (error is DisplayNameTakenException) {
       return 'Tên này đã được sử dụng. Hãy chọn tên khác.';
+    }
+    if (error is DisplayNameNotFoundException) {
+      return 'Không tìm thấy tài khoản có tên này.';
     }
     if (error is FirebaseAuthException) {
       switch (error.code) {

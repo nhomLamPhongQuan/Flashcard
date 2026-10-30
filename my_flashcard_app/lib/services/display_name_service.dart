@@ -4,6 +4,10 @@ class DisplayNameTakenException implements Exception {
   const DisplayNameTakenException();
 }
 
+class DisplayNameNotFoundException implements Exception {
+  const DisplayNameNotFoundException();
+}
+
 class DisplayNameService {
   DisplayNameService({FirebaseFirestore? db})
       : _db = db ?? FirebaseFirestore.instance;
@@ -13,6 +17,17 @@ class DisplayNameService {
   DocumentReference<Map<String, dynamic>> _reservation(String displayName) {
     final normalized = displayName.trim().toLowerCase();
     return _db.collection('usernames').doc(Uri.encodeComponent(normalized));
+  }
+
+  Future<String> uidForName(String displayName) async {
+    final name = displayName.trim();
+    if (name.isEmpty) throw const DisplayNameNotFoundException();
+    final snapshot = await _reservation(name).get();
+    final uid = snapshot.data()?['uid'] as String?;
+    if (uid == null || uid.isEmpty) {
+      throw const DisplayNameNotFoundException();
+    }
+    return uid;
   }
 
   Future<void> claim({
