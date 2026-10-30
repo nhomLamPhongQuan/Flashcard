@@ -78,6 +78,8 @@ class AppState extends ChangeNotifier {
   bool _displayNameConflict = false;
   StatsPrivacySettings _statsPrivacy = const StatsPrivacySettings();
   bool _statsPrivacyReady = false;
+  bool _statsPrivacyLoading = false;
+  String? _statsPrivacyIssue;
   String? _publicStatsIssue;
   int _examCount = 0;
   int _examWordsTotal = 0;
@@ -115,6 +117,8 @@ class AppState extends ChangeNotifier {
       _examCount == 0 ? 0 : _examCorrectTotal / _examCount;
   StatsPrivacySettings get statsPrivacy => _statsPrivacy;
   bool get statsPrivacyReady => _statsPrivacyReady;
+  bool get statsPrivacyLoading => _statsPrivacyLoading;
+  String? get statsPrivacyIssue => _statsPrivacyIssue;
   String? get publicStatsIssue => _publicStatsIssue;
 
   List<Deck> get decksOfLang =>
@@ -212,6 +216,16 @@ class AppState extends ChangeNotifier {
     );
     _publicStatsIssue = null;
     notifyListeners();
+  }
+
+  Future<void> retryStatsPrivacyLoad() async {
+    final uid = _uid ?? auth.currentUid;
+    if (uid == null || auth.isAnonymous || _localGuest) {
+      throw StateError(
+          'Sign in with a linked account to manage stats privacy.');
+    }
+    if (_statsPrivacyLoading) return;
+    await _loadStatsPrivacy(uid);
   }
 
   Future<PublicStats?> lookupPublicStats(String displayName) async {
@@ -349,6 +363,7 @@ class AppState extends ChangeNotifier {
     _displayNameIssue = null;
     _displayNameConflict = false;
     if (uid == null) {
+      _resetStatsPrivacyLoad();
       if (_unlinking || _unlinkedUid != null) {
         _localGuest = true;
         await _persistLocalGuest();
@@ -366,6 +381,7 @@ class AppState extends ChangeNotifier {
     }
 
     if (auth.isAnonymous) {
+      _resetStatsPrivacyLoad();
       _localGuest = true;
       _unlinkedUid = uid;
       _unlinkedDisplayName = auth.currentDisplayName;
@@ -387,7 +403,8 @@ class AppState extends ChangeNotifier {
     }
 
     _localGuest = false;
-    _statsPrivacyReady = false;
+    final privacyLoad = _loadStatsPrivacy(uid);
+    _localGuest = false;
     final carryGuestExamStats =
         previousUid == null && wasLocalGuest && previousUnlinkedUid == null;
     final previousAvatarId = _avatarId;
@@ -437,15 +454,14 @@ class AppState extends ChangeNotifier {
     }
     if (carryGuestExamStats) await _saveExamStatsLocally();
     try {
+      await privacyLoad;
       final displayName = auth.currentDisplayName?.trim();
       if (displayName != null && displayName.isNotEmpty) {
-        _statsPrivacy = await _publicStats.ensurePrivacySettings(uid);
         await _publicStats.ensureStatsDocument(
           uid: uid,
           displayName: displayName,
           initialStats: _publicStatsPayload(),
         );
-        _statsPrivacyReady = true;
         final cloudStats = await _publicStats.fetchOwnStats(uid);
         if (cloudStats != null) {
           _examCount = cloudStats['examCount'] as int? ?? 0;
@@ -467,6 +483,34 @@ class AppState extends ChangeNotifier {
       _publicStatsIssue = auth.friendlyError(error);
     }
     notifyListeners();
+  }
+
+  Future<void> _loadStatsPrivacy(String uid) async {
+    _statsPrivacyLoading = true;
+    _statsPrivacyReady = false;
+    _statsPrivacyIssue = null;
+    notifyListeners();
+    try {
+      final settings = await _publicStats.ensurePrivacySettings(uid);
+      if (_uid != uid) return;
+      _statsPrivacy = settings;
+      _statsPrivacyReady = true;
+    } catch (error) {
+      if (_uid != uid) return;
+      _statsPrivacyIssue = auth.friendlyError(error);
+    } finally {
+      if (_uid == uid) {
+        _statsPrivacyLoading = false;
+        notifyListeners();
+      }
+    }
+  }
+
+  void _resetStatsPrivacyLoad() {
+    _statsPrivacy = const StatsPrivacySettings();
+    _statsPrivacyReady = false;
+    _statsPrivacyLoading = false;
+    _statsPrivacyIssue = null;
   }
 
   bool _unlinking = false;
