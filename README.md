@@ -92,6 +92,14 @@ local cache while leaving the separately saved guest profile intact. Linking a
 different email before logging out carries the current unlinked progress to
 that new linked account; it never replaces the device's saved guest progress.
 
+On Web, guest data is stored by the browser for the exact site origin. Use the
+VS Code launch profile **Flashcard (Web, persistent guest storage)** to keep
+local development on port `8080`; changing the hostname or port, using private
+browsing, or clearing site data makes the saved guest unavailable.
+Web guest profiles remain saved but start signed out after each app launch, and
+Firebase email sessions use session persistence so closing the browser session
+signs them out.
+
 Deploy the Firestore rules before using name reservations:
 
 ```bash

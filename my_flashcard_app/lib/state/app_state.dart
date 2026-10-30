@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,7 +21,7 @@ import '../services/vocab_repository.dart';
 /// local qua `shared_preferences` trước (offline-first, không cần mạng).
 /// Chế độ khách chỉ lưu tiến độ trên thiết bị. Tài khoản email mới đồng bộ
 /// tiến độ lên Cloud Firestore theo uid.
-class AppState extends ChangeNotifier {
+class AppState extends ChangeNotifier with WidgetsBindingObserver {
   AppState(
     this._repo, {
     AuthService? auth,
@@ -36,6 +37,7 @@ class AppState extends ChangeNotifier {
   static const _themeKey = 'theme_mode_v1';
   static const _langKey = 'lang_v1';
   static const _localGuestKey = 'local_guest_active_v1';
+  static const _guestSignedOutKey = 'local_guest_signed_out_v1';
   static const _guestNameKey = 'local_guest_name_v1';
   static const _unlinkedUidKey = 'local_unlinked_uid_v1';
   static const _unlinkedNameKey = 'local_unlinked_name_v1';
@@ -128,10 +130,12 @@ class AppState extends ChangeNotifier {
       decksOfLang.expand((d) => d.words).toList(growable: false);
 
   Future<void> init() async {
+    await auth.useSessionPersistenceOnWeb();
     _decks = await _repo.load();
     _prefs = await SharedPreferences.getInstance();
     await _restoreLocal();
     _ready = true;
+    WidgetsBinding.instance.addObserver(this);
     notifyListeners();
 
     // Chế độ khách không tạo phiên Firebase; chỉ tài khoản email được đồng bộ.
@@ -326,8 +330,29 @@ class AppState extends ChangeNotifier {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _authSub?.cancel();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.inactive &&
+        state != AppLifecycleState.paused &&
+        state != AppLifecycleState.detached) {
+      return;
+    }
+    _flushLocalState().catchError((Object error) {
+      _localGuestIssue = auth.friendlyError(error);
+      notifyListeners();
+    });
+  }
+
+  Future<void> _flushLocalState() async {
+    await _pendingLocalWrite;
+    await _persistLocal();
+    await _persistLocalGuest();
+    await _persistUnlinkedSession();
   }
 
   Future<void> _onAuthChanged(String? uid) async {
@@ -782,12 +807,26 @@ class AppState extends ChangeNotifier {
   Future<void> _persistLocalGuest() async {
     final prefs = _prefs;
     if (prefs == null) return;
-    await prefs.setBool(_localGuestKey, _localGuest);
+    if (_localGuest) {
+      await prefs.remove(_guestSignedOutKey);
+    } else {
+      final signedOutSaved = await prefs.setBool(_guestSignedOutKey, true);
+      if (!signedOutSaved) {
+        throw StateError('Could not save the guest sign-out state.');
+      }
+    }
+    final activeSaved = await prefs.setBool(_localGuestKey, _localGuest);
+    if (!activeSaved) {
+      throw StateError('Could not save the guest session state.');
+    }
     final name = _guestDisplayName;
     if (name == null || name.isEmpty) {
       await prefs.remove(_guestNameKey);
     } else {
-      await prefs.setString(_guestNameKey, name);
+      final nameSaved = await prefs.setString(_guestNameKey, name);
+      if (!nameSaved) {
+        throw StateError('Could not save the guest display name.');
+      }
     }
   }
 
@@ -850,7 +889,6 @@ class AppState extends ChangeNotifier {
       );
     }
 
-    _localGuest = prefs.getBool(_localGuestKey) ?? false;
     _guestDisplayName = prefs.getString(_guestNameKey);
     _unlinkedUid = prefs.getString(_unlinkedUidKey);
     _unlinkedDisplayName = prefs.getString(_unlinkedNameKey);
@@ -858,13 +896,25 @@ class AppState extends ChangeNotifier {
     _unlinkedAvatarId = prefs.getString(_unlinkedAvatarKey);
 
     final signedInUid = auth.currentUid;
+    // Guest profiles persist, but each Web app launch starts signed out.
+    final savedLocalGuest = prefs.getBool(_localGuestKey);
+    final guestWasExplicitlySignedOut =
+        prefs.getBool(_guestSignedOutKey) ?? false;
+    final hasGuestData = (_guestDisplayName?.isNotEmpty ?? false) ||
+        prefs.containsKey(_guestProgressKey);
+    _localGuest = kIsWeb
+        ? false
+        : signedInUid == null &&
+            !guestWasExplicitlySignedOut &&
+            (savedLocalGuest ?? hasGuestData);
+
     final String activeKey;
     final String statsKey;
     if (signedInUid != null) {
       activeKey = _linkedProgressKey(signedInUid);
       statsKey = '$_examStatsKeyPrefix$signedInUid';
     } else if (_unlinkedUid != null) {
-      _localGuest = true;
+      _localGuest = !kIsWeb;
       _avatarId = _unlinkedAvatarId ?? 'avatar_01';
       activeKey = _linkedProgressKey(_unlinkedUid!);
       statsKey = '$_examStatsKeyPrefix$_unlinkedUid';
@@ -965,7 +1015,8 @@ class AppState extends ChangeNotifier {
     final map = _progress.map((id, p) => MapEntry(id, p.toJson()));
     final contents = jsonEncode(map);
     final write = _pendingLocalWrite.then((_) async {
-      await prefs.setString(key, contents);
+      final saved = await prefs.setString(key, contents);
+      if (!saved) throw StateError('Could not save local study progress.');
     });
     _pendingLocalWrite = write.catchError((_) {});
     await write;
@@ -1032,17 +1083,17 @@ class AppState extends ChangeNotifier {
       dueWords(words, now: now).length;
 
   /// Ghi nhận người học tự đánh giá 1 từ sau khi lật thẻ (luồng học chính).
-  void rate(Word w, SrsRating rating) {
+  Future<void> rate(Word w, SrsRating rating) async {
     final current = progressOf(w);
     _progress[w.id] = current.rated(rating, DateTime.now());
     notifyListeners();
-    _persistLocal();
+    await _persistLocal();
     _pushIfSignedIn();
   }
 
   /// Đánh dấu/gỡ đánh dấu "đã thành thạo" thủ công (vd. từ trang Kho từ),
   /// không qua luồng lật thẻ.
-  void markMastered(Word w, {required bool mastered}) {
+  Future<void> markMastered(Word w, {required bool mastered}) async {
     if (mastered) {
       _progress[w.id] = WordProgress(
         box: kMasteredBox,
@@ -1053,7 +1104,7 @@ class AppState extends ChangeNotifier {
       _progress.remove(w.id);
     }
     notifyListeners();
-    _persistLocal();
+    await _persistLocal();
     _pushIfSignedIn();
   }
 

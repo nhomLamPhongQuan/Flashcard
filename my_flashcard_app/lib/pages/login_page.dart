@@ -83,6 +83,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final p = Palette.ofContext(context);
+    final state = AppScope.of(context);
 
     return Scaffold(
       backgroundColor: p.bg,
@@ -184,9 +185,25 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                   const SizedBox(height: 8),
+                  if (state.hasSavedGuest) ...[
+                    OutlinedButton.icon(
+                      onPressed: _loading
+                          ? null
+                          : () => _runAuthAction(state.continueLocalGuest),
+                      icon: const Icon(Icons.person_outline_rounded),
+                      label: Text(
+                        'Tiếp tục với ${state.savedGuestName?.isNotEmpty == true ? state.savedGuestName : 'tài khoản khách đã lưu'}',
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
                   OutlinedButton(
                     onPressed: _loading ? null : _continueAsGuest,
-                    child: const Text('Dùng thử không cần tài khoản'),
+                    child: Text(
+                      state.hasSavedGuest
+                          ? 'Tạo tài khoản khách mới'
+                          : 'Dùng thử không cần tài khoản',
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(

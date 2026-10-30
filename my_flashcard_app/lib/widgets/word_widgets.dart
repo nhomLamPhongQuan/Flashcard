@@ -213,7 +213,18 @@ class _WordSheet extends StatelessWidget {
               width: double.infinity,
               height: 52,
               child: FilledButton.icon(
-                onPressed: () => state.markMastered(word, mastered: !mastered),
+                onPressed: () async {
+                  try {
+                    await state.markMastered(word, mastered: !mastered);
+                  } catch (error) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Không thể lưu tiến độ học: $error'),
+                      ),
+                    );
+                  }
+                },
                 icon:
                     Icon(mastered ? Icons.replay_rounded : Icons.check_rounded),
                 label: Text(

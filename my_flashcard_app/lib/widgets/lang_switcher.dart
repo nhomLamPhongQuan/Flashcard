@@ -23,7 +23,7 @@ class LangSwitcher extends StatelessWidget {
         }),
       ),
       segments: const [
-        ButtonSegment(value: Lang.en, label: Text('Tiếng Anh')),
+        ButtonSegment(value: Lang.en, label: Text('English')),
         ButtonSegment(value: Lang.ja, label: Text('日本語')),
         ButtonSegment(value: Lang.ko, label: Text('한국어')),
         ButtonSegment(value: Lang.zh, label: Text('中文')),

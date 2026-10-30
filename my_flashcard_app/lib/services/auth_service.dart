@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 import 'cloud_progress_service.dart';
 import 'display_name_service.dart';
@@ -40,6 +41,12 @@ class AuthService {
   }
 
   String? get currentDisplayName => _auth.currentUser?.displayName;
+
+  Future<void> useSessionPersistenceOnWeb() async {
+    if (kIsWeb) {
+      await _auth.setPersistence(Persistence.SESSION);
+    }
+  }
 
   /// App guest mode includes accounts with no linked sign-in provider.
   bool get isAnonymous {

@@ -30,6 +30,7 @@ class _StudyPageState extends State<StudyPage> {
   late final int _total = widget.words.length;
   int _index = 0;
   bool _revealed = false;
+  bool _savingAnswer = false;
   int _masteredThisRound = 0;
 
   Word get _current => widget.words[_index];
@@ -40,16 +41,28 @@ class _StudyPageState extends State<StudyPage> {
     setState(() => _revealed = !_revealed);
   }
 
-  void _answer(SrsRating rating) {
-    if (!_revealed || _finished) return;
+  Future<void> _answer(SrsRating rating) async {
+    if (!_revealed || _finished || _savingAnswer) return;
     final state = AppScope.of(context);
-    state.rate(_current, rating);
+    setState(() => _savingAnswer = true);
+    try {
+      await state.rate(_current, rating);
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Không thể lưu tiến độ học: $error')),
+      );
+      setState(() => _savingAnswer = false);
+      return;
+    }
+    if (!mounted) return;
     if (rating == SrsRating.good || rating == SrsRating.easy) {
       if (state.isMastered(_current)) _masteredThisRound++;
     }
     setState(() {
       _index++;
       _revealed = false;
+      _savingAnswer = false;
     });
   }
 
