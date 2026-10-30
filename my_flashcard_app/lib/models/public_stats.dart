@@ -53,6 +53,7 @@ class PublicDeckStats {
 class PublicStats {
   const PublicStats({
     required this.displayName,
+    required this.avatarId,
     required this.masteredCount,
     required this.dueCount,
     required this.totalWords,
@@ -63,6 +64,7 @@ class PublicStats {
   });
 
   final String displayName;
+  final String avatarId;
   final int masteredCount;
   final int dueCount;
   final int totalWords;
@@ -93,6 +95,7 @@ class PublicStats {
 
     return PublicStats(
       displayName: json['displayName'] as String? ?? '',
+      avatarId: json['avatarId'] as String? ?? 'avatar_01',
       masteredCount: json['masteredCount'] as int? ?? 0,
       dueCount: json['dueCount'] as int? ?? 0,
       totalWords: json['totalWords'] as int? ?? 0,

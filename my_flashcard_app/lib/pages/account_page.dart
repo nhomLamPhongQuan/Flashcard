@@ -255,7 +255,7 @@ class _AccountPageState extends State<AccountPage> {
     final avatar = avatarOptionById(state.avatarId);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Tài khoản')),
+      appBar: AppBar(title: const Text('Tài Khoản')),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [

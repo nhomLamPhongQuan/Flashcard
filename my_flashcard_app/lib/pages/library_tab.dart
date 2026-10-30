@@ -46,10 +46,12 @@ class _LibraryTabState extends State<LibraryTab> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Kho từ',
-                  style: TextStyle(
-                      fontSize: 28, fontWeight: FontWeight.w800, height: 1.1),
+                const Center(
+                  child: Text(
+                    'Kho Từ',
+                    textAlign: TextAlign.center,
+                    style: AppTheme.pageTitleStyle,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(

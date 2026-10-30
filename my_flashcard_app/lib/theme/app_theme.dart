@@ -66,6 +66,12 @@ class Palette {
 }
 
 class AppTheme {
+  static const pageTitleStyle = TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.w800,
+    height: 1.1,
+  );
+
   static const _cjkFallback = [
     'Noto Sans JP',
     'Noto Sans CJK JP',
@@ -114,7 +120,9 @@ class AppTheme {
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
         foregroundColor: p.ink,
+        centerTitle: true,
         scrolledUnderElevation: 0,
+        titleTextStyle: pageTitleStyle.copyWith(color: p.ink),
       ),
     );
   }

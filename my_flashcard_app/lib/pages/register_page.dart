@@ -58,7 +58,7 @@ class _RegisterPageState extends State<RegisterPage> {
       backgroundColor: p.bg,
       appBar: AppBar(
         backgroundColor: p.bg,
-        title: const Text('Tạo tài khoản'),
+        title: const Text('Tạo Tài Khoản'),
       ),
       body: SafeArea(
         child: Center(

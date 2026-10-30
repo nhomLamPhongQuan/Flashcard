@@ -4,6 +4,8 @@ import '../models/vocab.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/panel.dart';
+import '../widgets/progress_ring.dart';
+import '../widgets/study_backdrop.dart';
 
 enum _ExamStage { setup, answering, result }
 
@@ -134,15 +136,18 @@ class _ExamPageState extends State<ExamPage> {
     final palette = Palette.ofContext(context);
     final accent = palette.accent(state.lang);
 
-    return SafeArea(
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 720),
-          child: switch (_stage) {
-            _ExamStage.setup => _buildSetup(state, palette, accent),
-            _ExamStage.answering => _buildQuestion(state, palette, accent),
-            _ExamStage.result => _buildResult(palette, accent),
-          },
+    return StudyBackdrop(
+      accent: accent,
+      child: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: switch (_stage) {
+              _ExamStage.setup => _buildSetup(state, palette, accent),
+              _ExamStage.answering => _buildQuestion(state, palette, accent),
+              _ExamStage.result => _buildResult(palette, accent),
+            },
+          ),
         ),
       ),
     );
@@ -158,17 +163,24 @@ class _ExamPageState extends State<ExamPage> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
       children: [
-        const Text(
-          'Bài kiểm tra',
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
+        const Center(
+          child: Text(
+            'Bài Kiểm Tra',
+            textAlign: TextAlign.center,
+            style: AppTheme.pageTitleStyle,
+          ),
         ),
         const SizedBox(height: 4),
-        Text(
-          'Chọn bộ thẻ và tỷ lệ từ muốn kiểm tra.',
-          style: TextStyle(color: palette.muted),
+        Center(
+          child: Text(
+            'Chọn bộ thẻ và tỷ lệ từ muốn kiểm tra.',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: palette.muted),
+          ),
         ),
         const SizedBox(height: 16),
         Panel(
+          color: accent.withAlpha(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -228,6 +240,7 @@ class _ExamPageState extends State<ExamPage> {
             padding: const EdgeInsets.only(bottom: 8),
             child: Panel(
               padding: EdgeInsets.zero,
+              color: palette.accent(deck.lang).withAlpha(10),
               child: CheckboxListTile(
                 value: _selectedDeckIds.contains(deck.id),
                 activeColor: palette.accent(deck.lang),
@@ -291,7 +304,19 @@ class _ExamPageState extends State<ExamPage> {
           ],
         ),
         const SizedBox(height: 8),
-        LinearProgressIndicator(value: progress, color: accent),
+        TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0, end: progress),
+          duration: const Duration(milliseconds: 450),
+          curve: Curves.easeOutCubic,
+          builder: (context, value, _) => ClipRRect(
+            borderRadius: BorderRadius.circular(999),
+            child: LinearProgressIndicator(
+              value: value,
+              color: accent,
+              minHeight: 7,
+            ),
+          ),
+        ),
         const SizedBox(height: 24),
         Panel(
           child: Column(
@@ -377,16 +402,26 @@ class _ExamPageState extends State<ExamPage> {
   Widget _buildResult(Palette palette, Color accent) {
     final total = _questions.length;
     final incorrect = total - _correctAnswers;
+    final accuracy = total == 0 ? 0.0 : _correctAnswers / total;
     return ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.all(24),
       children: [
-        Icon(Icons.check_circle_outline_rounded, size: 64, color: accent),
+        const SizedBox(height: 12),
+        Center(
+          child: ProgressRing(
+            value: accuracy,
+            accent: accent,
+            size: 128,
+            strokeWidth: 11,
+            label: '${(accuracy * 100).round()}%',
+          ),
+        ),
         const SizedBox(height: 16),
         const Text(
-          'Hoàn thành bài kiểm tra',
+          'Hoàn Thành Bài Kiểm Tra',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+          style: AppTheme.pageTitleStyle,
         ),
         const SizedBox(height: 20),
         Panel(

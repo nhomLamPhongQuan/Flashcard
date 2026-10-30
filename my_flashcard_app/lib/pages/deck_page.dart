@@ -4,6 +4,7 @@ import '../models/vocab.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/panel.dart';
+import '../widgets/slide_page_route.dart';
 import '../widgets/word_widgets.dart';
 import 'study_page.dart';
 
@@ -14,7 +15,7 @@ class DeckPage extends StatelessWidget {
 
   void _startStudy(BuildContext context, List<Word> words) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
+      slidePageRoute<void>(
         builder: (_) =>
             StudyPage(title: deck.title, words: words, lang: deck.lang),
       ),

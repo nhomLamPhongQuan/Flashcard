@@ -72,6 +72,7 @@ class PublicStatsService {
       if (!snapshot.exists) {
         transaction.set(ref, {
           'displayName': displayName,
+          'avatarId': initialStats['avatarId'] ?? 'avatar_01',
           'masteredCount': initialStats['masteredCount'] ?? 0,
           'dueCount': initialStats['dueCount'] ?? 0,
           'totalWords': initialStats['totalWords'] ?? 0,
@@ -81,11 +82,13 @@ class PublicStatsService {
           'examCorrectTotal': initialStats['examCorrectTotal'] ?? 0,
           'updatedAt': FieldValue.serverTimestamp(),
         });
-      } else if (snapshot.data()?['displayName'] != displayName) {
+      } else if (snapshot.data()?['displayName'] != displayName ||
+          snapshot.data()?['avatarId'] != initialStats['avatarId']) {
         transaction.set(
           ref,
           {
             'displayName': displayName,
+            'avatarId': initialStats['avatarId'] ?? 'avatar_01',
             'updatedAt': FieldValue.serverTimestamp(),
           },
           SetOptions(merge: true),
@@ -102,6 +105,7 @@ class PublicStatsService {
   Future<void> updateStudyStats({
     required String uid,
     required String displayName,
+    required String avatarId,
     required int masteredCount,
     required int dueCount,
     required int totalWords,
@@ -109,6 +113,7 @@ class PublicStatsService {
   }) =>
       _stats(uid).set({
         'displayName': displayName,
+        'avatarId': avatarId,
         'masteredCount': masteredCount,
         'dueCount': dueCount,
         'totalWords': totalWords,
@@ -119,6 +124,7 @@ class PublicStatsService {
   Future<Map<String, int>> recordExamResult({
     required String uid,
     required String displayName,
+    required String avatarId,
     required int wordCount,
     required int correctCount,
   }) {
@@ -136,6 +142,7 @@ class PublicStatsService {
         ref,
         {
           'displayName': displayName,
+          'avatarId': avatarId,
           ...values,
           'updatedAt': FieldValue.serverTimestamp(),
         },

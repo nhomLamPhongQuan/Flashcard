@@ -150,6 +150,7 @@ class AppState extends ChangeNotifier {
         ? await _publicStats.recordExamResult(
             uid: uid,
             displayName: auth.currentDisplayName ?? '',
+            avatarId: _avatarId,
             wordCount: wordCount,
             correctCount: correctCount,
           )
@@ -277,6 +278,7 @@ class AppState extends ChangeNotifier {
     final allWords = _decks.expand((deck) => deck.words).toList();
     return {
       'masteredCount': masteredCountOf(allWords),
+      'avatarId': _avatarId,
       'dueCount': dueCountOf(allWords),
       'totalWords': allWords.length,
       'examCount': _examCount,
@@ -300,6 +302,7 @@ class AppState extends ChangeNotifier {
     await _publicStats.updateStudyStats(
       uid: uid,
       displayName: displayName,
+      avatarId: _avatarId,
       masteredCount: stats['masteredCount'] as int,
       dueCount: stats['dueCount'] as int,
       totalWords: stats['totalWords'] as int,
@@ -590,6 +593,18 @@ class AppState extends ChangeNotifier {
     if (uid != null && !auth.isAnonymous && !_localGuest) {
       await _cloud.setAvatarId(uid, avatarId);
       await _prefs?.setString('linked_avatar_v1_$uid', avatarId);
+      _avatarId = avatarId;
+      notifyListeners();
+      final stats = _publicStatsPayload();
+      await _publicStats.updateStudyStats(
+        uid: uid,
+        displayName: auth.currentDisplayName ?? '',
+        avatarId: avatarId,
+        masteredCount: stats['masteredCount'] as int,
+        dueCount: stats['dueCount'] as int,
+        totalWords: stats['totalWords'] as int,
+        decks: List<Map<String, dynamic>>.from(stats['decks'] as List),
+      );
     } else if (_unlinkedUid != null) {
       _unlinkedAvatarId = avatarId;
       await _prefs?.setString(_unlinkedAvatarKey, avatarId);

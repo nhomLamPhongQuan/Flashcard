@@ -4,6 +4,7 @@ import '../services/auth_service.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/panel.dart';
+import '../widgets/slide_page_route.dart';
 import 'register_page.dart';
 
 /// Màn hình đăng nhập, hoặc "Dùng thử không cần tài khoản"
@@ -96,12 +97,9 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   const SizedBox(height: 24),
                   Text(
-                    'Từ vựng Anh · Nhật · Hàn',
+                    'Từ Vựng Anh · Nhật · Hàn',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        color: p.ink),
+                    style: AppTheme.pageTitleStyle.copyWith(color: p.ink),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -167,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: _loading
                         ? null
                         : () => Navigator.of(context).push(
-                              MaterialPageRoute<void>(
+                              slidePageRoute<void>(
                                 builder: (_) => RegisterPage(auth: widget.auth),
                               ),
                             ),
