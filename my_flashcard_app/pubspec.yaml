@@ -26,4 +26,5 @@ flutter:
     - assets/vocab/decks/en/
     - assets/vocab/decks/ja/
     - assets/vocab/decks/ko/
+    - assets/vocab/decks/zh/
     - assets/avatars/

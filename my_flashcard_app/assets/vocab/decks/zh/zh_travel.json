@@ -1,0 +1,124 @@
+{
+  "words": [
+    {
+      "t": "机场",
+      "r": "jī chǎng",
+      "p": "n",
+      "m": "sân bay",
+      "e": "我们从机场出发。",
+      "v": "Chúng tôi khởi hành từ sân bay."
+    },
+    {
+      "t": "车站",
+      "r": "chē zhàn",
+      "p": "n",
+      "m": "nhà ga, trạm xe",
+      "e": "请问火车站在哪里？",
+      "v": "Xin hỏi nhà ga xe lửa ở đâu?"
+    },
+    {
+      "t": "票",
+      "r": "piào",
+      "p": "n",
+      "m": "vé",
+      "e": "我买了一张票。",
+      "v": "Tôi đã mua một vé."
+    },
+    {
+      "t": "酒店",
+      "r": "jiǔ diàn",
+      "p": "n",
+      "m": "khách sạn",
+      "e": "这个酒店很好。",
+      "v": "Khách sạn này rất tốt."
+    },
+    {
+      "t": "地图",
+      "r": "dì tú",
+      "p": "n",
+      "m": "bản đồ",
+      "e": "请给我一张地图。",
+      "v": "Làm ơn cho tôi một tấm bản đồ."
+    },
+    {
+      "t": "餐厅",
+      "r": "cān tīng",
+      "p": "n",
+      "m": "nhà hàng",
+      "e": "我们去餐厅吃饭。",
+      "v": "Chúng tôi đi nhà hàng ăn."
+    },
+    {
+      "t": "菜单",
+      "r": "cài dān",
+      "p": "n",
+      "m": "thực đơn",
+      "e": "请看一下菜单。",
+      "v": "Xin xem qua thực đơn."
+    },
+    {
+      "t": "买",
+      "r": "mǎi",
+      "p": "v",
+      "m": "mua",
+      "e": "我想买一件衣服。",
+      "v": "Tôi muốn mua một bộ quần áo."
+    },
+    {
+      "t": "门票",
+      "r": "mén piào",
+      "p": "n",
+      "m": "vé vào cửa",
+      "e": "门票多少钱？",
+      "v": "Vé vào cửa bao nhiêu tiền?"
+    },
+    {
+      "t": "导游",
+      "r": "dǎo yóu",
+      "p": "n",
+      "m": "hướng dẫn viên",
+      "e": "导游介绍了当地文化。",
+      "v": "Hướng dẫn viên giới thiệu văn hóa địa phương."
+    },
+    {
+      "t": "地铁",
+      "r": "dì tiě",
+      "p": "n",
+      "m": "tàu điện ngầm",
+      "e": "地铁站在这儿。",
+      "v": "Ga tàu điện ngầm ở đây."
+    },
+    {
+      "t": "停车场",
+      "r": "tíng chē chǎng",
+      "p": "n",
+      "m": "bãi đỗ xe",
+      "e": "停车场在酒店旁边。",
+      "v": "Bãi đỗ xe ở cạnh khách sạn."
+    },
+    {
+      "t": "行李",
+      "r": "xíng li",
+      "p": "n",
+      "m": "hành lý",
+      "e": "我的行李太重了。",
+      "v": "Hành lý của tôi quá nặng."
+    },
+    {
+      "t": "洗手间",
+      "r": "xǐ shǒu jiān",
+      "p": "n",
+      "m": "nhà vệ sinh",
+      "e": "洗手间在前面。",
+      "v": "Nhà vệ sinh ở phía trước."
+    },
+    {
+      "t": "欢迎",
+      "r": "huān yíng",
+      "p": "v",
+      "m": "chào mừng",
+      "e": "欢迎来到中国！",
+      "v": "Chào mừng đến với Trung Quốc!"
+    }
+  ]
+}

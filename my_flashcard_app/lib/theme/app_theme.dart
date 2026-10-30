@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../models/vocab.dart';
 
 /// Bảng màu riêng của ứng dụng. Mỗi ngôn ngữ có một màu nhấn:
-/// tiếng Anh là xanh biển, tiếng Nhật là đỏ hồng (beni), tiếng Hàn là tím.
+/// tiếng Anh là xanh biển, tiếng Nhật là đỏ hồng (beni), tiếng Hàn là tím,
+/// tiếng Trung là đỏ.
 class Palette {
   const Palette({
     required this.bg,
@@ -14,6 +15,7 @@ class Palette {
     required this.en,
     required this.ja,
     required this.ko,
+    required this.zh,
   });
 
   final Color bg;
@@ -24,6 +26,7 @@ class Palette {
   final Color en;
   final Color ja;
   final Color ko;
+  final Color zh;
 
   Color accent(Lang lang) {
     switch (lang) {
@@ -31,6 +34,8 @@ class Palette {
         return ja;
       case Lang.ko:
         return ko;
+      case Lang.zh:
+        return zh;
       case Lang.en:
         return en;
     }
@@ -45,6 +50,7 @@ class Palette {
     en: Color(0xFF1B6FC2),
     ja: Color(0xFFC83653),
     ko: Color(0xFF7B4FE0),
+    zh: Color(0xFFD62828),
   );
 
   static const dark = Palette(
@@ -56,6 +62,7 @@ class Palette {
     en: Color(0xFF6DB3F2),
     ja: Color(0xFFFF8299),
     ko: Color(0xFFB79CFF),
+    zh: Color(0xFFFF5C5C),
   );
 
   static Palette of(Brightness brightness) =>

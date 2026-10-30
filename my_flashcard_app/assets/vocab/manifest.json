@@ -152,6 +152,24 @@
       "level": "Sơ cấp – Trung cấp",
       "badge": "여",
       "file": "decks/ko/ko_travel.json"
+    },
+    {
+      "id": "zh_basic",
+      "lang": "zh",
+      "title": "Tiếng Trung cơ bản",
+      "subtitle": "Chào hỏi, lời cảm ơn và từ vựng đời sống hàng ngày",
+      "level": "Sơ cấp",
+      "badge": "中",
+      "file": "decks/zh/zh_basic.json"
+    },
+    {
+      "id": "zh_travel",
+      "lang": "zh",
+      "title": "Du lịch Trung Quốc",
+      "subtitle": "Từ vựng cần thiết khi đi lại, đặt phòng và mua sắm",
+      "level": "Sơ cấp – Trung cấp",
+      "badge": "旅",
+      "file": "decks/zh/zh_travel.json"
     }
   ]
 }

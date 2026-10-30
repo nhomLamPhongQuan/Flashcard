@@ -28,7 +28,7 @@ class FlashcardApp extends StatelessWidget {
     // notifyListeners() được gọi, FlashcardApp sẽ tự rebuild với theme mới.
     final state = AppScope.of(context);
     return MaterialApp(
-      title: 'Từ vựng Anh - Nhật - Hàn',
+      title: 'Thư viện từ vựng thế giới',
       debugShowCheckedModeBanner: false,
       themeMode: state.themeMode,
       theme: AppTheme.build(Brightness.light, state.lang),

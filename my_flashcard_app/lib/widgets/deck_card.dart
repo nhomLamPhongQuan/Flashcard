@@ -150,6 +150,8 @@ class DeckCard extends StatelessWidget {
         return Icons.auto_stories_rounded;
       case Lang.ko:
         return Icons.translate_rounded;
+      case Lang.zh:
+        return Icons.translate_rounded;
     }
   }
 }

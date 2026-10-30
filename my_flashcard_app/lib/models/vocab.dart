@@ -1,4 +1,4 @@
-enum Lang { en, ja, ko }
+enum Lang { en, ja, ko, zh }
 
 Lang langFromCode(String? code) {
   switch (code) {
@@ -6,6 +6,8 @@ Lang langFromCode(String? code) {
       return Lang.ja;
     case 'ko':
       return Lang.ko;
+    case 'zh':
+      return Lang.zh;
     default:
       return Lang.en;
   }
@@ -18,6 +20,8 @@ extension LangInfo on Lang {
         return 'ja';
       case Lang.ko:
         return 'ko';
+      case Lang.zh:
+        return 'zh';
       case Lang.en:
         return 'en';
     }
@@ -29,12 +33,14 @@ extension LangInfo on Lang {
         return '日本語';
       case Lang.ko:
         return '한국어';
+      case Lang.zh:
+        return '中文';
       case Lang.en:
-        return 'Tiếng Anh';
+        return 'English';
     }
   }
 
-  /// true nếu là ngôn ngữ dùng chữ tượng hình/khối (Nhật, Hàn): những ngôn
+  /// true nếu là ngôn ngữ dùng chữ tượng hình/khối (Nhật, Hàn, Trung): những ngôn
   /// ngữ này hiển thị cách đọc/phiên âm ở mặt sau thẻ thay vì mặt trước,
   /// khác với tiếng Anh (hiện IPA ngay mặt trước).
   bool get hidesReadingOnFront => this != Lang.en;
