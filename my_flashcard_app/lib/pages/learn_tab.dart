@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_text.dart';
 import '../models/vocab.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
@@ -74,9 +75,9 @@ class LearnTab extends StatelessWidget {
                   const SizedBox(height: 18),
                   const LangSwitcher(),
                   const SizedBox(height: 24),
-                  const Text('Bộ thẻ',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                  Text(appText(context, 'Bộ thẻ'),
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 12),
                   for (final deck in decks)
                     Padding(
@@ -158,7 +159,7 @@ class _WelcomeCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '$language · ${totalDue > 0 ? '$totalDue từ đang chờ ôn' : 'Sẵn sàng học thêm?'}',
+                    '$language · ${totalDue > 0 ? '$totalDue ${appText(context, 'Từ đến hạn ôn')}' : appText(context, 'Sẵn sàng học thêm?')}',
                     style: TextStyle(color: Colors.white.withAlpha(220)),
                   ),
                   const SizedBox(height: 18),
@@ -193,7 +194,7 @@ class _WelcomeCard extends StatelessWidget {
                       foregroundColor: accent,
                     ),
                     icon: const Icon(Icons.play_arrow_rounded),
-                    label: const Text('Tiếp tục học'),
+                    label: Text(appText(context, 'Tiếp tục học')),
                   ),
                 ],
               ),

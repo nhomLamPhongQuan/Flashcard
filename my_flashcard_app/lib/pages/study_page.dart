@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../l10n/app_text.dart';
 import '../models/srs.dart';
 import '../models/vocab.dart';
 import '../state/app_state.dart';
@@ -51,7 +52,10 @@ class _StudyPageState extends State<StudyPage> {
     } catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Không thể lưu tiến độ học: $error')),
+        SnackBar(
+          content: Text(appText(context, 'Không thể lưu tiến độ học: {error}')
+              .replaceAll('{error}', '$error')),
+        ),
       );
       setState(() => _savingAnswer = false);
       return;
@@ -153,8 +157,8 @@ class _StudyPageState extends State<StudyPage> {
                                       height: 56,
                                       child: FilledButton(
                                         onPressed: _flip,
-                                        child: const Text(
-                                          'Hiện đáp án',
+                                        child: Text(
+                                          appText(context, 'Hiện đáp án'),
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600),
@@ -203,7 +207,7 @@ class _TopBar extends StatelessWidget {
         Row(
           children: [
             IconButton(
-              tooltip: 'Thoát',
+              tooltip: appText(context, 'Thoát bài học'),
               icon: Icon(Icons.close_rounded, color: p.ink),
               onPressed: () => Navigator.of(context).maybePop(),
             ),
@@ -255,7 +259,7 @@ class _AnswerRow extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: _AnswerButton(
-                label: rating.label,
+                label: appText(context, rating.label),
                 color: color,
                 onTap: () => onAnswer(rating),
               ),
@@ -316,24 +320,30 @@ class _Summary extends StatelessWidget {
           children: [
             Icon(Icons.check_circle_rounded, size: 72, color: accent),
             const SizedBox(height: 20),
-            const Text(
-              'Xong lượt học',
+            Text(
+              appText(context, 'Xong lượt học'),
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 8),
             Text(
               mastered > 0
-                  ? 'Bạn đã ôn qua $total từ, trong đó $mastered từ vừa đạt mức thành thạo.'
-                  : 'Bạn đã ôn qua $total từ trong bộ thẻ này.',
+                  ? appText(context,
+                          'Bạn đã ôn qua {total} từ, trong đó {mastered} từ vừa đạt mức thành thạo.')
+                      .replaceAll('{total}', '$total')
+                      .replaceAll('{mastered}', '$mastered')
+                  : appText(
+                          context, 'Bạn đã ôn qua {total} từ trong bộ thẻ này.')
+                      .replaceAll('{total}', '$total'),
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 15, height: 1.4, color: p.muted),
             ),
             const SizedBox(height: 28),
             FilledButton(
               onPressed: () => Navigator.of(context).maybePop(),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-                child: Text('Về trang chính'),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+                child: Text(appText(context, 'Về trang chính')),
               ),
             ),
           ],

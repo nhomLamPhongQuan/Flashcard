@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_text.dart';
+import '../models/app_language.dart';
 import '../models/avatar_catalog.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
@@ -17,6 +19,20 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   bool _working = false;
   String? _error;
+
+  Future<void> _setAppLanguage(
+    AppState state,
+    AppLanguage language,
+  ) async {
+    setState(() {
+      _error = null;
+    });
+    try {
+      await state.setAppLanguage(language);
+    } catch (error) {
+      if (mounted) setState(() => _error = error.toString());
+    }
+  }
 
   Future<T?> _showNeutralDialog<T>({
     required WidgetBuilder builder,
@@ -47,7 +63,11 @@ class _AccountPageState extends State<AccountPage> {
     try {
       await state.selectAvatar(avatarId);
     } catch (error) {
-      if (mounted) setState(() => _error = state.auth.friendlyError(error));
+      if (mounted) {
+        setState(
+          () => _error = appText(context, state.auth.friendlyError(error)),
+        );
+      }
     } finally {
       if (mounted) setState(() => _working = false);
     }
@@ -58,23 +78,23 @@ class _AccountPageState extends State<AccountPage> {
         TextEditingController(text: state.currentDisplayName ?? '');
     final name = await _showNeutralDialog<String>(
       builder: (context) => AlertDialog(
-        title: const Text('Tên hiển thị'),
+        title: Text(appText(context, 'Tên hiển thị')),
         content: TextField(
           controller: controller,
           autofocus: true,
           textCapitalization: TextCapitalization.words,
           maxLength: 60,
-          decoration: const InputDecoration(labelText: 'Tên'),
+          decoration: InputDecoration(labelText: appText(context, 'Tên')),
           onSubmitted: (value) => Navigator.of(context).pop(value.trim()),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Hủy'),
+            child: Text(appText(context, 'Hủy')),
           ),
           FilledButton(
             onPressed: () => Navigator.of(context).pop(controller.text.trim()),
-            child: const Text('Lưu'),
+            child: Text(appText(context, 'Lưu')),
           ),
         ],
       ),
@@ -92,7 +112,11 @@ class _AccountPageState extends State<AccountPage> {
       await state.updateDisplayName(name);
       state.clearDisplayNameIssue();
     } catch (error) {
-      if (mounted) setState(() => _error = state.auth.friendlyError(error));
+      if (mounted) {
+        setState(
+          () => _error = appText(context, state.auth.friendlyError(error)),
+        );
+      }
     } finally {
       if (mounted) setState(() => _working = false);
     }
@@ -101,22 +125,25 @@ class _AccountPageState extends State<AccountPage> {
   Future<void> _signOut(AppState state) async {
     final shouldSignOut = await _showNeutralDialog<bool>(
       builder: (context) => AlertDialog(
-        title: const Text('Xác nhận đăng xuất'),
+        title: Text(appText(context, 'Xác nhận đăng xuất')),
         content: Text(
           state.unlinkedSession
-              ? 'Tài khoản chưa được liên kết và sẽ bị xóa khi đăng xuất'
+              ? appText(context,
+                  'Tài khoản chưa được liên kết và sẽ bị xóa khi đăng xuất')
               : state.auth.isAnonymous
-                  ? 'Tài khoản khách và tiến độ của bạn vẫn được giữ trên thiết bị.'
-                  : 'Tài khoản và tiến độ trên Firebase vẫn được giữ. Bản sao tiến độ trên thiết bị này sẽ bị xóa.',
+                  ? appText(context,
+                      'Tài khoản khách và tiến độ của bạn vẫn được giữ trên thiết bị.')
+                  : appText(context,
+                      'Tài khoản và tiến độ trên Firebase vẫn được giữ. Bản sao tiến độ trên thiết bị này sẽ bị xóa.'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Hủy'),
+            child: Text(appText(context, 'Hủy')),
           ),
           FilledButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Đăng xuất'),
+            child: Text(appText(context, 'Đăng xuất')),
           ),
         ],
       ),
@@ -127,7 +154,9 @@ class _AccountPageState extends State<AccountPage> {
       await state.signOut();
     } catch (error) {
       if (mounted) {
-        setState(() => _error = state.auth.friendlyError(error));
+        setState(
+          () => _error = appText(context, state.auth.friendlyError(error)),
+        );
       }
     }
   }
@@ -149,11 +178,15 @@ class _AccountPageState extends State<AccountPage> {
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Đã đổi mật khẩu.')),
+          SnackBar(content: Text(appText(context, 'Đã đổi mật khẩu.'))),
         );
       }
     } catch (error) {
-      if (mounted) setState(() => _error = state.auth.friendlyError(error));
+      if (mounted) {
+        setState(
+          () => _error = appText(context, state.auth.friendlyError(error)),
+        );
+      }
     } finally {
       if (mounted) setState(() => _working = false);
     }
@@ -179,11 +212,17 @@ class _AccountPageState extends State<AccountPage> {
       if (mounted) {
         setState(() {});
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Đã liên kết email với tài khoản.')),
+          SnackBar(
+              content:
+                  Text(appText(context, 'Đã liên kết email với tài khoản.'))),
         );
       }
     } catch (error) {
-      if (mounted) setState(() => _error = state.auth.friendlyError(error));
+      if (mounted) {
+        setState(
+          () => _error = appText(context, state.auth.friendlyError(error)),
+        );
+      }
     } finally {
       if (mounted) setState(() => _working = false);
     }
@@ -207,15 +246,18 @@ class _AccountPageState extends State<AccountPage> {
       if (mounted) {
         setState(() {});
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Tài khoản và dữ liệu Firebase đã được xóa. Tiến độ vẫn còn trên thiết bị.',
-            ),
+          SnackBar(
+            content: Text(appText(context,
+                'Tài khoản và dữ liệu Firebase đã được xóa. Tiến độ vẫn còn trên thiết bị.')),
           ),
         );
       }
     } catch (error) {
-      if (mounted) setState(() => _error = state.auth.friendlyError(error));
+      if (mounted) {
+        setState(
+          () => _error = appText(context, state.auth.friendlyError(error)),
+        );
+      }
     } finally {
       if (mounted) setState(() => _working = false);
     }
@@ -239,11 +281,17 @@ class _AccountPageState extends State<AccountPage> {
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Đã cập nhật quyền riêng tư thống kê.')),
+          SnackBar(
+              content: Text(
+                  appText(context, 'Đã cập nhật quyền riêng tư thống kê.'))),
         );
       }
     } catch (error) {
-      if (mounted) setState(() => _error = state.auth.friendlyError(error));
+      if (mounted) {
+        setState(
+          () => _error = appText(context, state.auth.friendlyError(error)),
+        );
+      }
     } finally {
       if (mounted) setState(() => _working = false);
     }
@@ -257,10 +305,10 @@ class _AccountPageState extends State<AccountPage> {
     final displayName = state.currentDisplayName?.trim();
     final name = displayName == null || displayName.isEmpty
         ? (state.unlinkedSession
-            ? 'Tài khoản chưa liên kết'
+            ? appText(context, 'Tài khoản chưa liên kết')
             : auth.isAnonymous
-                ? 'Tài khoản khách'
-                : 'Chưa đặt tên')
+                ? appText(context, 'Tài khoản khách')
+                : appText(context, 'Chưa đặt tên'))
         : displayName;
     final avatar = avatarOptionById(state.avatarId);
 
@@ -269,7 +317,7 @@ class _AccountPageState extends State<AccountPage> {
       child: Scaffold(
         appBar: AppBar(
           title: PageTitleBar(
-            title: 'Tài Khoản',
+            title: appText(context, 'Tài Khoản'),
             icon: Icons.person_rounded,
             accent: palette.muted,
           ),
@@ -301,7 +349,7 @@ class _AccountPageState extends State<AccountPage> {
                   TextButton.icon(
                     onPressed: _working ? null : () => _chooseAvatar(state),
                     icon: const Icon(Icons.face_retouching_natural_outlined),
-                    label: const Text('Chọn ảnh đại diện'),
+                    label: Text(appText(context, 'Chọn ảnh đại diện')),
                   ),
                   const SizedBox(height: 14),
                   Text(
@@ -316,9 +364,10 @@ class _AccountPageState extends State<AccountPage> {
                   Text(
                     auth.isAnonymous
                         ? (state.unlinkedSession
-                            ? 'Tài khoản chưa được liên kết'
-                            : 'Đang dùng thử')
-                        : (auth.currentEmail ?? 'Tài khoản email'),
+                            ? appText(context, 'Tài khoản chưa được liên kết')
+                            : appText(context, 'Đang dùng thử'))
+                        : (auth.currentEmail ??
+                            appText(context, 'Tài khoản email')),
                     textAlign: TextAlign.center,
                     style: TextStyle(color: palette.muted),
                   ),
@@ -332,7 +381,9 @@ class _AccountPageState extends State<AccountPage> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : const Icon(Icons.edit_outlined),
-                    label: Text(_working ? 'Đang xử lý...' : 'Sửa tên'),
+                    label: Text(
+                      appText(context, _working ? 'Đang xử lý...' : 'Sửa tên'),
+                    ),
                   ),
                 ],
               ),
@@ -343,15 +394,16 @@ class _AccountPageState extends State<AccountPage> {
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.visibility_outlined),
-                  title: const Text('Quyền riêng tư thống kê'),
+                  title: Text(appText(context, 'Quyền riêng tư thống kê')),
                   subtitle: Text(
                     state.statsPrivacyReady
-                        ? '${state.statsPrivacy.mode.label} · '
-                            '${state.statsPrivacy.mode.description}'
+                        ? '${appText(context, state.statsPrivacy.mode.label)} · '
+                            '${appText(context, state.statsPrivacy.mode.description)}'
                         : state.statsPrivacyIssue != null
-                            ? 'Không thể tải cài đặt: '
-                                '${state.statsPrivacyIssue}'
-                            : 'Đang tải cài đặt quyền riêng tư...',
+                            ? appText(context, 'Không thể tải cài đặt: {error}')
+                                .replaceAll('{error}', state.statsPrivacyIssue!)
+                            : appText(
+                                context, 'Đang tải cài đặt quyền riêng tư...'),
                     style: state.statsPrivacyIssue != null
                         ? TextStyle(color: Theme.of(context).colorScheme.error)
                         : null,
@@ -364,7 +416,8 @@ class _AccountPageState extends State<AccountPage> {
                         )
                       : state.statsPrivacyIssue != null
                           ? IconButton(
-                              tooltip: 'Thử tải lại cài đặt quyền riêng tư',
+                              tooltip: appText(context,
+                                  'Thử tải lại cài đặt quyền riêng tư'),
                               onPressed: () => state.retryStatsPrivacyLoad(),
                               icon: const Icon(Icons.refresh_rounded),
                             )
@@ -377,11 +430,40 @@ class _AccountPageState extends State<AccountPage> {
             ],
             const SizedBox(height: 16),
             Panel(
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.translate_rounded),
+                title: Text(appText(context, 'Ngôn ngữ ứng dụng')),
+                subtitle: Text(
+                  appText(context, 'Chọn ngôn ngữ hiển thị của ứng dụng'),
+                ),
+                trailing: DropdownButton<AppLanguage>(
+                  value: state.appLanguage,
+                  underline: const SizedBox.shrink(),
+                  items: [
+                    for (final language in AppLanguage.values)
+                      DropdownMenuItem(
+                        value: language,
+                        child: Text(language.nativeName),
+                      ),
+                  ],
+                  onChanged: _working
+                      ? null
+                      : (language) {
+                          if (language != null) {
+                            _setAppLanguage(state, language);
+                          }
+                        },
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Panel(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Đồng bộ tiến độ',
+                  Text(
+                    appText(context, 'Đồng bộ tiến độ'),
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 8),
@@ -399,12 +481,15 @@ class _AccountPageState extends State<AccountPage> {
                       Expanded(
                         child: Text(
                           state.syncing
-                              ? 'Đang đồng bộ tiến độ học...'
+                              ? appText(context, 'Đang đồng bộ tiến độ học...')
                               : (auth.isAnonymous
                                   ? (state.unlinkedSession
-                                      ? 'Dữ liệu tạm thời chỉ được lưu trên thiết bị này.'
-                                      : 'Dữ liệu chỉ được lưu trên thiết bị này.')
-                                  : 'Tiến độ học được lưu trên thiết bị và đồng bộ khi đăng nhập.'),
+                                      ? appText(context,
+                                          'Dữ liệu tạm thời chỉ được lưu trên thiết bị này.')
+                                      : appText(context,
+                                          'Dữ liệu chỉ được lưu trên thiết bị này.'))
+                                  : appText(context,
+                                      'Tiến độ học được lưu trên thiết bị và đồng bộ khi đăng nhập.')),
                           style: TextStyle(color: palette.muted),
                         ),
                       ),
@@ -418,19 +503,23 @@ class _AccountPageState extends State<AccountPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Giao diện',
+                  Text(
+                    appText(context, 'Giao diện'),
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 12),
                   SegmentedButton<ThemeMode>(
                     showSelectedIcon: false,
-                    segments: const [
+                    segments: [
                       ButtonSegment(
-                          value: ThemeMode.system, label: Text('Tự động')),
+                          value: ThemeMode.system,
+                          label: Text(appText(context, 'Tự động'))),
                       ButtonSegment(
-                          value: ThemeMode.light, label: Text('Sáng')),
-                      ButtonSegment(value: ThemeMode.dark, label: Text('Tối')),
+                          value: ThemeMode.light,
+                          label: Text(appText(context, 'Sáng'))),
+                      ButtonSegment(
+                          value: ThemeMode.dark,
+                          label: Text(appText(context, 'Tối'))),
                     ],
                     selected: {state.themeMode},
                     onSelectionChanged: (selection) =>
@@ -445,8 +534,9 @@ class _AccountPageState extends State<AccountPage> {
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.lock_outline_rounded),
-                  title: const Text('Đổi mật khẩu'),
-                  subtitle: const Text('Cập nhật mật khẩu đăng nhập'),
+                  title: Text(appText(context, 'Đổi mật khẩu')),
+                  subtitle:
+                      Text(appText(context, 'Cập nhật mật khẩu đăng nhập')),
                   trailing: const Icon(Icons.chevron_right_rounded),
                   onTap: _working ? null : () => _changePassword(state),
                 ),
@@ -458,10 +548,13 @@ class _AccountPageState extends State<AccountPage> {
                 state.publicStatsIssue != null) ...[
               const SizedBox(height: 12),
               Text(
-                _error ??
-                    state.displayNameIssue ??
-                    state.localGuestIssue ??
-                    state.publicStatsIssue!,
+                appText(
+                  context,
+                  _error ??
+                      state.displayNameIssue ??
+                      state.localGuestIssue ??
+                      state.publicStatsIssue!,
+                ),
                 style: const TextStyle(color: Color(0xFFD64550)),
                 textAlign: TextAlign.center,
               ),
@@ -477,35 +570,39 @@ class _AccountPageState extends State<AccountPage> {
                         } catch (error) {
                           if (mounted) {
                             setState(() {
-                              _error = state.auth.friendlyError(error);
+                              _error = appText(
+                                context,
+                                state.auth.friendlyError(error),
+                              );
                             });
                           }
                         } finally {
                           if (mounted) setState(() => _working = false);
                         }
                       },
-                child: const Text('Thử xóa dữ liệu Firebase lần nữa'),
+                child:
+                    Text(appText(context, 'Thử xóa dữ liệu Firebase lần nữa')),
               ),
             const SizedBox(height: 24),
             if (auth.isAnonymous) ...[
               FilledButton.tonalIcon(
                 onPressed: _working ? null : () => _linkAccount(state),
                 icon: const Icon(Icons.link_rounded),
-                label: const Text('Liên kết email và mật khẩu'),
+                label: Text(appText(context, 'Liên kết email và mật khẩu')),
               ),
               const SizedBox(height: 12),
             ],
             FilledButton.tonalIcon(
               onPressed: _working ? null : () => _signOut(state),
               icon: const Icon(Icons.logout_rounded),
-              label: const Text('Đăng xuất'),
+              label: Text(appText(context, 'Đăng xuất')),
             ),
             if (!auth.isAnonymous) ...[
               const SizedBox(height: 24),
               OutlinedButton.icon(
                 onPressed: _working ? null : () => _unlinkAccount(state),
                 icon: const Icon(Icons.link_off_rounded),
-                label: const Text('Hủy liên kết email'),
+                label: Text(appText(context, 'Hủy liên kết email')),
               ),
             ],
           ],

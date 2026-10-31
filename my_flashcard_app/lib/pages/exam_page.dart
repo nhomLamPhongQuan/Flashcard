@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_text.dart';
 import '../models/vocab.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
@@ -68,7 +69,10 @@ class _ExamPageState extends State<ExamPage> {
     final answer =
         _answerController.text.replaceAll(RegExp(r'\s+'), '').toLowerCase();
     if (answer.isEmpty) {
-      setState(() => _answerError = 'Nhập câu trả lời trước khi kiểm tra.');
+      setState(
+        () => _answerError =
+            appText(context, 'Nhập câu trả lời trước khi kiểm tra.'),
+      );
       return;
     }
 
@@ -116,7 +120,9 @@ class _ExamPageState extends State<ExamPage> {
       if (!mounted) return;
       setState(() {
         _savingResult = false;
-        _resultError = 'Không thể lưu kết quả bài kiểm tra: $error';
+        _resultError =
+            appText(context, 'Không thể lưu kết quả bài kiểm tra: {error}')
+                .replaceAll('{error}', '$error');
       });
     }
   }
@@ -166,7 +172,7 @@ class _ExamPageState extends State<ExamPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: PageTitleBar(
-            title: 'Bài Kiểm Tra',
+            title: appText(context, 'Bài Kiểm Tra'),
             icon: Icons.assignment_rounded,
             accent: accent,
           ),
@@ -177,7 +183,7 @@ class _ExamPageState extends State<ExamPage> {
             children: [
               Center(
                 child: Text(
-                  'Chọn bộ thẻ và tỷ lệ từ muốn kiểm tra.',
+                  appText(context, 'Chọn bộ thẻ và tỷ lệ từ muốn kiểm tra.'),
                   textAlign: TextAlign.center,
                   style: TextStyle(color: palette.muted),
                 ),
@@ -228,9 +234,9 @@ class _ExamPageState extends State<ExamPage> {
                           children: [
                             Row(
                               children: [
-                                const Expanded(
+                                Expanded(
                                   child: Text(
-                                    'Số từ mỗi bộ thẻ',
+                                    appText(context, 'Số từ mỗi bộ thẻ'),
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700),
@@ -265,7 +271,8 @@ class _ExamPageState extends State<ExamPage> {
                               ),
                             ),
                             Text(
-                              'Số từ được làm tròn xuống riêng cho từng bộ thẻ.',
+                              appText(context,
+                                  'Số từ được làm tròn xuống riêng cho từng bộ thẻ.'),
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.white.withAlpha(220),
@@ -281,15 +288,16 @@ class _ExamPageState extends State<ExamPage> {
               const SizedBox(height: 16),
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'Chọn bộ thẻ',
+                      appText(context, 'Chọn bộ thẻ'),
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                     ),
                   ),
                   Text(
-                    '${_selectedDeckIds.length} đã chọn',
+                    appText(context, '{count} đã chọn')
+                        .replaceAll('{count}', '${_selectedDeckIds.length}'),
                     style: TextStyle(color: palette.muted),
                   ),
                 ],
@@ -306,7 +314,7 @@ class _ExamPageState extends State<ExamPage> {
                       activeColor: palette.accent(deck.lang),
                       title: Text(deck.title),
                       subtitle: Text(
-                        '${deck.lang.label} · ${_wordCountFor(deck)} / ${deck.words.length} từ',
+                        '${deck.lang.label} · ${_wordCountFor(deck)} / ${deck.words.length} ${appText(context, 'từ')}',
                       ),
                       controlAffinity: ListTileControlAffinity.leading,
                       onChanged: (selected) {
@@ -330,8 +338,9 @@ class _ExamPageState extends State<ExamPage> {
                   icon: const Icon(Icons.play_arrow_rounded),
                   label: Text(
                     questionCount == 0
-                        ? 'Chọn bộ thẻ có từ để bắt đầu'
-                        : 'Bắt đầu kiểm tra · $questionCount từ',
+                        ? appText(context, 'Chọn bộ thẻ có từ để bắt đầu')
+                        : appText(context, 'Bắt đầu kiểm tra · {count} từ')
+                            .replaceAll('{count}', '$questionCount'),
                   ),
                 ),
               ),
@@ -353,13 +362,15 @@ class _ExamPageState extends State<ExamPage> {
         Row(
           children: [
             IconButton(
-              tooltip: 'Thoát bài kiểm tra',
+              tooltip: appText(context, 'Thoát bài kiểm tra'),
               onPressed: _returnToSetup,
               icon: const Icon(Icons.close_rounded),
             ),
             Expanded(
               child: Text(
-                'Câu ${_questionIndex + 1} / $total',
+                appText(context, 'Câu {current} / {total}')
+                    .replaceAll('{current}', '${_questionIndex + 1}')
+                    .replaceAll('{total}', '$total'),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontWeight: FontWeight.w700),
               ),
@@ -393,7 +404,7 @@ class _ExamPageState extends State<ExamPage> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Nhập chính xác nghĩa của từ',
+                appText(context, 'Nhập chính xác nghĩa của từ'),
                 style: TextStyle(color: palette.muted),
               ),
             ],
@@ -407,7 +418,7 @@ class _ExamPageState extends State<ExamPage> {
           textInputAction: TextInputAction.done,
           onSubmitted: (_) => _submitAnswer(),
           decoration: InputDecoration(
-            labelText: 'Nghĩa của từ',
+            labelText: appText(context, 'Nghĩa của từ'),
             errorText: _answerError,
             border: const OutlineInputBorder(),
           ),
@@ -422,7 +433,9 @@ class _ExamPageState extends State<ExamPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _answerWasCorrect ? 'Chính xác!' : 'Chưa chính xác',
+                  _answerWasCorrect
+                      ? appText(context, 'Chính xác!')
+                      : appText(context, 'Chưa chính xác'),
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     color: _answerWasCorrect
@@ -432,7 +445,8 @@ class _ExamPageState extends State<ExamPage> {
                 ),
                 if (!_answerWasCorrect) ...[
                   const SizedBox(height: 6),
-                  Text('Đáp án đúng: ${word.meaning}'),
+                  Text(appText(context, 'Đáp án đúng: {meaning}')
+                      .replaceAll('{meaning}', word.meaning)),
                 ],
               ],
             ),
@@ -446,8 +460,10 @@ class _ExamPageState extends State<ExamPage> {
                 : _submitAnswer,
             child: Text(
               _answered
-                  ? (_questionIndex + 1 == total ? 'Xem kết quả' : 'Tiếp theo')
-                  : 'Kiểm tra đáp án',
+                  ? (_questionIndex + 1 == total
+                      ? appText(context, 'Xem kết quả')
+                      : appText(context, 'Tiếp theo'))
+                  : appText(context, 'Kiểm tra đáp án'),
             ),
           ),
         ),
@@ -472,7 +488,7 @@ class _ExamPageState extends State<ExamPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: PageTitleBar(
-            title: 'Hoàn Thành Bài Kiểm Tra',
+            title: appText(context, 'Hoàn Thành Bài Kiểm Tra'),
             icon: Icons.emoji_events_rounded,
             accent: accent,
           ),
@@ -495,23 +511,28 @@ class _ExamPageState extends State<ExamPage> {
               Panel(
                 child: Column(
                   children: [
-                    _ResultRow(label: 'Tổng số từ', value: '$total'),
+                    _ResultRow(
+                        label: appText(context, 'Tổng số từ'), value: '$total'),
                     const SizedBox(height: 12),
                     _ResultRow(
-                        label: 'Trả lời đúng', value: '$_correctAnswers'),
+                        label: appText(context, 'Trả lời đúng'),
+                        value: '$_correctAnswers'),
                     const SizedBox(height: 12),
-                    _ResultRow(label: 'Trả lời sai', value: '$incorrect'),
+                    _ResultRow(
+                        label: appText(context, 'Trả lời sai'),
+                        value: '$incorrect'),
                   ],
                 ),
               ),
               const SizedBox(height: 20),
               FilledButton(
                 onPressed: _returnToSetup,
-                child: const Text('Tạo bài kiểm tra khác'),
+                child: Text(appText(context, 'Tạo bài kiểm tra khác')),
               ),
               TextButton(
                 onPressed: () => Navigator.of(context).maybePop(),
-                child: Text('Quay lại', style: TextStyle(color: palette.muted)),
+                child: Text(appText(context, 'Quay lại'),
+                    style: TextStyle(color: palette.muted)),
               ),
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_text.dart';
 import '../models/avatar_catalog.dart';
 import '../models/public_stats.dart';
 import '../state/app_state.dart';
@@ -61,7 +62,7 @@ class _StatsPrivacyDialogState extends State<StatsPrivacyDialog> {
     final isBlockedList = _mode == StatsPrivacyMode.open;
 
     return AlertDialog(
-      title: const Text('Quyền riêng tư thống kê'),
+      title: Text(appText(context, 'Quyền riêng tư thống kê')),
       content: SizedBox(
         width: 420,
         child: SingleChildScrollView(
@@ -73,34 +74,39 @@ class _StatsPrivacyDialogState extends State<StatsPrivacyDialog> {
                 showSelectedIcon: false,
                 segments: [
                   for (final mode in StatsPrivacyMode.values)
-                    ButtonSegment(value: mode, label: Text(mode.label)),
+                    ButtonSegment(
+                      value: mode,
+                      label: Text(appText(context, mode.label)),
+                    ),
                 ],
                 selected: {_mode},
                 onSelectionChanged: (selection) =>
                     setState(() => _mode = selection.first),
               ),
               const SizedBox(height: 8),
-              Text(_mode.description),
+              Text(appText(context, _mode.description)),
               if (_mode != StatsPrivacyMode.cloaked) ...[
                 const SizedBox(height: 8),
                 Text(
-                  isBlockedList ? 'Blacklist' : 'Whitelist',
+                  appText(context, isBlockedList ? 'Blacklist' : 'Whitelist'),
                   style: const TextStyle(fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   isBlockedList
-                      ? 'Một tên tài khoản trên mỗi dòng. Những người này không thể xem thống kê của bạn.'
-                      : 'Một tên tài khoản trên mỗi dòng. Chỉ những người này có thể xem thống kê của bạn.',
+                      ? appText(context,
+                          'Một tên tài khoản trên mỗi dòng. Những người này không thể xem thống kê của bạn.')
+                      : appText(context,
+                          'Một tên tài khoản trên mỗi dòng. Chỉ những người này có thể xem thống kê của bạn.'),
                 ),
                 const SizedBox(height: 8),
                 TextField(
                   controller: listController,
                   minLines: 3,
                   maxLines: 5,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'Tên tài khoản',
+                    hintText: appText(context, 'Tên tài khoản'),
                   ),
                 ),
               ],
@@ -111,11 +117,11 @@ class _StatsPrivacyDialogState extends State<StatsPrivacyDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Hủy'),
+          child: Text(appText(context, 'Hủy')),
         ),
         FilledButton(
           onPressed: _save,
-          child: const Text('Lưu'),
+          child: Text(appText(context, 'Lưu')),
         ),
       ],
     );
@@ -131,7 +137,7 @@ class AvatarPickerDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final palette = Palette.ofContext(context);
     return AlertDialog(
-      title: const Text('Chọn ảnh đại diện'),
+      title: Text(appText(context, 'Chọn ảnh đại diện')),
       content: SizedBox(
         width: 320,
         child: GridView.builder(
@@ -180,7 +186,7 @@ class AvatarPickerDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Đóng'),
+          child: Text(appText(context, 'Đóng')),
         ),
       ],
     );
@@ -219,7 +225,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Đổi mật khẩu'),
+      title: Text(appText(context, 'Đổi mật khẩu')),
       content: Form(
         key: _formKey,
         child: AutofillGroup(
@@ -231,29 +237,30 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                   controller: _currentPasswordController,
                   obscureText: true,
                   autofillHints: const [AutofillHints.password],
-                  decoration:
-                      const InputDecoration(labelText: 'Mật khẩu hiện tại'),
+                  decoration: InputDecoration(
+                      labelText: appText(context, 'Mật khẩu hiện tại')),
                   validator: (value) => value == null || value.isEmpty
-                      ? 'Nhập mật khẩu hiện tại'
+                      ? appText(context, 'Nhập mật khẩu hiện tại')
                       : null,
                 ),
                 TextFormField(
                   controller: _newPasswordController,
                   obscureText: true,
                   autofillHints: const [AutofillHints.newPassword],
-                  decoration: const InputDecoration(labelText: 'Mật khẩu mới'),
+                  decoration: InputDecoration(
+                      labelText: appText(context, 'Mật khẩu mới')),
                   validator: (value) => value == null || value.length < 6
-                      ? 'Mật khẩu phải có ít nhất 6 ký tự'
+                      ? appText(context, 'Mật khẩu phải có ít nhất 6 ký tự')
                       : null,
                 ),
                 TextFormField(
                   controller: _confirmPasswordController,
                   obscureText: true,
                   autofillHints: const [AutofillHints.newPassword],
-                  decoration:
-                      const InputDecoration(labelText: 'Xác nhận mật khẩu mới'),
+                  decoration: InputDecoration(
+                      labelText: appText(context, 'Xác nhận mật khẩu mới')),
                   validator: (value) => value != _newPasswordController.text
-                      ? 'Mật khẩu xác nhận không khớp'
+                      ? appText(context, 'Mật khẩu xác nhận không khớp')
                       : null,
                 ),
               ],
@@ -264,11 +271,11 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Hủy'),
+          child: Text(appText(context, 'Hủy')),
         ),
         FilledButton(
           onPressed: _submit,
-          child: const Text('Cập nhật'),
+          child: Text(appText(context, 'Cập nhật')),
         ),
       ],
     );
@@ -310,7 +317,7 @@ class _LinkAccountDialogState extends State<LinkAccountDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Tạo tài khoản email'),
+      title: Text(appText(context, 'Tạo tài khoản email')),
       content: Form(
         key: _formKey,
         child: AutofillGroup(
@@ -323,37 +330,40 @@ class _LinkAccountDialogState extends State<LinkAccountDialog> {
                   autofocus: true,
                   maxLength: 60,
                   textCapitalization: TextCapitalization.words,
-                  decoration: const InputDecoration(labelText: 'Tên'),
+                  decoration:
+                      InputDecoration(labelText: appText(context, 'Tên')),
                   validator: (value) => value == null || value.trim().isEmpty
-                      ? 'Nhập tên của bạn'
+                      ? appText(context, 'Nhập tên của bạn')
                       : null,
                 ),
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   autofillHints: const [AutofillHints.email],
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  decoration:
+                      InputDecoration(labelText: appText(context, 'Email')),
                   validator: (value) => value == null || !value.contains('@')
-                      ? 'Nhập email hợp lệ'
+                      ? appText(context, 'Nhập email hợp lệ')
                       : null,
                 ),
                 TextFormField(
                   controller: _passwordController,
                   obscureText: true,
                   autofillHints: const [AutofillHints.newPassword],
-                  decoration: const InputDecoration(labelText: 'Mật khẩu'),
+                  decoration:
+                      InputDecoration(labelText: appText(context, 'Mật khẩu')),
                   validator: (value) => value == null || value.length < 6
-                      ? 'Tối thiểu 6 ký tự'
+                      ? appText(context, 'Tối thiểu 6 ký tự')
                       : null,
                 ),
                 TextFormField(
                   controller: _confirmPasswordController,
                   obscureText: true,
                   autofillHints: const [AutofillHints.newPassword],
-                  decoration:
-                      const InputDecoration(labelText: 'Xác nhận mật khẩu'),
+                  decoration: InputDecoration(
+                      labelText: appText(context, 'Xác nhận mật khẩu')),
                   validator: (value) => value != _passwordController.text
-                      ? 'Mật khẩu xác nhận không khớp'
+                      ? appText(context, 'Mật khẩu xác nhận không khớp')
                       : null,
                 ),
               ],
@@ -364,11 +374,11 @@ class _LinkAccountDialogState extends State<LinkAccountDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Hủy'),
+          child: Text(appText(context, 'Hủy')),
         ),
         FilledButton(
           onPressed: _submit,
-          child: const Text('Liên kết'),
+          child: Text(appText(context, 'Liên kết')),
         ),
       ],
     );
@@ -407,11 +417,12 @@ class _UnlinkAccountDialogState extends State<UnlinkAccountDialog> {
     final auth = AppScope.of(context).auth;
     final displayName = auth.currentDisplayName?.trim();
     final expectedName = displayName == null || displayName.isEmpty
-        ? 'Chưa đặt tên'
+        ? appText(context, 'Chưa đặt tên')
         : displayName;
 
     return AlertDialog(
-      title: const Text('Bạn có muốn hủy liên kết với tài khoản này?'),
+      title:
+          Text(appText(context, 'Bạn có muốn hủy liên kết với tài khoản này?')),
       content: Form(
         key: _formKey,
         child: AutofillGroup(
@@ -420,30 +431,35 @@ class _UnlinkAccountDialogState extends State<UnlinkAccountDialog> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Tiến trình học vẫn sẽ được lưu trên máy tính của bạn',
+                Text(
+                  appText(context,
+                      'Tiến trình học vẫn sẽ được lưu trên máy tính của bạn'),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Tài khoản, tiến độ trên Firebase và tên đã đăng ký trên đám mây sẽ bị xóa.',
+                Text(
+                  appText(context,
+                      'Tài khoản, tiến độ trên Firebase và tên đã đăng ký trên đám mây sẽ bị xóa.'),
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _nameController,
                   autofocus: true,
                   textCapitalization: TextCapitalization.words,
-                  decoration: const InputDecoration(
-                      labelText: 'Nhập lại tên tài khoản'),
-                  validator: (value) =>
-                      value?.trim() != expectedName ? 'Tên không khớp' : null,
+                  decoration: InputDecoration(
+                      labelText: appText(context, 'Nhập lại tên tài khoản')),
+                  validator: (value) => value?.trim() != expectedName
+                      ? appText(context, 'Tên không khớp')
+                      : null,
                 ),
                 TextFormField(
                   controller: _passwordController,
                   obscureText: true,
                   autofillHints: const [AutofillHints.password],
-                  decoration: const InputDecoration(labelText: 'Nhập mật khẩu'),
-                  validator: (value) =>
-                      value == null || value.isEmpty ? 'Nhập mật khẩu' : null,
+                  decoration: InputDecoration(
+                      labelText: appText(context, 'Nhập mật khẩu')),
+                  validator: (value) => value == null || value.isEmpty
+                      ? appText(context, 'Nhập mật khẩu')
+                      : null,
                 ),
               ],
             ),
@@ -453,11 +469,11 @@ class _UnlinkAccountDialogState extends State<UnlinkAccountDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Hủy'),
+          child: Text(appText(context, 'Hủy')),
         ),
         FilledButton(
           onPressed: _submit,
-          child: const Text('Hủy liên kết'),
+          child: Text(appText(context, 'Hủy liên kết')),
         ),
       ],
     );

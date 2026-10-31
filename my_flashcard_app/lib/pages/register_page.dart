@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_text.dart';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/panel.dart';
@@ -45,7 +46,11 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
-      if (mounted) setState(() => _error = widget.auth.friendlyError(e));
+      if (mounted) {
+        setState(
+          () => _error = appText(context, widget.auth.friendlyError(e)),
+        );
+      }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -60,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
       appBar: AppBar(
         backgroundColor: p.bg,
         title: PageTitleBar(
-          title: 'Tạo Tài Khoản',
+          title: appText(context, 'Tạo Tài Khoản'),
           icon: Icons.person_add_alt_1_rounded,
           accent: p.muted,
         ),
@@ -75,7 +80,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Tạo tài khoản để lưu tiến độ học lâu dài',
+                    appText(
+                        context, 'Tạo tài khoản để lưu tiến độ học lâu dài'),
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, color: p.muted),
                   ),
@@ -90,42 +96,45 @@ class _RegisterPageState extends State<RegisterPage> {
                             controller: _nameCtrl,
                             maxLength: 60,
                             textCapitalization: TextCapitalization.words,
-                            decoration: const InputDecoration(labelText: 'Tên'),
+                            decoration: InputDecoration(
+                                labelText: appText(context, 'Tên')),
                             validator: (value) =>
                                 (value == null || value.trim().isEmpty)
-                                    ? 'Nhập tên của bạn'
+                                    ? appText(context, 'Nhập tên của bạn')
                                     : null,
                           ),
                           const SizedBox(height: 12),
                           TextFormField(
                             controller: _emailCtrl,
                             keyboardType: TextInputType.emailAddress,
-                            decoration:
-                                const InputDecoration(labelText: 'Email'),
+                            decoration: InputDecoration(
+                                labelText: appText(context, 'Email')),
                             validator: (value) =>
                                 (value == null || !value.contains('@'))
-                                    ? 'Nhập email hợp lệ'
+                                    ? appText(context, 'Nhập email hợp lệ')
                                     : null,
                           ),
                           const SizedBox(height: 12),
                           TextFormField(
                             controller: _passwordCtrl,
                             obscureText: true,
-                            decoration:
-                                const InputDecoration(labelText: 'Mật khẩu'),
+                            decoration: InputDecoration(
+                                labelText: appText(context, 'Mật khẩu')),
                             validator: (value) =>
                                 (value == null || value.length < 6)
-                                    ? 'Tối thiểu 6 ký tự'
+                                    ? appText(context, 'Tối thiểu 6 ký tự')
                                     : null,
                           ),
                           const SizedBox(height: 12),
                           TextFormField(
                             controller: _confirmPasswordCtrl,
                             obscureText: true,
-                            decoration: const InputDecoration(
-                                labelText: 'Xác nhận mật khẩu'),
+                            decoration: InputDecoration(
+                                labelText:
+                                    appText(context, 'Xác nhận mật khẩu')),
                             validator: (value) => value != _passwordCtrl.text
-                                ? 'Mật khẩu xác nhận không khớp'
+                                ? appText(
+                                    context, 'Mật khẩu xác nhận không khớp')
                                 : null,
                           ),
                           if (_error != null) ...[
@@ -148,7 +157,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       child: CircularProgressIndicator(
                                           strokeWidth: 2),
                                     )
-                                  : const Text('Đăng ký'),
+                                  : Text(appText(context, 'Đăng ký')),
                             ),
                           ),
                         ],

@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
 import 'pages/auth_gate.dart';
+import 'models/app_language.dart';
 import 'services/vocab_repository.dart';
 import 'state/app_state.dart';
 import 'theme/app_theme.dart';
@@ -30,6 +32,19 @@ class FlashcardApp extends StatelessWidget {
     return MaterialApp(
       title: 'Thư viện từ vựng thế giới',
       debugShowCheckedModeBanner: false,
+      locale: Locale(state.appLanguage.code),
+      supportedLocales: const [
+        Locale('vi'),
+        Locale('en'),
+        Locale('ja'),
+        Locale('ko'),
+        Locale('zh'),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       themeMode: state.themeMode,
       theme: AppTheme.build(Brightness.light, state.lang),
       darkTheme: AppTheme.build(Brightness.dark, state.lang),

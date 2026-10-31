@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.3.2
   firebase_core: ^3.6.0
@@ -28,3 +30,4 @@ flutter:
     - assets/vocab/decks/ko/
     - assets/vocab/decks/zh/
     - assets/avatars/
+    - assets/images/flashcard_logo.png

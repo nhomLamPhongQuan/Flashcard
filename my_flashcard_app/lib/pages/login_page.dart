@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_text.dart';
 import '../services/auth_service.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/panel.dart';
-import '../widgets/page_title_bar.dart';
 import '../widgets/slide_page_route.dart';
 import 'register_page.dart';
 
@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
       await action();
     } catch (e) {
       if (mounted) {
-        setState(() => _error = widget.auth.friendlyError(e));
+        setState(() => _error = appText(context, widget.auth.friendlyError(e)));
       }
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -105,149 +105,146 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         backgroundColor: p.bg,
         body: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: PageTitleBar(
-                  title: 'Từ Vựng Thế Giới',
-                  icon: Icons.style_rounded,
-                  accent: p.muted,
-                ),
-              ),
-              Expanded(
-                child: Center(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(24),
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 420),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const SizedBox(height: 4),
-                          Text(
-                            'Đăng nhập để đồng bộ tiến độ học trên mọi thiết bị',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 14, color: p.muted),
-                          ),
-                          const SizedBox(height: 28),
-                          Panel(
-                            child: Form(
-                              key: _formKey,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  TextFormField(
-                                    controller: _emailCtrl,
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: const InputDecoration(
-                                        labelText: 'Email'),
-                                    validator: (v) =>
-                                        (v == null || !v.contains('@'))
-                                            ? 'Nhập email hợp lệ'
-                                            : null,
-                                  ),
-                                  const SizedBox(height: 12),
-                                  TextFormField(
-                                    controller: _passwordCtrl,
-                                    obscureText: true,
-                                    decoration: const InputDecoration(
-                                        labelText: 'Mật khẩu'),
-                                    validator: (v) =>
-                                        (v == null || v.length < 6)
-                                            ? 'Tối thiểu 6 ký tự'
-                                            : null,
-                                  ),
-                                  if (_error != null) ...[
-                                    const SizedBox(height: 12),
-                                    Text(
-                                      _error!,
-                                      style: const TextStyle(
-                                          color: Color(0xFFD64550),
-                                          fontSize: 13),
-                                    ),
-                                  ],
-                                  const SizedBox(height: 18),
-                                  SizedBox(
-                                    height: 50,
-                                    child: FilledButton(
-                                      onPressed: _loading ? null : _submit,
-                                      child: _loading
-                                          ? const SizedBox(
-                                              width: 20,
-                                              height: 20,
-                                              child: CircularProgressIndicator(
-                                                  strokeWidth: 2),
-                                            )
-                                          : const Text('Đăng nhập'),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          TextButton(
-                            onPressed: _loading
-                                ? null
-                                : () => Navigator.of(context).push(
-                                      slidePageRoute<void>(
-                                        builder: (_) =>
-                                            RegisterPage(auth: widget.auth),
-                                      ),
-                                    ),
-                            child: const Text('Chưa có tài khoản? Đăng ký'),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Expanded(child: Divider(color: p.line)),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                child: Text('hoặc',
-                                    style: TextStyle(
-                                        fontSize: 12, color: p.muted)),
-                              ),
-                              Expanded(child: Divider(color: p.line)),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          if (state.hasSavedGuest) ...[
-                            OutlinedButton.icon(
-                              onPressed: _loading
-                                  ? null
-                                  : () =>
-                                      _runAuthAction(state.continueLocalGuest),
-                              icon: const Icon(Icons.person_outline_rounded),
-                              label: Text(
-                                'Tiếp tục với ${state.savedGuestName?.isNotEmpty == true ? state.savedGuestName : 'tài khoản khách đã lưu'}',
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                          ],
-                          OutlinedButton(
-                            onPressed: _loading ? null : _continueAsGuest,
-                            child: Text(
-                              state.hasSavedGuest
-                                  ? 'Tạo tài khoản khách mới'
-                                  : 'Dùng thử không cần tài khoản',
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Khách chỉ lưu dữ liệu trên thiết bị. Tạo hoặc liên kết tài khoản email để đồng bộ tiến độ.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 12, color: p.muted, height: 1.4),
-                          ),
-                        ],
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 420),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Center(
+                      child: Image.asset(
+                        'assets/images/flashcard_logo.png',
+                        width: 280,
+                        height: 220,
+                        fit: BoxFit.contain,
+                        semanticLabel: appText(context, 'Từ Vựng Thế Giới'),
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 4),
+                    Text(
+                      appText(context,
+                          'Đăng nhập để đồng bộ tiến độ học trên mọi thiết bị'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: p.muted),
+                    ),
+                    const SizedBox(height: 28),
+                    Panel(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextFormField(
+                              controller: _emailCtrl,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                  labelText: appText(context, 'Email')),
+                              validator: (v) => (v == null || !v.contains('@'))
+                                  ? appText(context, 'Nhập email hợp lệ')
+                                  : null,
+                            ),
+                            const SizedBox(height: 12),
+                            TextFormField(
+                              controller: _passwordCtrl,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  labelText: appText(context, 'Mật khẩu')),
+                              validator: (v) => (v == null || v.length < 6)
+                                  ? appText(context, 'Tối thiểu 6 ký tự')
+                                  : null,
+                            ),
+                            if (_error != null) ...[
+                              const SizedBox(height: 12),
+                              Text(
+                                _error!,
+                                style: const TextStyle(
+                                    color: Color(0xFFD64550), fontSize: 13),
+                              ),
+                            ],
+                            const SizedBox(height: 18),
+                            SizedBox(
+                              height: 50,
+                              child: FilledButton(
+                                onPressed: _loading ? null : _submit,
+                                child: _loading
+                                    ? const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                            strokeWidth: 2),
+                                      )
+                                    : Text(appText(context, 'Đăng nhập')),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed: _loading
+                          ? null
+                          : () => Navigator.of(context).push(
+                                slidePageRoute<void>(
+                                  builder: (_) =>
+                                      RegisterPage(auth: widget.auth),
+                                ),
+                              ),
+                      child:
+                          Text(appText(context, 'Chưa có tài khoản? Đăng ký')),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(child: Divider(color: p.line)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text(appText(context, 'hoặc'),
+                              style: TextStyle(fontSize: 12, color: p.muted)),
+                        ),
+                        Expanded(child: Divider(color: p.line)),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    if (state.hasSavedGuest) ...[
+                      OutlinedButton.icon(
+                        onPressed: _loading
+                            ? null
+                            : () => _runAuthAction(state.continueLocalGuest),
+                        icon: const Icon(Icons.person_outline_rounded),
+                        label: Text(
+                          appText(context, 'Tiếp tục với {name}').replaceAll(
+                            '{name}',
+                            state.savedGuestName?.isNotEmpty == true
+                                ? state.savedGuestName!
+                                : appText(context, 'Tài khoản khách đã lưu'),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                    OutlinedButton(
+                      onPressed: _loading ? null : _continueAsGuest,
+                      child: Text(
+                        state.hasSavedGuest
+                            ? appText(context, 'Tạo tài khoản khách mới')
+                            : appText(context, 'Dùng thử không cần tài khoản'),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      appText(context,
+                          'Khách chỉ lưu dữ liệu trên thiết bị. Tạo hoặc liên kết tài khoản email để đồng bộ tiến độ.'),
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 12, color: p.muted, height: 1.4),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -275,7 +272,7 @@ class _GuestNameDialogState extends State<_GuestNameDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Dùng thử với tư cách khách'),
+      title: Text(appText(context, 'Dùng thử với tư cách khách')),
       content: Form(
         key: _formKey,
         child: TextFormField(
@@ -283,9 +280,10 @@ class _GuestNameDialogState extends State<_GuestNameDialog> {
           autofocus: true,
           maxLength: 60,
           textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(labelText: 'Tên của bạn'),
+          decoration:
+              InputDecoration(labelText: appText(context, 'Tên của bạn')),
           validator: (value) => value == null || value.trim().isEmpty
-              ? 'Nhập tên để tiếp tục'
+              ? appText(context, 'Nhập tên để tiếp tục')
               : null,
           onFieldSubmitted: (_) => _continue(),
         ),
@@ -293,11 +291,11 @@ class _GuestNameDialogState extends State<_GuestNameDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Hủy'),
+          child: Text(appText(context, 'Hủy')),
         ),
         FilledButton(
           onPressed: _continue,
-          child: const Text('Tiếp tục'),
+          child: Text(appText(context, 'Tiếp tục')),
         ),
       ],
     );
@@ -318,25 +316,32 @@ class _ExistingGuestDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final name = AppScope.of(context).savedGuestName;
     return AlertDialog(
-      title: const Text('Đã có tài khoản khách trên thiết bị'),
+      title: Text(appText(context, 'Đã có tài khoản khách trên thiết bị')),
       content: Text(
-        'Bạn muốn tiếp tục với ${name?.isNotEmpty == true ? name : 'tài khoản khách hiện có'} '
-        'hay tạo tài khoản khách mới? Tạo mới sẽ thay thế toàn bộ tiến độ khách cũ.',
+        appText(
+          context,
+          'Bạn muốn tiếp tục với {name} hay tạo tài khoản khách mới? Tạo mới sẽ thay thế toàn bộ tiến độ khách cũ.',
+        ).replaceAll(
+          '{name}',
+          name?.isNotEmpty == true
+              ? name!
+              : appText(context, 'tài khoản khách hiện có'),
+        ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Hủy'),
+          child: Text(appText(context, 'Hủy')),
         ),
         OutlinedButton(
           onPressed: () =>
               Navigator.of(context).pop(_GuestChoice.replaceExisting),
-          child: const Text('Tạo mới'),
+          child: Text(appText(context, 'Tạo mới')),
         ),
         FilledButton(
           onPressed: () =>
               Navigator.of(context).pop(_GuestChoice.continueExisting),
-          child: const Text('Tiếp tục'),
+          child: Text(appText(context, 'Tiếp tục')),
         ),
       ],
     );

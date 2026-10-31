@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../l10n/app_text.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import '../models/public_stats.dart';
@@ -36,7 +38,7 @@ class _StatsTabState extends State<StatsTab> {
     if (name.isEmpty) {
       setState(() {
         _viewedStats = null;
-        _lookupError = 'Nhập tên tài khoản để tìm.';
+        _lookupError = appText(context, 'Nhập tên tài khoản để tìm.');
       });
       return;
     }
@@ -52,15 +54,18 @@ class _StatsTabState extends State<StatsTab> {
       setState(() {
         _viewedStats = result;
         if (result != null) _searchVisible = false;
-        if (result == null) _lookupError = 'Không tìm thấy thống kê công khai.';
+        if (result == null) {
+          _lookupError = appText(context, 'Không tìm thấy thống kê công khai.');
+        }
       });
     } catch (error) {
       if (!mounted) return;
       setState(() {
-        _lookupError =
-            error is FirebaseException && error.code == 'permission-denied'
-                ? 'Không tìm thấy thống kê hoặc bạn không có quyền xem.'
-                : state.auth.friendlyError(error);
+        _lookupError = error is FirebaseException &&
+                error.code == 'permission-denied'
+            ? appText(
+                context, 'Không tìm thấy thống kê hoặc bạn không có quyền xem.')
+            : appText(context, state.auth.friendlyError(error));
       });
     } finally {
       if (mounted) setState(() => _lookingUp = false);
@@ -86,7 +91,7 @@ class _StatsTabState extends State<StatsTab> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: PageTitleBar(
-                title: 'Tiến Độ',
+                title: appText(context, 'Tiến Độ'),
                 icon: Icons.insights_rounded,
                 accent: accent,
               ),
@@ -152,8 +157,9 @@ class _StatsTabState extends State<StatsTab> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          const Text(
-                                            'Hành trình học tập',
+                                          Text(
+                                            appText(
+                                                context, 'Hành trình học tập'),
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w700,
@@ -161,7 +167,12 @@ class _StatsTabState extends State<StatsTab> {
                                           ),
                                           const SizedBox(height: 4),
                                           Text(
-                                            '$totalMastered trong ${allWords.length} từ đã thành thạo',
+                                            appText(context,
+                                                    '{mastered} trong {total} từ đã thành thạo')
+                                                .replaceAll('{mastered}',
+                                                    '$totalMastered')
+                                                .replaceAll('{total}',
+                                                    '${allWords.length}'),
                                             style: TextStyle(
                                               color:
                                                   Colors.white.withAlpha(220),
@@ -181,7 +192,8 @@ class _StatsTabState extends State<StatsTab> {
                                       child: _Metric(
                                         icon: Icons.verified_rounded,
                                         value: '$totalMastered',
-                                        label: 'Đã thành thạo',
+                                        label:
+                                            appText(context, 'Đã thành thạo'),
                                         color: Colors.white,
                                         onAccent: true,
                                       ),
@@ -191,7 +203,8 @@ class _StatsTabState extends State<StatsTab> {
                                       child: _Metric(
                                         icon: Icons.alarm_rounded,
                                         value: '$totalDue',
-                                        label: 'Cần ôn hôm nay',
+                                        label:
+                                            appText(context, 'Cần ôn hôm nay'),
                                         color: Colors.white,
                                         onAccent: true,
                                       ),
@@ -201,7 +214,7 @@ class _StatsTabState extends State<StatsTab> {
                                       child: _Metric(
                                         icon: Icons.menu_book_rounded,
                                         value: '${allWords.length}',
-                                        label: 'Tổng số từ',
+                                        label: appText(context, 'Tổng số từ'),
                                         color: Colors.white,
                                         onAccent: true,
                                       ),
@@ -220,8 +233,8 @@ class _StatsTabState extends State<StatsTab> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Kết quả kiểm tra',
+                        Text(
+                          appText(context, 'Kết quả kiểm tra'),
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w700),
                         ),
@@ -232,7 +245,7 @@ class _StatsTabState extends State<StatsTab> {
                               child: _Metric(
                                 icon: Icons.assignment_turned_in_outlined,
                                 value: '${state.examCount}',
-                                label: 'Số bài kiểm tra',
+                                label: appText(context, 'Số bài kiểm tra'),
                                 color: accent,
                               ),
                             ),
@@ -242,7 +255,7 @@ class _StatsTabState extends State<StatsTab> {
                                 icon: Icons.format_list_numbered_rounded,
                                 value:
                                     state.averageExamWords.toStringAsFixed(1),
-                                label: 'Từ trung bình / bài',
+                                label: appText(context, 'Từ trung bình / bài'),
                                 color: accent,
                               ),
                             ),
@@ -252,7 +265,8 @@ class _StatsTabState extends State<StatsTab> {
                                 icon: Icons.check_circle_outline_rounded,
                                 value:
                                     state.averageExamCorrect.toStringAsFixed(1),
-                                label: 'Đúng trung bình / bài',
+                                label:
+                                    appText(context, 'Đúng trung bình / bài'),
                                 color: accent,
                               ),
                             ),
@@ -266,8 +280,8 @@ class _StatsTabState extends State<StatsTab> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Theo bộ thẻ',
+                        Text(
+                          appText(context, 'Theo bộ thẻ'),
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w700),
                         ),

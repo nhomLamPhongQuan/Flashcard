@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_text.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/lang_switcher.dart';
@@ -55,7 +56,7 @@ class _LibraryTabState extends State<LibraryTab> {
       appBar: AppBar(
         titleSpacing: 16,
         title: PageTitleBar(
-          title: 'Kho Từ',
+          title: appText(context, 'Kho Từ'),
           icon: Icons.menu_book_rounded,
           accent: accent,
         ),
@@ -73,22 +74,22 @@ class _LibraryTabState extends State<LibraryTab> {
                     children: [
                       Expanded(
                         child: Text(
-                          '${all.length} từ trong ${state.decksOfLang.length} bộ thẻ',
+                          '${all.length} ${appText(context, 'từ')} · ${state.decksOfLang.length} ${appText(context, 'bộ thẻ')}',
                           style: TextStyle(fontSize: 14, color: p.muted),
                         ),
                       ),
                       SegmentedButton<bool>(
                         showSelectedIcon: false,
-                        segments: const [
+                        segments: [
                           ButtonSegment(
                             value: false,
                             icon: Icon(Icons.view_agenda_outlined),
-                            tooltip: 'Dạng danh sách',
+                            tooltip: appText(context, 'Dạng danh sách'),
                           ),
                           ButtonSegment(
                             value: true,
                             icon: Icon(Icons.grid_view_rounded),
-                            tooltip: 'Dạng ô',
+                            tooltip: appText(context, 'Dạng ô'),
                           ),
                         ],
                         selected: {_gridView},
@@ -103,7 +104,8 @@ class _LibraryTabState extends State<LibraryTab> {
                   TextField(
                     onChanged: (value) => setState(() => _query = value),
                     decoration: InputDecoration(
-                      hintText: 'Tìm theo từ, cách đọc hoặc nghĩa',
+                      hintText:
+                          appText(context, 'Tìm theo từ, cách đọc hoặc nghĩa'),
                       prefixIcon: const Icon(Icons.search_rounded),
                       filled: true,
                       fillColor: p.surface,
@@ -123,7 +125,9 @@ class _LibraryTabState extends State<LibraryTab> {
                       child: Padding(
                         padding: const EdgeInsets.all(32),
                         child: Text(
-                          'Không có từ nào khớp với "$_query".',
+                          appText(context,
+                                  'Không có từ nào khớp với "{query}".')
+                              .replaceAll('{query}', _query),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 15, height: 1.4, color: p.muted),

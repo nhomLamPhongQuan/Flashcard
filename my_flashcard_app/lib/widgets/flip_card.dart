@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../l10n/app_text.dart';
 import '../models/vocab.dart';
 import '../theme/app_theme.dart';
 import 'word_widgets.dart';
@@ -136,7 +137,7 @@ class _Face extends StatelessWidget {
               bottom: 18,
               child: Center(
                 child: Text(
-                  'Chạm để lật thẻ',
+                  appText(context, 'Chạm để lật thẻ'),
                   style: TextStyle(fontSize: 13, color: p.muted),
                 ),
               ),

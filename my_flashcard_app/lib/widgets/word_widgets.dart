@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_text.dart';
 import '../models/srs.dart';
 import '../models/vocab.dart';
 import '../state/app_state.dart';
@@ -79,7 +80,10 @@ class StatusPill extends StatelessWidget {
     final color = mastered
         ? toneFor(context, const Color(0xFF2A9D6A))
         : (box > 0 ? toneFor(context, const Color(0xFFDB9438)) : p.muted);
-    final label = mastered ? 'Đã thành thạo' : (box > 0 ? 'Hộp $box' : 'Mới');
+    final label = appText(
+      context,
+      mastered ? 'Đã thành thạo' : (box > 0 ? 'Hộp {box}' : 'Mới'),
+    ).replaceAll('{box}', '$box');
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -274,15 +278,20 @@ class _WordSheet extends StatelessWidget {
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Không thể lưu tiến độ học: $error'),
+                        content: Text(
+                          appText(context, 'Không thể lưu tiến độ học: {error}')
+                              .replaceAll('{error}', '$error'),
+                        ),
                       ),
                     );
                   }
                 },
                 icon:
                     Icon(mastered ? Icons.replay_rounded : Icons.check_rounded),
-                label: Text(
-                    mastered ? 'Học lại từ đầu' : 'Đánh dấu đã thành thạo'),
+                label: Text(appText(
+                  context,
+                  mastered ? 'Học lại từ đầu' : 'Đánh dấu đã thành thạo',
+                )),
               ),
             ),
           ],

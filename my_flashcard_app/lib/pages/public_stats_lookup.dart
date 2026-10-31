@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_text.dart';
 import '../models/avatar_catalog.dart';
 import '../models/public_stats.dart';
 import '../state/app_state.dart';
@@ -38,9 +39,9 @@ class PublicStatsLookup extends StatelessWidget {
     final searchActive = searchVisible || profile != null;
     final Widget lookupContent;
     if (searchVisible && canLookup) {
-      lookupContent = _buildSearchPanel();
+      lookupContent = _buildSearchPanel(context);
     } else if (profile != null) {
-      lookupContent = _buildProfilePanel();
+      lookupContent = _buildProfilePanel(context);
     } else {
       lookupContent = const SizedBox.shrink();
     }
@@ -55,14 +56,15 @@ class PublicStatsLookup extends StatelessWidget {
             icon: Icon(
               searchActive ? Icons.close_rounded : Icons.search_rounded,
             ),
-            label: Text(searchActive ? 'Close' : 'Search'),
+            label: Text(appText(context, searchActive ? 'Close' : 'Search')),
           ),
         ),
         if (!canLookup)
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(
-              'Tính năng này chỉ dành cho tài khoản đã liên kết email.',
+              appText(context,
+                  'Tính năng này chỉ dành cho tài khoản đã liên kết email.'),
               style: TextStyle(color: palette.muted),
             ),
           ),
@@ -93,7 +95,7 @@ class PublicStatsLookup extends StatelessWidget {
     );
   }
 
-  Widget _buildSearchPanel() {
+  Widget _buildSearchPanel(BuildContext context) {
     return Panel(
       key: const ValueKey('public-stats-search'),
       child: Column(
@@ -104,8 +106,8 @@ class PublicStatsLookup extends StatelessWidget {
             enabled: !loading,
             textInputAction: TextInputAction.search,
             onSubmitted: (_) => onLookup(),
-            decoration: const InputDecoration(
-              labelText: 'Tên tài khoản',
+            decoration: InputDecoration(
+              labelText: appText(context, 'Tên tài khoản'),
               border: OutlineInputBorder(),
             ),
           ),
@@ -113,7 +115,7 @@ class PublicStatsLookup extends StatelessWidget {
           FilledButton.icon(
             onPressed: loading ? null : onLookup,
             icon: const Icon(Icons.search_rounded),
-            label: Text(loading ? 'Đang tìm...' : 'Search'),
+            label: Text(appText(context, loading ? 'Đang tìm...' : 'Search')),
           ),
           if (error != null) ...[
             const SizedBox(height: 8),
@@ -124,7 +126,7 @@ class PublicStatsLookup extends StatelessWidget {
     );
   }
 
-  Widget _buildProfilePanel() {
+  Widget _buildProfilePanel(BuildContext context) {
     final viewedProfile = profile!;
     return Panel(
       key: const ValueKey('public-stats-profile'),
@@ -147,8 +149,8 @@ class PublicStatsLookup extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          const Text(
-            'Theo bộ thẻ',
+          Text(
+            appText(context, 'Theo bộ thẻ'),
             style: TextStyle(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 8),
@@ -156,29 +158,29 @@ class PublicStatsLookup extends StatelessWidget {
             _PublicDeckProgress(deck: deck, palette: palette),
           if (viewedProfile.decks.isEmpty)
             Text(
-              'Chưa có tiến độ học để hiển thị.',
+              appText(context, 'Chưa có tiến độ học để hiển thị.'),
               style: TextStyle(color: palette.muted),
             ),
           const Divider(height: 24),
           _PublicMetric(
-            label: 'Đã thành thạo',
+            label: appText(context, 'Đã thành thạo'),
             value:
                 '${viewedProfile.masteredCount} / ${viewedProfile.totalWords}',
           ),
           _PublicMetric(
-            label: 'Cần ôn hôm nay',
+            label: appText(context, 'Cần ôn hôm nay'),
             value: '${viewedProfile.dueCount}',
           ),
           _PublicMetric(
-            label: 'Số bài kiểm tra',
+            label: appText(context, 'Số bài kiểm tra'),
             value: '${viewedProfile.examCount}',
           ),
           _PublicMetric(
-            label: 'Từ trung bình / bài',
+            label: appText(context, 'Từ trung bình / bài'),
             value: viewedProfile.averageExamWords.toStringAsFixed(1),
           ),
           _PublicMetric(
-            label: 'Đúng trung bình / bài',
+            label: appText(context, 'Đúng trung bình / bài'),
             value: viewedProfile.averageExamCorrect.toStringAsFixed(1),
           ),
           const SizedBox(height: 12),
@@ -187,7 +189,7 @@ class PublicStatsLookup extends StatelessWidget {
             child: OutlinedButton.icon(
               onPressed: onSearchAgain,
               icon: const Icon(Icons.search_rounded),
-              label: const Text('Search again'),
+              label: Text(appText(context, 'Search again')),
             ),
           ),
         ],

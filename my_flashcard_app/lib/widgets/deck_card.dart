@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_text.dart';
 import '../models/vocab.dart';
 import '../pages/deck_page.dart';
 import '../state/app_state.dart';
@@ -125,7 +126,9 @@ class DeckCard extends StatelessWidget {
                       Icon(Icons.check_circle_outline, size: 16, color: accent),
                       const SizedBox(width: 6),
                       Text(
-                        '$mastered/$total đã thành thạo',
+                        appText(context, '{mastered}/{total} đã thành thạo')
+                            .replaceAll('{mastered}', '$mastered')
+                            .replaceAll('{total}', '$total'),
                         style: TextStyle(fontSize: 13, color: p.muted),
                       ),
                       const Spacer(),

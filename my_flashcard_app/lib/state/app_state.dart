@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/srs.dart';
 import '../models/vocab.dart';
+import '../models/app_language.dart';
 import '../models/avatar_catalog.dart';
 import '../models/public_stats.dart';
 import '../services/auth_service.dart';
@@ -36,6 +37,7 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
   static const _linkedProgressKeyPrefix = 'srs_linked_progress_v1_';
   static const _themeKey = 'theme_mode_v1';
   static const _langKey = 'lang_v1';
+  static const _appLanguageKey = 'app_language_v1';
   static const _localGuestKey = 'local_guest_active_v1';
   static const _guestSignedOutKey = 'local_guest_signed_out_v1';
   static const _guestNameKey = 'local_guest_name_v1';
@@ -73,6 +75,7 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
   List<Deck> _decks = const [];
   final Map<String, WordProgress> _progress = {};
   Lang _lang = Lang.en;
+  AppLanguage _appLanguage = AppLanguage.vi;
   ThemeMode _themeMode = ThemeMode.system;
   bool _ready = false;
   bool _syncing = false;
@@ -89,6 +92,7 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
 
   List<Deck> get decks => _decks;
   Lang get lang => _lang;
+  AppLanguage get appLanguage => _appLanguage;
   ThemeMode get themeMode => _themeMode;
 
   /// true khi đã đọc xong kho từ + tiến độ local, sẵn sàng hiển thị.
@@ -881,6 +885,8 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     final savedLang = prefs.getString(_langKey);
     if (savedLang != null) _lang = langFromCode(savedLang);
 
+    _appLanguage = appLanguageFromCode(prefs.getString(_appLanguageKey));
+
     final savedTheme = prefs.getString(_themeKey);
     if (savedTheme != null) {
       _themeMode = ThemeMode.values.firstWhere(
@@ -1055,6 +1061,16 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     _lang = lang;
     notifyListeners();
     _prefs?.setString(_langKey, lang.code);
+  }
+
+  Future<void> setAppLanguage(AppLanguage language) async {
+    if (_appLanguage == language) return;
+    final prefs = _prefs;
+    if (prefs == null) throw StateError('AppState has not been initialized.');
+    final saved = await prefs.setString(_appLanguageKey, language.code);
+    if (!saved) throw StateError('Could not save app language.');
+    _appLanguage = language;
+    notifyListeners();
   }
 
   void setThemeMode(ThemeMode mode) {
