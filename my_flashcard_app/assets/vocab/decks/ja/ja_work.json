@@ -1,0 +1,139 @@
+{
+  "words": [
+    {
+      "t": "職場",
+      "r": "しょくば",
+      "ro": "shokuba",
+      "p": "n",
+      "m": "nơi làm việc",
+      "e": "職場まで電車で通っています。",
+      "v": "Tôi đi tàu điện đến nơi làm việc."
+    },
+    {
+      "t": "会議",
+      "r": "かいぎ",
+      "ro": "kaigi",
+      "p": "n",
+      "m": "cuộc họp",
+      "e": "午後三時から会議があります。",
+      "v": "Có cuộc họp từ ba giờ chiều."
+    },
+    {
+      "t": "資料",
+      "r": "しりょう",
+      "ro": "shiryō",
+      "p": "n",
+      "m": "tài liệu",
+      "e": "会議の資料を準備しました。",
+      "v": "Tôi đã chuẩn bị tài liệu cho cuộc họp."
+    },
+    {
+      "t": "報告",
+      "r": "ほうこく",
+      "ro": "hōkoku",
+      "p": "n, v(する)",
+      "m": "báo cáo",
+      "e": "結果を上司に報告します。",
+      "v": "Tôi sẽ báo cáo kết quả với cấp trên."
+    },
+    {
+      "t": "連絡",
+      "r": "れんらく",
+      "ro": "renraku",
+      "p": "n, v(する)",
+      "m": "liên lạc, thông báo",
+      "e": "予定が変わったら連絡してください。",
+      "v": "Nếu lịch trình thay đổi, hãy liên lạc nhé."
+    },
+    {
+      "t": "締め切り",
+      "r": "しめきり",
+      "ro": "shimekiri",
+      "p": "n",
+      "m": "hạn chót",
+      "e": "レポートの締め切りは金曜日です。",
+      "v": "Hạn nộp báo cáo là thứ Sáu."
+    },
+    {
+      "t": "残業",
+      "r": "ざんぎょう",
+      "ro": "zangyō",
+      "p": "n, v(する)",
+      "m": "làm thêm giờ",
+      "e": "今日は残業をしません。",
+      "v": "Hôm nay tôi không làm thêm giờ."
+    },
+    {
+      "t": "出張",
+      "r": "しゅっちょう",
+      "ro": "shutchō",
+      "p": "n, v(する)",
+      "m": "chuyến công tác",
+      "e": "来週、大阪へ出張します。",
+      "v": "Tuần sau tôi đi công tác ở Osaka."
+    },
+    {
+      "t": "同僚",
+      "r": "どうりょう",
+      "ro": "dōryō",
+      "p": "n",
+      "m": "đồng nghiệp",
+      "e": "同僚と昼ご飯を食べました。",
+      "v": "Tôi đã ăn trưa cùng đồng nghiệp."
+    },
+    {
+      "t": "上司",
+      "r": "じょうし",
+      "ro": "jōshi",
+      "p": "n",
+      "m": "cấp trên",
+      "e": "上司に相談してから決めます。",
+      "v": "Tôi sẽ trao đổi với cấp trên rồi mới quyết định."
+    },
+    {
+      "t": "受付",
+      "r": "うけつけ",
+      "ro": "uketsuke",
+      "p": "n",
+      "m": "quầy lễ tân, tiếp nhận",
+      "e": "受付で名前を伝えてください。",
+      "v": "Hãy cho biết tên ở quầy lễ tân."
+    },
+    {
+      "t": "休憩",
+      "r": "きゅうけい",
+      "ro": "kyūkei",
+      "p": "n, v(する)",
+      "m": "nghỉ giải lao",
+      "e": "昼休みに少し休憩します。",
+      "v": "Tôi nghỉ giải lao một chút vào giờ trưa."
+    },
+    {
+      "t": "提出する",
+      "r": "ていしゅつする",
+      "ro": "teishutsu suru",
+      "p": "v",
+      "m": "nộp (tài liệu, bài tập)",
+      "e": "書類を月曜日までに提出してください。",
+      "v": "Hãy nộp giấy tờ trước thứ Hai."
+    },
+    {
+      "t": "確認する",
+      "r": "かくにんする",
+      "ro": "kakunin suru",
+      "p": "v",
+      "m": "xác nhận, kiểm tra",
+      "e": "送る前に内容を確認します。",
+      "v": "Tôi sẽ kiểm tra nội dung trước khi gửi."
+    },
+    {
+      "t": "間に合う",
+      "r": "まにあう",
+      "ro": "maniau",
+      "p": "v",
+      "m": "kịp giờ, kịp hạn",
+      "e": "急げば会議に間に合います。",
+      "v": "Nếu nhanh lên thì sẽ kịp cuộc họp."
+    }
+  ]
+}

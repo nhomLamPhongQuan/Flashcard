@@ -1,0 +1,124 @@
+{
+  "words": [
+    {
+      "t": "米饭",
+      "r": "mǐ fàn",
+      "p": "n",
+      "m": "cơm",
+      "e": "我每天中午都吃米饭。",
+      "v": "Trưa nào tôi cũng ăn cơm."
+    },
+    {
+      "t": "饺子",
+      "r": "jiǎo zi",
+      "p": "n",
+      "m": "sủi cảo",
+      "e": "春节的时候，我们一家人一起包饺子。",
+      "v": "Đến Tết Nguyên đán, cả nhà tôi cùng nhau gói sủi cảo."
+    },
+    {
+      "t": "面条",
+      "r": "miàn tiáo",
+      "p": "n",
+      "m": "mì sợi",
+      "e": "这家店的面条很好吃。",
+      "v": "Mì sợi ở quán này rất ngon."
+    },
+    {
+      "t": "豆腐",
+      "r": "dòu fu",
+      "p": "n",
+      "m": "đậu phụ",
+      "e": "我喜欢吃豆腐。",
+      "v": "Tôi thích ăn đậu phụ."
+    },
+    {
+      "t": "鸡蛋",
+      "r": "jī dàn",
+      "p": "n",
+      "m": "trứng gà",
+      "e": "早饭我吃了一个鸡蛋。",
+      "v": "Bữa sáng tôi đã ăn một quả trứng."
+    },
+    {
+      "t": "蔬菜",
+      "r": "shū cài",
+      "p": "n",
+      "m": "rau",
+      "e": "多吃蔬菜对身体好。",
+      "v": "Ăn nhiều rau tốt cho sức khỏe."
+    },
+    {
+      "t": "水果",
+      "r": "shuǐ guǒ",
+      "p": "n",
+      "m": "trái cây",
+      "e": "饭后我常常吃水果。",
+      "v": "Sau bữa ăn tôi thường ăn trái cây."
+    },
+    {
+      "t": "酸",
+      "r": "suān",
+      "p": "adj",
+      "m": "chua",
+      "e": "这个橘子有一点儿酸。",
+      "v": "Quả quýt này hơi chua."
+    },
+    {
+      "t": "辣",
+      "r": "là",
+      "p": "adj",
+      "m": "cay",
+      "e": "我不太能吃辣。",
+      "v": "Tôi không ăn cay giỏi lắm."
+    },
+    {
+      "t": "咸",
+      "r": "xián",
+      "p": "adj",
+      "m": "mặn",
+      "e": "汤有点儿咸，可以加点儿水吗？",
+      "v": "Canh hơi mặn, có thể thêm chút nước không?"
+    },
+    {
+      "t": "甜",
+      "r": "tián",
+      "p": "adj",
+      "m": "ngọt",
+      "e": "这块蛋糕不太甜。",
+      "v": "Miếng bánh này không ngọt lắm."
+    },
+    {
+      "t": "炒",
+      "r": "chǎo",
+      "p": "v",
+      "m": "xào",
+      "e": "妈妈正在厨房炒菜。",
+      "v": "Mẹ đang xào rau trong bếp."
+    },
+    {
+      "t": "煮",
+      "r": "zhǔ",
+      "p": "v",
+      "m": "luộc, nấu",
+      "e": "我想煮一碗面条。",
+      "v": "Tôi muốn nấu một bát mì."
+    },
+    {
+      "t": "筷子",
+      "r": "kuài zi",
+      "p": "n",
+      "m": "đũa",
+      "e": "请给我一双筷子。",
+      "v": "Làm ơn cho tôi một đôi đũa."
+    },
+    {
+      "t": "味道",
+      "r": "wèi dào",
+      "p": "n",
+      "m": "mùi vị",
+      "e": "这道菜的味道真不错。",
+      "v": "Món này có mùi vị thật ngon."
+    }
+  ]
+}

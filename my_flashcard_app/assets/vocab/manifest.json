@@ -136,6 +136,24 @@
       "file": "decks/ja/ja_travel.json"
     },
     {
+      "id": "ja_work",
+      "lang": "ja",
+      "title": "Công việc & Văn phòng",
+      "subtitle": "Từ vựng thường gặp trong môi trường công sở Nhật Bản",
+      "level": "Trung cấp",
+      "badge": "仕",
+      "file": "decks/ja/ja_work.json"
+    },
+    {
+      "id": "ja_shopping",
+      "lang": "ja",
+      "title": "Mua sắm",
+      "subtitle": "Từ vựng về giá cả, thử đồ và thanh toán tại cửa hàng",
+      "level": "Sơ cấp – Trung cấp",
+      "badge": "買",
+      "file": "decks/ja/ja_shopping.json"
+    },
+    {
       "id": "ko_basic",
       "lang": "ko",
       "title": "Từ vựng cơ bản",
@@ -154,6 +172,24 @@
       "file": "decks/ko/ko_travel.json"
     },
     {
+      "id": "ko_food",
+      "lang": "ko",
+      "title": "Ẩm thực Hàn Quốc",
+      "subtitle": "Từ vựng về món ăn, hương vị và cách chế biến",
+      "level": "Sơ cấp – Trung cấp",
+      "badge": "밥",
+      "file": "decks/ko/ko_food.json"
+    },
+    {
+      "id": "ko_work",
+      "lang": "ko",
+      "title": "Công việc & Văn phòng",
+      "subtitle": "Từ vựng về nơi làm việc và sinh hoạt công sở",
+      "level": "Trung cấp",
+      "badge": "일",
+      "file": "decks/ko/ko_work.json"
+    },
+    {
       "id": "zh_basic",
       "lang": "zh",
       "title": "Tiếng Trung cơ bản",
@@ -170,6 +206,24 @@
       "level": "Sơ cấp – Trung cấp",
       "badge": "旅",
       "file": "decks/zh/zh_travel.json"
+    },
+    {
+      "id": "zh_food",
+      "lang": "zh",
+      "title": "Ẩm thực Trung Hoa",
+      "subtitle": "Từ vựng về món ăn, hương vị và cách chế biến",
+      "level": "Sơ cấp – Trung cấp",
+      "badge": "食",
+      "file": "decks/zh/zh_food.json"
+    },
+    {
+      "id": "zh_work",
+      "lang": "zh",
+      "title": "Công việc & Văn phòng",
+      "subtitle": "Từ vựng thường gặp trong môi trường công sở",
+      "level": "Trung cấp",
+      "badge": "工",
+      "file": "decks/zh/zh_work.json"
     }
   ]
 }

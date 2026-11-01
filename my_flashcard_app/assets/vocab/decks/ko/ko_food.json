@@ -1,0 +1,124 @@
+{
+  "words": [
+    {
+      "t": "김치",
+      "r": "gimchi",
+      "p": "n",
+      "m": "kim chi",
+      "e": "김치는 한국의 대표적인 음식이에요.",
+      "v": "Kim chi là món ăn tiêu biểu của Hàn Quốc."
+    },
+    {
+      "t": "불고기",
+      "r": "bulgogi",
+      "p": "n",
+      "m": "thịt bò nướng tẩm gia vị",
+      "e": "불고기를 밥과 함께 먹어요.",
+      "v": "Tôi ăn thịt bò nướng tẩm gia vị cùng với cơm."
+    },
+    {
+      "t": "비빔밥",
+      "r": "bibimbap",
+      "p": "n",
+      "m": "cơm trộn",
+      "e": "점심으로 비빔밥을 먹었어요.",
+      "v": "Tôi đã ăn cơm trộn vào bữa trưa."
+    },
+    {
+      "t": "찌개",
+      "r": "jjigae",
+      "p": "n",
+      "m": "món canh hầm Hàn Quốc",
+      "e": "추운 날에는 따뜻한 찌개가 좋아요.",
+      "v": "Ngày lạnh thì món canh hầm nóng rất hợp."
+    },
+    {
+      "t": "반찬",
+      "r": "banchan",
+      "p": "n",
+      "m": "món ăn kèm",
+      "e": "이 식당은 반찬이 다양해요.",
+      "v": "Quán ăn này có nhiều món ăn kèm."
+    },
+    {
+      "t": "밥",
+      "r": "bap",
+      "p": "n",
+      "m": "cơm",
+      "e": "밥을 조금 더 주세요.",
+      "v": "Cho tôi thêm một chút cơm."
+    },
+    {
+      "t": "국수",
+      "r": "guksu",
+      "p": "n",
+      "m": "mì, bún",
+      "e": "더운 날에는 시원한 국수를 먹어요.",
+      "v": "Ngày nóng tôi ăn mì lạnh."
+    },
+    {
+      "t": "맵다",
+      "r": "maepda",
+      "p": "adj",
+      "m": "cay",
+      "e": "이 음식은 너무 매워요.",
+      "v": "Món này cay quá."
+    },
+    {
+      "t": "달다",
+      "r": "dalda",
+      "p": "adj",
+      "m": "ngọt",
+      "e": "이 과일은 아주 달아요.",
+      "v": "Loại quả này rất ngọt."
+    },
+    {
+      "t": "짜다",
+      "r": "jjada",
+      "p": "adj",
+      "m": "mặn",
+      "e": "국이 조금 짜요.",
+      "v": "Canh hơi mặn."
+    },
+    {
+      "t": "굽다",
+      "r": "gupda",
+      "p": "v",
+      "m": "nướng",
+      "e": "고기를 불에 구워요.",
+      "v": "Tôi nướng thịt trên lửa."
+    },
+    {
+      "t": "끓이다",
+      "r": "kkeurida",
+      "p": "v",
+      "m": "đun sôi, nấu",
+      "e": "물을 끓여서 차를 만들어요.",
+      "v": "Tôi đun sôi nước để pha trà."
+    },
+    {
+      "t": "재료",
+      "r": "jaeryo",
+      "p": "n",
+      "m": "nguyên liệu",
+      "e": "요리에 필요한 재료를 샀어요.",
+      "v": "Tôi đã mua nguyên liệu cần cho món ăn."
+    },
+    {
+      "t": "간",
+      "r": "gan",
+      "p": "n",
+      "m": "độ nêm, gia vị",
+      "e": "간이 딱 맞아요.",
+      "v": "Món ăn được nêm vừa miệng."
+    },
+    {
+      "t": "포장하다",
+      "r": "pojanghada",
+      "p": "v",
+      "m": "đóng gói mang về",
+      "e": "남은 음식을 포장해 주세요.",
+      "v": "Làm ơn gói phần thức ăn còn lại cho tôi."
+    }
+  ]
+}
