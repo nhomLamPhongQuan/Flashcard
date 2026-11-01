@@ -99,6 +99,9 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final p = Palette.ofContext(context);
     final state = AppScope.of(context);
+    final logoAsset = Theme.of(context).brightness == Brightness.dark
+        ? 'assets/images/flashcard_logo_dark.png'
+        : 'assets/images/flashcard_logo_light.png';
 
     return Theme(
       data: AppTheme.neutralizeAccents(Theme.of(context), p),
@@ -115,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Center(
                       child: Image.asset(
-                        'assets/images/flashcard_logo.png',
+                        logoAsset,
                         width: 280,
                         height: 220,
                         fit: BoxFit.contain,
