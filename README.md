@@ -113,3 +113,5 @@ blacklist, **Restricted** with a whitelist, or **Cloaked**. Viewer lists use
 unique account display names. Only linked accounts can use the lookup feature;
 guest sessions remain local-only. Deploy the Firestore rules after changing
 privacy or stats access rules.
+
+End.
