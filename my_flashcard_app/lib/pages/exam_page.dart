@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../l10n/app_text.dart';
+import '../models/exam_logic.dart';
 import '../models/vocab.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
@@ -38,17 +39,14 @@ class _ExamPageState extends State<ExamPage> {
     super.dispose();
   }
 
-  int _wordCountFor(Deck deck) => deck.words.length * _percentage ~/ 100;
+  int _wordCountFor(Deck deck) => examWordCount(deck, _percentage);
 
   void _startExam(AppState state) {
-    final selectedDecks =
-        state.decks.where((deck) => _selectedDeckIds.contains(deck.id));
-    final questions = <Word>[];
-    for (final deck in selectedDecks) {
-      final words = List<Word>.of(deck.words)..shuffle();
-      questions.addAll(words.take(_wordCountFor(deck)));
-    }
-    questions.shuffle();
+    final questions = selectExamQuestions(
+      decks: state.decks,
+      selectedDeckIds: _selectedDeckIds,
+      percentage: _percentage,
+    );
     if (questions.isEmpty) return;
 
     setState(() {
@@ -66,9 +64,8 @@ class _ExamPageState extends State<ExamPage> {
 
   void _submitAnswer() {
     if (_answered) return;
-    final answer =
-        _answerController.text.replaceAll(RegExp(r'\s+'), '').toLowerCase();
-    if (answer.isEmpty) {
+    final answer = _answerController.text;
+    if (answer.trim().isEmpty) {
       setState(
         () => _answerError =
             appText(context, 'Nhập câu trả lời trước khi kiểm tra.'),
@@ -76,12 +73,8 @@ class _ExamPageState extends State<ExamPage> {
       return;
     }
 
-    final acceptedMeanings = _questions[_questionIndex]
-        .meaning
-        .split(',')
-        .map((meaning) => meaning.replaceAll(RegExp(r'\s+'), '').toLowerCase())
-        .where((meaning) => meaning.isNotEmpty);
-    final isCorrect = acceptedMeanings.contains(answer);
+    final isCorrect =
+        isExamAnswerCorrect(answer, _questions[_questionIndex].meaning);
     setState(() {
       _answered = true;
       _answerWasCorrect = isCorrect;
