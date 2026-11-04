@@ -1,0 +1,124 @@
+{
+  "words": [
+    {
+      "t": "公司",
+      "r": "gōng sī",
+      "p": "n",
+      "m": "công ty",
+      "e": "我在一家小公司工作。",
+      "v": "Tôi làm việc ở một công ty nhỏ."
+    },
+    {
+      "t": "同事",
+      "r": "tóng shì",
+      "p": "n",
+      "m": "đồng nghiệp",
+      "e": "我的同事都很友好。",
+      "v": "Các đồng nghiệp của tôi đều rất thân thiện."
+    },
+    {
+      "t": "经理",
+      "r": "jīng lǐ",
+      "p": "n",
+      "m": "quản lý, giám đốc",
+      "e": "经理正在开会。",
+      "v": "Quản lý đang họp."
+    },
+    {
+      "t": "会议",
+      "r": "huì yì",
+      "p": "n",
+      "m": "cuộc họp",
+      "e": "下午两点有一个会议。",
+      "v": "Hai giờ chiều có một cuộc họp."
+    },
+    {
+      "t": "办公室",
+      "r": "bàn gōng shì",
+      "p": "n",
+      "m": "văn phòng",
+      "e": "办公室里有很多书。",
+      "v": "Trong văn phòng có nhiều sách."
+    },
+    {
+      "t": "工作",
+      "r": "gōng zuò",
+      "p": "n, v",
+      "m": "công việc; làm việc",
+      "e": "我每天八点开始工作。",
+      "v": "Mỗi ngày tôi bắt đầu làm việc lúc tám giờ."
+    },
+    {
+      "t": "任务",
+      "r": "rèn wu",
+      "p": "n",
+      "m": "nhiệm vụ",
+      "e": "这个任务今天必须完成。",
+      "v": "Nhiệm vụ này phải hoàn thành hôm nay."
+    },
+    {
+      "t": "文件",
+      "r": "wén jiàn",
+      "p": "n",
+      "m": "tài liệu, hồ sơ",
+      "e": "请把文件发给我。",
+      "v": "Hãy gửi tài liệu cho tôi."
+    },
+    {
+      "t": "邮件",
+      "r": "yóu jiàn",
+      "p": "n",
+      "m": "thư điện tử, email",
+      "e": "我给客户发了一封邮件。",
+      "v": "Tôi đã gửi một email cho khách hàng."
+    },
+    {
+      "t": "计划",
+      "r": "jì huà",
+      "p": "n, v",
+      "m": "kế hoạch; lên kế hoạch",
+      "e": "我们正在计划下个月的活动。",
+      "v": "Chúng tôi đang lên kế hoạch cho hoạt động tháng sau."
+    },
+    {
+      "t": "加班",
+      "r": "jiā bān",
+      "p": "v",
+      "m": "làm thêm giờ",
+      "e": "他今天晚上要加班。",
+      "v": "Tối nay anh ấy phải làm thêm giờ."
+    },
+    {
+      "t": "请假",
+      "r": "qǐng jià",
+      "p": "v",
+      "m": "xin nghỉ phép",
+      "e": "我想请一天假。",
+      "v": "Tôi muốn xin nghỉ một ngày."
+    },
+    {
+      "t": "工资",
+      "r": "gōng zī",
+      "p": "n",
+      "m": "tiền lương",
+      "e": "工资每个月月底发。",
+      "v": "Lương được trả vào cuối mỗi tháng."
+    },
+    {
+      "t": "准时",
+      "r": "zhǔn shí",
+      "p": "adj, adv",
+      "m": "đúng giờ",
+      "e": "会议请准时开始。",
+      "v": "Cuộc họp vui lòng bắt đầu đúng giờ."
+    },
+    {
+      "t": "完成",
+      "r": "wán chéng",
+      "p": "v",
+      "m": "hoàn thành",
+      "e": "我已经完成今天的工作了。",
+      "v": "Tôi đã hoàn thành công việc hôm nay rồi."
+    }
+  ]
+}

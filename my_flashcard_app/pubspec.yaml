@@ -9,16 +9,38 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.3.2
   firebase_core: ^3.6.0
   firebase_auth: ^5.3.1
   cloud_firestore: ^5.4.4
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: assets/images/app_logo.png
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: assets/images/app_logo.png
+  web:
+    generate: true
+    image_path: assets/images/app_logo.png
+    background_color: "#FFFFFF"
+    theme_color: "#FFFFFF"
+  windows:
+    generate: true
+    image_path: assets/images/app_logo.png
+    icon_size: 256
+  macos:
+    generate: true
+    image_path: assets/images/app_logo.png
 
 flutter:
   uses-material-design: true
@@ -27,3 +49,9 @@ flutter:
     - assets/vocab/decks/en/
     - assets/vocab/decks/ja/
     - assets/vocab/decks/ko/
+    - assets/vocab/decks/zh/
+    - assets/avatars/
+    - assets/images/app_logo.png
+    - assets/images/flashcard_logo.png
+    - assets/images/flashcard_logo_dark.png
+    - assets/images/flashcard_logo_light.png

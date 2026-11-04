@@ -1,0 +1,139 @@
+{
+  "words": [
+    {
+      "t": "値段",
+      "r": "ねだん",
+      "ro": "nedan",
+      "p": "n",
+      "m": "giá cả",
+      "e": "このかばんの値段はいくらですか。",
+      "v": "Chiếc túi này giá bao nhiêu?"
+    },
+    {
+      "t": "試着する",
+      "r": "しちゃくする",
+      "ro": "shichaku suru",
+      "p": "v",
+      "m": "thử (quần áo)",
+      "e": "このコートを試着してもいいですか。",
+      "v": "Tôi có thể thử chiếc áo khoác này không?"
+    },
+    {
+      "t": "サイズ",
+      "r": "サイズ",
+      "ro": "saizu",
+      "p": "n",
+      "m": "kích cỡ",
+      "e": "もう少し大きいサイズはありますか。",
+      "v": "Có cỡ lớn hơn một chút không?"
+    },
+    {
+      "t": "割引",
+      "r": "わりびき",
+      "ro": "waribiki",
+      "p": "n, v(する)",
+      "m": "giảm giá",
+      "e": "この商品は二割引です。",
+      "v": "Mặt hàng này được giảm giá hai mươi phần trăm."
+    },
+    {
+      "t": "現金",
+      "r": "げんきん",
+      "ro": "genkin",
+      "p": "n",
+      "m": "tiền mặt",
+      "e": "現金で払ってもいいですか。",
+      "v": "Tôi trả bằng tiền mặt được không?"
+    },
+    {
+      "t": "クレジットカード",
+      "r": "クレジットカード",
+      "ro": "kurejitto kādo",
+      "p": "n",
+      "m": "thẻ tín dụng",
+      "e": "クレジットカードは使えますか。",
+      "v": "Có thể dùng thẻ tín dụng không?"
+    },
+    {
+      "t": "レシート",
+      "r": "レシート",
+      "ro": "reshīto",
+      "p": "n",
+      "m": "hóa đơn",
+      "e": "レシートをください。",
+      "v": "Cho tôi xin hóa đơn."
+    },
+    {
+      "t": "返品する",
+      "r": "へんぴんする",
+      "ro": "henpin suru",
+      "p": "v",
+      "m": "trả lại hàng",
+      "e": "サイズが合わないので返品したいです。",
+      "v": "Vì không vừa cỡ nên tôi muốn trả lại hàng."
+    },
+    {
+      "t": "交換する",
+      "r": "こうかんする",
+      "ro": "kōkan suru",
+      "p": "v",
+      "m": "đổi hàng",
+      "e": "別の色に交換できますか。",
+      "v": "Tôi có thể đổi sang màu khác không?"
+    },
+    {
+      "t": "在庫",
+      "r": "ざいこ",
+      "ro": "zaiko",
+      "p": "n",
+      "m": "hàng tồn kho",
+      "e": "この商品の在庫はありますか。",
+      "v": "Mặt hàng này còn trong kho không?"
+    },
+    {
+      "t": "売り切れ",
+      "r": "うりきれ",
+      "ro": "urikire",
+      "p": "n",
+      "m": "hết hàng",
+      "e": "人気の商品はもう売り切れです。",
+      "v": "Mặt hàng được ưa chuộng đã hết rồi."
+    },
+    {
+      "t": "ぴったり",
+      "r": "ぴったり",
+      "ro": "pittari",
+      "p": "adv, na-adj",
+      "m": "vừa khít, vừa vặn",
+      "e": "この靴は私の足にぴったりです。",
+      "v": "Đôi giày này vừa khít chân tôi."
+    },
+    {
+      "t": "おすすめ",
+      "r": "おすすめ",
+      "ro": "osusume",
+      "p": "n",
+      "m": "gợi ý, món được đề xuất",
+      "e": "店員さんのおすすめは何ですか。",
+      "v": "Nhân viên gợi ý món nào vậy?"
+    },
+    {
+      "t": "袋",
+      "r": "ふくろ",
+      "ro": "fukuro",
+      "p": "n",
+      "m": "túi",
+      "e": "袋は必要ですか。",
+      "v": "Bạn có cần túi không?"
+    },
+    {
+      "t": "税込み",
+      "r": "ぜいこみ",
+      "ro": "zeikomi",
+      "p": "n",
+      "m": "đã bao gồm thuế",
+      "e": "表示価格は税込みです。",
+      "v": "Giá niêm yết đã bao gồm thuế."
+    }
+  ]
+}

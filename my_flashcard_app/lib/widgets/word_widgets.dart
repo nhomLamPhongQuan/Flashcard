@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_text.dart';
 import '../models/srs.dart';
 import '../models/vocab.dart';
 import '../state/app_state.dart';
@@ -79,7 +80,10 @@ class StatusPill extends StatelessWidget {
     final color = mastered
         ? toneFor(context, const Color(0xFF2A9D6A))
         : (box > 0 ? toneFor(context, const Color(0xFFDB9438)) : p.muted);
-    final label = mastered ? 'Đã thành thạo' : (box > 0 ? 'Hộp $box' : 'Mới');
+    final label = appText(
+      context,
+      mastered ? 'Đã thành thạo' : (box > 0 ? 'Hộp {box}' : 'Mới'),
+    ).replaceAll('{box}', '$box');
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -139,6 +143,60 @@ class WordTile extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
+          StatusPill(box: box),
+        ],
+      ),
+    );
+  }
+}
+
+class WordBlock extends StatelessWidget {
+  const WordBlock({super.key, required this.word});
+  final Word word;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = Palette.ofContext(context);
+    final box = AppScope.of(context).progressOf(word).box;
+    final reading = [word.reading, word.romanization]
+        .whereType<String>()
+        .where((value) => value.isNotEmpty)
+        .join(' · ');
+    return Panel(
+      radius: 16,
+      padding: const EdgeInsets.all(14),
+      onTap: () => showWordSheet(context, word),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            word.term,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+          ),
+          if (reading.isNotEmpty) ...[
+            const SizedBox(height: 3),
+            Text(
+              reading,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 13, color: p.muted),
+            ),
+          ],
+          const SizedBox(height: 8),
+          Expanded(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                word.meaning,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 14, color: p.muted),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
           StatusPill(box: box),
         ],
       ),
@@ -213,11 +271,27 @@ class _WordSheet extends StatelessWidget {
               width: double.infinity,
               height: 52,
               child: FilledButton.icon(
-                onPressed: () => state.markMastered(word, mastered: !mastered),
+                onPressed: () async {
+                  try {
+                    await state.markMastered(word, mastered: !mastered);
+                  } catch (error) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          appText(context, 'Không thể lưu tiến độ học: {error}')
+                              .replaceAll('{error}', '$error'),
+                        ),
+                      ),
+                    );
+                  }
+                },
                 icon:
                     Icon(mastered ? Icons.replay_rounded : Icons.check_rounded),
-                label: Text(
-                    mastered ? 'Học lại từ đầu' : 'Đánh dấu đã thành thạo'),
+                label: Text(appText(
+                  context,
+                  mastered ? 'Học lại từ đầu' : 'Đánh dấu đã thành thạo',
+                )),
               ),
             ),
           ],

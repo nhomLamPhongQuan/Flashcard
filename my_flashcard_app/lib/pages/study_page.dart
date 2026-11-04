@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../l10n/app_text.dart';
 import '../models/srs.dart';
 import '../models/vocab.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/flip_card.dart';
+import '../widgets/page_title_bar.dart';
 
 /// Màn hình học: lật thẻ rồi tự đánh giá theo hộp Leitner (4 mức:
 /// Học lại / Khó / Nhớ / Dễ). Mỗi đánh giá cập nhật hộp + ngày ôn tiếp theo
@@ -30,6 +32,7 @@ class _StudyPageState extends State<StudyPage> {
   late final int _total = widget.words.length;
   int _index = 0;
   bool _revealed = false;
+  bool _savingAnswer = false;
   int _masteredThisRound = 0;
 
   Word get _current => widget.words[_index];
@@ -40,16 +43,31 @@ class _StudyPageState extends State<StudyPage> {
     setState(() => _revealed = !_revealed);
   }
 
-  void _answer(SrsRating rating) {
-    if (!_revealed || _finished) return;
+  Future<void> _answer(SrsRating rating) async {
+    if (!_revealed || _finished || _savingAnswer) return;
     final state = AppScope.of(context);
-    state.rate(_current, rating);
+    setState(() => _savingAnswer = true);
+    try {
+      await state.rate(_current, rating);
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(appText(context, 'Không thể lưu tiến độ học: {error}')
+              .replaceAll('{error}', '$error')),
+        ),
+      );
+      setState(() => _savingAnswer = false);
+      return;
+    }
+    if (!mounted) return;
     if (rating == SrsRating.good || rating == SrsRating.easy) {
       if (state.isMastered(_current)) _masteredThisRound++;
     }
     setState(() {
       _index++;
       _revealed = false;
+      _savingAnswer = false;
     });
   }
 
@@ -139,8 +157,8 @@ class _StudyPageState extends State<StudyPage> {
                                       height: 56,
                                       child: FilledButton(
                                         onPressed: _flip,
-                                        child: const Text(
-                                          'Hiện đáp án',
+                                        child: Text(
+                                          appText(context, 'Hiện đáp án'),
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600),
@@ -179,25 +197,21 @@ class _TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = Palette.ofContext(context);
+    final titleBar = PageTitleBar(
+      title: title,
+      icon: Icons.auto_stories_rounded,
+      accent: color,
+    );
     return Column(
       children: [
         Row(
           children: [
             IconButton(
-              tooltip: 'Thoát',
-              icon: const Icon(Icons.close_rounded),
+              tooltip: appText(context, 'Thoát bài học'),
+              icon: Icon(Icons.close_rounded, color: p.ink),
               onPressed: () => Navigator.of(context).maybePop(),
             ),
-            Expanded(
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: 15, fontWeight: FontWeight.w600, color: p.muted),
-              ),
-            ),
+            Expanded(child: titleBar),
             SizedBox(
               width: 56,
               child: Text(
@@ -245,7 +259,7 @@ class _AnswerRow extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: _AnswerButton(
-                label: rating.label,
+                label: appText(context, rating.label),
                 color: color,
                 onTap: () => onAnswer(rating),
               ),
@@ -306,24 +320,30 @@ class _Summary extends StatelessWidget {
           children: [
             Icon(Icons.check_circle_rounded, size: 72, color: accent),
             const SizedBox(height: 20),
-            const Text(
-              'Xong lượt học',
+            Text(
+              appText(context, 'Xong lượt học'),
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 8),
             Text(
               mastered > 0
-                  ? 'Bạn đã ôn qua $total từ, trong đó $mastered từ vừa đạt mức thành thạo.'
-                  : 'Bạn đã ôn qua $total từ trong bộ thẻ này.',
+                  ? appText(context,
+                          'Bạn đã ôn qua {total} từ, trong đó {mastered} từ vừa đạt mức thành thạo.')
+                      .replaceAll('{total}', '$total')
+                      .replaceAll('{mastered}', '$mastered')
+                  : appText(
+                          context, 'Bạn đã ôn qua {total} từ trong bộ thẻ này.')
+                      .replaceAll('{total}', '$total'),
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 15, height: 1.4, color: p.muted),
             ),
             const SizedBox(height: 28),
             FilledButton(
               onPressed: () => Navigator.of(context).maybePop(),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-                child: Text('Về trang chính'),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+                child: Text(appText(context, 'Về trang chính')),
               ),
             ),
           ],

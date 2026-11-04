@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../models/vocab.dart';
 
 /// Bảng màu riêng của ứng dụng. Mỗi ngôn ngữ có một màu nhấn:
-/// tiếng Anh là xanh biển, tiếng Nhật là đỏ hồng (beni), tiếng Hàn là tím.
+/// tiếng Anh là xanh biển, tiếng Nhật là hồng sakura, tiếng Hàn là tím sáng,
+/// tiếng Trung là đỏ.
 class Palette {
   const Palette({
     required this.bg,
@@ -14,6 +15,7 @@ class Palette {
     required this.en,
     required this.ja,
     required this.ko,
+    required this.zh,
   });
 
   final Color bg;
@@ -24,6 +26,7 @@ class Palette {
   final Color en;
   final Color ja;
   final Color ko;
+  final Color zh;
 
   Color accent(Lang lang) {
     switch (lang) {
@@ -31,6 +34,8 @@ class Palette {
         return ja;
       case Lang.ko:
         return ko;
+      case Lang.zh:
+        return zh;
       case Lang.en:
         return en;
     }
@@ -43,8 +48,9 @@ class Palette {
     muted: Color(0xFF667089),
     line: Color(0xFFE3E7F0),
     en: Color(0xFF1B6FC2),
-    ja: Color(0xFFC83653),
-    ko: Color(0xFF7B4FE0),
+    ja: Color(0xFFE88AAE),
+    ko: Color(0xFF9B4DFF),
+    zh: Color(0xFFD62828),
   );
 
   static const dark = Palette(
@@ -54,8 +60,9 @@ class Palette {
     muted: Color(0xFF9AA5BD),
     line: Color(0xFF283149),
     en: Color(0xFF6DB3F2),
-    ja: Color(0xFFFF8299),
-    ko: Color(0xFFB79CFF),
+    ja: Color(0xFFF4A7C2),
+    ko: Color(0xFFC28AFF),
+    zh: Color(0xFFFF5C5C),
   );
 
   static Palette of(Brightness brightness) =>
@@ -66,6 +73,32 @@ class Palette {
 }
 
 class AppTheme {
+  static const pageTitleStyle = TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.w800,
+    height: 1.1,
+  );
+
+  static ThemeData neutralizeAccents(ThemeData theme, Palette palette) {
+    final scheme = theme.colorScheme;
+    return theme.copyWith(
+      colorScheme: scheme.copyWith(
+        primary: palette.muted,
+        onPrimary: palette.surface,
+        primaryContainer: palette.line,
+        onPrimaryContainer: palette.ink,
+        secondary: palette.muted,
+        onSecondary: palette.surface,
+        secondaryContainer: palette.bg,
+        onSecondaryContainer: palette.ink,
+        tertiary: palette.muted,
+        onTertiary: palette.surface,
+        tertiaryContainer: palette.bg,
+        onTertiaryContainer: palette.ink,
+      ),
+    );
+  }
+
   static const _cjkFallback = [
     'Noto Sans JP',
     'Noto Sans CJK JP',
@@ -114,7 +147,9 @@ class AppTheme {
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
         foregroundColor: p.ink,
+        centerTitle: true,
         scrolledUnderElevation: 0,
+        titleTextStyle: pageTitleStyle.copyWith(color: p.ink),
       ),
     );
   }

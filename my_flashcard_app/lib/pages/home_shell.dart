@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_text.dart';
+import 'account_page.dart';
+import 'exam_page.dart';
 import 'learn_tab.dart';
 import 'library_tab.dart';
 import 'stats_tab.dart';
 
-/// Khung điều hướng chính với 3 tab: Học, Kho từ, Tiến độ.
+/// Khung điều hướng chính cho học, kho từ, kiểm tra, tiến độ và tài khoản.
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
 
@@ -21,31 +24,47 @@ class _HomeShellState extends State<HomeShell> {
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 720),
-          //IndexedStack giữ trạng thái cả 3 tab không bị mất khi chuyển qua lại
+          // IndexedStack giữ trạng thái các tab khi chuyển qua lại.
           child: IndexedStack(
             index: _index,
-            children: const [LearnTab(), LibraryTab(), StatsTab()],
+            children: [
+              const LearnTab(),
+              LibraryTab(isActive: _index == 1),
+              const ExamPage(),
+              const StatsTab(),
+              const AccountPage(),
+            ],
           ),
         ),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (i) => setState(() => _index = i),
-        destinations: const [
+        destinations: [
           NavigationDestination(
             icon: Icon(Icons.style_outlined),
             selectedIcon: Icon(Icons.style),
-            label: 'Học',
+            label: appText(context, 'Học'),
           ),
           NavigationDestination(
             icon: Icon(Icons.menu_book_outlined),
             selectedIcon: Icon(Icons.menu_book),
-            label: 'Kho từ',
+            label: appText(context, 'Kho từ'),
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.assignment_outlined),
+            selectedIcon: Icon(Icons.assignment),
+            label: appText(context, 'Kiểm tra'),
           ),
           NavigationDestination(
             icon: Icon(Icons.insights_outlined),
             selectedIcon: Icon(Icons.insights),
-            label: 'Tiến độ',
+            label: appText(context, 'Tiến độ'),
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline_rounded),
+            selectedIcon: Icon(Icons.person_rounded),
+            label: appText(context, 'Tài khoản'),
           ),
         ],
       ),

@@ -1,0 +1,124 @@
+{
+  "words": [
+    {
+      "t": "회사",
+      "r": "hoesa",
+      "p": "n",
+      "m": "công ty",
+      "e": "저는 서울에 있는 회사에서 일해요.",
+      "v": "Tôi làm việc ở một công ty tại Seoul."
+    },
+    {
+      "t": "직원",
+      "r": "jigwon",
+      "p": "n",
+      "m": "nhân viên",
+      "e": "직원들이 회의실에 모였어요.",
+      "v": "Các nhân viên đã tập trung ở phòng họp."
+    },
+    {
+      "t": "회의",
+      "r": "hoeui",
+      "p": "n",
+      "m": "cuộc họp",
+      "e": "오후에 중요한 회의가 있어요.",
+      "v": "Buổi chiều có một cuộc họp quan trọng."
+    },
+    {
+      "t": "업무",
+      "r": "eommu",
+      "p": "n",
+      "m": "công việc, nhiệm vụ",
+      "e": "오늘 업무를 모두 끝냈어요.",
+      "v": "Hôm nay tôi đã hoàn thành tất cả công việc."
+    },
+    {
+      "t": "동료",
+      "r": "dongnyo",
+      "p": "n",
+      "m": "đồng nghiệp",
+      "e": "동료에게 새 프로그램을 배웠어요.",
+      "v": "Tôi đã học chương trình mới từ đồng nghiệp."
+    },
+    {
+      "t": "상사",
+      "r": "sangsa",
+      "p": "n",
+      "m": "cấp trên",
+      "e": "상사와 업무 계획을 이야기했어요.",
+      "v": "Tôi đã trao đổi kế hoạch công việc với cấp trên."
+    },
+    {
+      "t": "출근하다",
+      "r": "chulgeunhada",
+      "p": "v",
+      "m": "đi làm",
+      "e": "저는 보통 아홉 시에 출근해요.",
+      "v": "Tôi thường đi làm lúc chín giờ."
+    },
+    {
+      "t": "퇴근하다",
+      "r": "toegeunhada",
+      "p": "v",
+      "m": "tan làm",
+      "e": "오늘은 일찍 퇴근할 거예요.",
+      "v": "Hôm nay tôi sẽ tan làm sớm."
+    },
+    {
+      "t": "야근",
+      "r": "yageun",
+      "p": "n, v(하다)",
+      "m": "làm việc buổi tối, tăng ca",
+      "e": "이번 주에는 야근이 많아요.",
+      "v": "Tuần này tôi phải tăng ca nhiều."
+    },
+    {
+      "t": "월급",
+      "r": "wolgeup",
+      "p": "n",
+      "m": "lương tháng",
+      "e": "월급을 받으면 저축을 해요.",
+      "v": "Nhận lương tháng xong tôi sẽ tiết kiệm."
+    },
+    {
+      "t": "휴가",
+      "r": "hyuga",
+      "p": "n",
+      "m": "kỳ nghỉ, ngày nghỉ phép",
+      "e": "다음 주에 휴가를 갈 거예요.",
+      "v": "Tuần sau tôi sẽ nghỉ phép."
+    },
+    {
+      "t": "보고서",
+      "r": "bogoseo",
+      "p": "n",
+      "m": "báo cáo",
+      "e": "회의 전에 보고서를 보내 주세요.",
+      "v": "Hãy gửi báo cáo trước cuộc họp."
+    },
+    {
+      "t": "일정",
+      "r": "iljeong",
+      "p": "n",
+      "m": "lịch trình",
+      "e": "이번 달 일정을 확인해 주세요.",
+      "v": "Hãy kiểm tra lịch trình tháng này."
+    },
+    {
+      "t": "면접",
+      "r": "myeonjeop",
+      "p": "n",
+      "m": "phỏng vấn",
+      "e": "내일 회사 면접이 있어요.",
+      "v": "Ngày mai tôi có buổi phỏng vấn ở công ty."
+    },
+    {
+      "t": "합격하다",
+      "r": "hapgyeokhada",
+      "p": "v",
+      "m": "đỗ, trúng tuyển",
+      "e": "친구가 면접에 합격했어요.",
+      "v": "Bạn tôi đã đỗ phỏng vấn."
+    }
+  ]
+}

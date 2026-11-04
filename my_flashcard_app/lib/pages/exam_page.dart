@@ -1,0 +1,553 @@
+import 'package:flutter/material.dart';
+
+import '../l10n/app_text.dart';
+import '../models/exam_logic.dart';
+import '../models/vocab.dart';
+import '../state/app_state.dart';
+import '../theme/app_theme.dart';
+import '../widgets/panel.dart';
+import '../widgets/page_title_bar.dart';
+import '../widgets/progress_ring.dart';
+import '../widgets/study_backdrop.dart';
+
+enum _ExamStage { setup, answering, result }
+
+class ExamPage extends StatefulWidget {
+  const ExamPage({super.key});
+
+  @override
+  State<ExamPage> createState() => _ExamPageState();
+}
+
+class _ExamPageState extends State<ExamPage> {
+  final Set<String> _selectedDeckIds = {};
+  final TextEditingController _answerController = TextEditingController();
+  int _percentage = 50;
+  int _questionIndex = 0;
+  int _correctAnswers = 0;
+  List<Word> _questions = [];
+  _ExamStage _stage = _ExamStage.setup;
+  bool _answered = false;
+  bool _answerWasCorrect = false;
+  bool _savingResult = false;
+  String? _answerError;
+  String? _resultError;
+
+  @override
+  void dispose() {
+    _answerController.dispose();
+    super.dispose();
+  }
+
+  int _wordCountFor(Deck deck) => examWordCount(deck, _percentage);
+
+  void _startExam(AppState state) {
+    final questions = selectExamQuestions(
+      decks: state.decks,
+      selectedDeckIds: _selectedDeckIds,
+      percentage: _percentage,
+    );
+    if (questions.isEmpty) return;
+
+    setState(() {
+      _questions = questions;
+      _questionIndex = 0;
+      _correctAnswers = 0;
+      _answered = false;
+      _answerWasCorrect = false;
+      _answerError = null;
+      _resultError = null;
+      _answerController.clear();
+      _stage = _ExamStage.answering;
+    });
+  }
+
+  void _submitAnswer() {
+    if (_answered) return;
+    final answer = _answerController.text;
+    if (answer.trim().isEmpty) {
+      setState(
+        () => _answerError =
+            appText(context, 'Nhập câu trả lời trước khi kiểm tra.'),
+      );
+      return;
+    }
+
+    final isCorrect =
+        isExamAnswerCorrect(answer, _questions[_questionIndex].meaning);
+    setState(() {
+      _answered = true;
+      _answerWasCorrect = isCorrect;
+      _answerError = null;
+      if (isCorrect) _correctAnswers++;
+    });
+  }
+
+  Future<void> _advance(AppState state) async {
+    if (_questionIndex + 1 < _questions.length) {
+      setState(() {
+        _questionIndex++;
+        _answered = false;
+        _answerWasCorrect = false;
+        _answerError = null;
+        _answerController.clear();
+      });
+      return;
+    }
+
+    setState(() {
+      _savingResult = true;
+      _resultError = null;
+    });
+    try {
+      await state.recordExamResult(
+        wordCount: _questions.length,
+        correctCount: _correctAnswers,
+      );
+      if (!mounted) return;
+      setState(() {
+        _stage = _ExamStage.result;
+        _savingResult = false;
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _savingResult = false;
+        _resultError =
+            appText(context, 'Không thể lưu kết quả bài kiểm tra: {error}')
+                .replaceAll('{error}', '$error');
+      });
+    }
+  }
+
+  void _returnToSetup() {
+    setState(() {
+      _stage = _ExamStage.setup;
+      _questions = [];
+      _answerController.clear();
+      _answerError = null;
+      _resultError = null;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = AppScope.of(context);
+    final palette = Palette.ofContext(context);
+    final accent = palette.accent(state.lang);
+
+    return StudyBackdrop(
+      accent: accent,
+      child: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: switch (_stage) {
+              _ExamStage.setup => _buildSetup(state, palette, accent),
+              _ExamStage.answering => _buildQuestion(state, palette, accent),
+              _ExamStage.result => _buildResult(palette, accent),
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSetup(AppState state, Palette palette, Color accent) {
+    final selectedDecks = state.decks
+        .where((deck) => _selectedDeckIds.contains(deck.id))
+        .toList(growable: false);
+    final questionCount = selectedDecks.fold<int>(
+        0, (total, deck) => total + _wordCountFor(deck));
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: PageTitleBar(
+            title: appText(context, 'Bài Kiểm Tra'),
+            icon: Icons.assignment_rounded,
+            accent: accent,
+          ),
+        ),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
+            children: [
+              Center(
+                child: Text(
+                  appText(context, 'Chọn bộ thẻ và tỷ lệ từ muốn kiểm tra.'),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: palette.muted),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [accent, Color.lerp(accent, palette.ink, .22)!],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: accent.withAlpha(40),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(24),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        right: -14,
+                        top: -24,
+                        child: Icon(
+                          Icons.quiz_rounded,
+                          size: 150,
+                          color: Colors.white.withAlpha(24),
+                        ),
+                      ),
+                      Positioned(
+                        right: 24,
+                        top: 24,
+                        child: Icon(
+                          Icons.sentiment_very_satisfied_rounded,
+                          size: 34,
+                          color: Colors.white.withAlpha(110),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    appText(context, 'Số từ mỗi bộ thẻ'),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                                Text(
+                                  '$_percentage%',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SliderTheme(
+                              data: SliderTheme.of(context).copyWith(
+                                activeTrackColor: Colors.white,
+                                inactiveTrackColor: Colors.white.withAlpha(70),
+                                thumbColor: Colors.white,
+                                overlayColor: Colors.white.withAlpha(32),
+                                valueIndicatorColor: palette.ink,
+                              ),
+                              child: Slider(
+                                value: _percentage.toDouble(),
+                                min: 10,
+                                max: 100,
+                                divisions: 90,
+                                label: '$_percentage%',
+                                onChanged: (value) =>
+                                    setState(() => _percentage = value.round()),
+                              ),
+                            ),
+                            Text(
+                              appText(context,
+                                  'Số từ được làm tròn xuống riêng cho từng bộ thẻ.'),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.white.withAlpha(220),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      appText(context, 'Chọn bộ thẻ'),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  Text(
+                    appText(context, '{count} đã chọn')
+                        .replaceAll('{count}', '${_selectedDeckIds.length}'),
+                    style: TextStyle(color: palette.muted),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              for (final deck in state.decks)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Panel(
+                    padding: EdgeInsets.zero,
+                    color: palette.accent(deck.lang).withAlpha(10),
+                    child: CheckboxListTile(
+                      value: _selectedDeckIds.contains(deck.id),
+                      activeColor: palette.accent(deck.lang),
+                      title: Text(deck.title),
+                      subtitle: Text(
+                        '${deck.lang.label} · ${_wordCountFor(deck)} / ${deck.words.length} ${appText(context, 'từ')}',
+                      ),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged: (selected) {
+                        setState(() {
+                          if (selected == true) {
+                            _selectedDeckIds.add(deck.id);
+                          } else {
+                            _selectedDeckIds.remove(deck.id);
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 54,
+                child: FilledButton.icon(
+                  onPressed:
+                      questionCount == 0 ? null : () => _startExam(state),
+                  icon: const Icon(Icons.play_arrow_rounded),
+                  label: Text(
+                    questionCount == 0
+                        ? appText(context, 'Chọn bộ thẻ có từ để bắt đầu')
+                        : appText(context, 'Bắt đầu kiểm tra · {count} từ')
+                            .replaceAll('{count}', '$questionCount'),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQuestion(AppState state, Palette palette, Color accent) {
+    final word = _questions[_questionIndex];
+    final total = _questions.length;
+    final progress = (_questionIndex + 1) / total;
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
+      children: [
+        Row(
+          children: [
+            IconButton(
+              tooltip: appText(context, 'Thoát bài kiểm tra'),
+              onPressed: _returnToSetup,
+              icon: const Icon(Icons.close_rounded),
+            ),
+            Expanded(
+              child: Text(
+                appText(context, 'Câu {current} / {total}')
+                    .replaceAll('{current}', '${_questionIndex + 1}')
+                    .replaceAll('{total}', '$total'),
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+            const SizedBox(width: 48),
+          ],
+        ),
+        const SizedBox(height: 8),
+        TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0, end: progress),
+          duration: const Duration(milliseconds: 450),
+          curve: Curves.easeOutCubic,
+          builder: (context, value, _) => ClipRRect(
+            borderRadius: BorderRadius.circular(999),
+            child: LinearProgressIndicator(
+              value: value,
+              color: accent,
+              minHeight: 7,
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
+        Panel(
+          child: Column(
+            children: [
+              Text(
+                word.term,
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(fontSize: 30, fontWeight: FontWeight.w800),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                appText(context, 'Nhập chính xác nghĩa của từ'),
+                style: TextStyle(color: palette.muted),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        TextField(
+          controller: _answerController,
+          autofocus: true,
+          enabled: !_answered,
+          textInputAction: TextInputAction.done,
+          onSubmitted: (_) => _submitAnswer(),
+          decoration: InputDecoration(
+            labelText: appText(context, 'Nghĩa của từ'),
+            errorText: _answerError,
+            border: const OutlineInputBorder(),
+          ),
+        ),
+        const SizedBox(height: 12),
+        if (_answered)
+          Panel(
+            color: _answerWasCorrect
+                ? Colors.green.withAlpha(20)
+                : Colors.red.withAlpha(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _answerWasCorrect
+                      ? appText(context, 'Chính xác!')
+                      : appText(context, 'Chưa chính xác'),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: _answerWasCorrect
+                        ? Colors.green.shade700
+                        : Colors.red.shade700,
+                  ),
+                ),
+                if (!_answerWasCorrect) ...[
+                  const SizedBox(height: 6),
+                  Text(appText(context, 'Đáp án đúng: {meaning}')
+                      .replaceAll('{meaning}', word.meaning)),
+                ],
+              ],
+            ),
+          ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 52,
+          child: FilledButton(
+            onPressed: _answered
+                ? (_savingResult ? null : () => _advance(state))
+                : _submitAnswer,
+            child: Text(
+              _answered
+                  ? (_questionIndex + 1 == total
+                      ? appText(context, 'Xem kết quả')
+                      : appText(context, 'Tiếp theo'))
+                  : appText(context, 'Kiểm tra đáp án'),
+            ),
+          ),
+        ),
+        if (_resultError != null) ...[
+          const SizedBox(height: 12),
+          Text(
+            _resultError!,
+            style: const TextStyle(color: Colors.red),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildResult(Palette palette, Color accent) {
+    final total = _questions.length;
+    final incorrect = total - _correctAnswers;
+    final accuracy = total == 0 ? 0.0 : _correctAnswers / total;
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: PageTitleBar(
+            title: appText(context, 'Hoàn Thành Bài Kiểm Tra'),
+            icon: Icons.emoji_events_rounded,
+            accent: accent,
+          ),
+        ),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.all(24),
+            children: [
+              const SizedBox(height: 12),
+              Center(
+                child: ProgressRing(
+                  value: accuracy,
+                  accent: accent,
+                  size: 128,
+                  strokeWidth: 11,
+                  label: '${(accuracy * 100).round()}%',
+                ),
+              ),
+              const SizedBox(height: 20),
+              Panel(
+                child: Column(
+                  children: [
+                    _ResultRow(
+                        label: appText(context, 'Tổng số từ'), value: '$total'),
+                    const SizedBox(height: 12),
+                    _ResultRow(
+                        label: appText(context, 'Trả lời đúng'),
+                        value: '$_correctAnswers'),
+                    const SizedBox(height: 12),
+                    _ResultRow(
+                        label: appText(context, 'Trả lời sai'),
+                        value: '$incorrect'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              FilledButton(
+                onPressed: _returnToSetup,
+                child: Text(appText(context, 'Tạo bài kiểm tra khác')),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).maybePop(),
+                child: Text(appText(context, 'Quay lại'),
+                    style: TextStyle(color: palette.muted)),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ResultRow extends StatelessWidget {
+  const _ResultRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(child: Text(label)),
+        Text(value, style: const TextStyle(fontWeight: FontWeight.w700)),
+      ],
+    );
+  }
+}

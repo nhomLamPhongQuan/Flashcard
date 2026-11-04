@@ -78,6 +78,7 @@ class WordProgress {
 
   factory WordProgress.fromJson(Map<String, dynamic> json) => WordProgress(
         box: (json['box'] as num).toInt(),
-        nextReview: DateTime.fromMillisecondsSinceEpoch((json['next'] as num).toInt()),
+        nextReview:
+            DateTime.fromMillisecondsSinceEpoch((json['next'] as num).toInt()),
       );
 }

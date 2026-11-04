@@ -1,0 +1,124 @@
+{
+  "words": [
+    {
+      "t": "你好",
+      "r": "nǐ hǎo",
+      "p": "phr",
+      "m": "xin chào",
+      "e": "你好！很高兴认识你。",
+      "v": "Xin chào! Rất vui được gặp bạn."
+    },
+    {
+      "t": "谢谢",
+      "r": "xiè xie",
+      "p": "phr",
+      "m": "cảm ơn",
+      "e": "谢谢你的帮助。",
+      "v": "Cảm ơn vì sự giúp đỡ của bạn."
+    },
+    {
+      "t": "再见",
+      "r": "zài jiàn",
+      "p": "phr",
+      "m": "tạm biệt",
+      "e": "明天见，再见！",
+      "v": "Hẹn gặp lại ngày mai, tạm biệt!"
+    },
+    {
+      "t": "朋友",
+      "r": "péng you",
+      "p": "n",
+      "m": "bạn bè",
+      "e": "他是我的好朋友。",
+      "v": "Anh ấy là bạn tốt của tôi."
+    },
+    {
+      "t": "家人",
+      "r": "jiā rén",
+      "p": "n",
+      "m": "người trong gia đình",
+      "e": "我和家人一起吃饭。",
+      "v": "Tôi ăn cùng gia đình."
+    },
+    {
+      "t": "学习",
+      "r": "xué xí",
+      "p": "v",
+      "m": "học tập",
+      "e": "我喜欢学习中文。",
+      "v": "Tôi thích học tiếng Trung."
+    },
+    {
+      "t": "吃饭",
+      "r": "chī fàn",
+      "p": "v",
+      "m": "ăn cơm, ăn uống",
+      "e": "我们一起吃饭吧。",
+      "v": "Chúng ta cùng ăn nhé."
+    },
+    {
+      "t": "水",
+      "r": "shuǐ",
+      "p": "n",
+      "m": "nước",
+      "e": "我想喝一点水。",
+      "v": "Tôi muốn uống chút nước."
+    },
+    {
+      "t": "茶",
+      "r": "chá",
+      "p": "n",
+      "m": "trà",
+      "e": "这个茶很好喝。",
+      "v": "Chè này rất ngon."
+    },
+    {
+      "t": "喜欢",
+      "r": "xǐ huān",
+      "p": "v",
+      "m": "thích",
+      "e": "我喜欢看电影。",
+      "v": "Tôi thích xem phim."
+    },
+    {
+      "t": "工作",
+      "r": "gōng zuò",
+      "p": "n",
+      "m": "công việc",
+      "e": "我今天很忙，工作很多。",
+      "v": "Hôm nay tôi rất bận, công việc nhiều."
+    },
+    {
+      "t": "累",
+      "r": "lèi",
+      "p": "adj",
+      "m": "mệt, mỏi",
+      "e": "今天我觉得有点累。",
+      "v": "Hôm nay tôi thấy hơi mệt."
+    },
+    {
+      "t": "天气",
+      "r": "tiān qì",
+      "p": "n",
+      "m": "thời tiết",
+      "e": "今天天气很好。",
+      "v": "Thời tiết hôm nay rất đẹp."
+    },
+    {
+      "t": "忙",
+      "r": "máng",
+      "p": "adj",
+      "m": "bận rộn",
+      "e": "我最近很忙。",
+      "v": "Gần đây tôi rất bận."
+    },
+    {
+      "t": "钱",
+      "r": "qián",
+      "p": "n",
+      "m": "tiền",
+      "e": "我没有很多钱。",
+      "v": "Tôi không có nhiều tiền."
+    }
+  ]
+}

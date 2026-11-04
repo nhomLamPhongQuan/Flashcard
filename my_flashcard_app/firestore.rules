@@ -1,0 +1,57 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function canReadPublicStats(uid) {
+      let settingsPath = /databases/$(database)/documents/user_settings/$(uid);
+      return signedIn() && (
+        request.auth.uid == uid
+        || (
+          exists(settingsPath)
+          && (
+            (
+              get(settingsPath).data.get('statsPrivacyMode', 'cloaked') == 'open'
+              && !(request.auth.uid in get(settingsPath).data.get('blockedViewerUids', []))
+            )
+            || (
+              get(settingsPath).data.get('statsPrivacyMode', 'cloaked') == 'restricted'
+              && request.auth.uid in get(settingsPath).data.get('allowedViewerUids', [])
+            )
+          )
+        )
+      );
+    }
+
+    match /usernames/{username} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['uid'])
+        && request.resource.data.uid == request.auth.uid;
+      allow delete: if signedIn()
+        && resource.data.uid == request.auth.uid;
+      allow update: if signedIn()
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.keys().hasOnly(['uid'])
+        && request.resource.data.uid == request.auth.uid;
+    }
+
+    match /users/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
+    match /user_settings/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
+    match /public_stats/{uid} {
+      allow get: if canReadPublicStats(uid);
+      allow list: if false;
+      allow create, update, delete: if signedIn() && request.auth.uid == uid;
+    }
+  }
+}
